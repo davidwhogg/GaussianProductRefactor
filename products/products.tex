@@ -9,16 +9,21 @@
 \newcommand{\T}{^{\!\mathsf{T}}}
 \newcommand{\inv}{^{-1}}
 
+% typesetting stuff
+\addtolength{\topmargin}{-0.75in}
+\addtolength{\textheight}{1.5in}
+\raggedbottom\sloppy\sloppypar\frenchspacing
+
 \begin{document}
 
 \section*{Products of dependent multivariate Gaussians}
 
 \noindent
-David W. Hogg, Adrian Price-Whelan
+\textbf{David W. Hogg}, \textbf{Adrian Price-Whelan}
 
 \paragraph{Abstract:} Foo and bar.
 
-\section{Marginalizing a likelihood by refactorization}
+\section{Marginalization by refactorization}
 
 Imagine that we are doing an inference using data $y$ (which is a
 $N$-dimensional vector, say).
@@ -129,14 +134,17 @@ Here we solve this problem in the general case:
 The inputs are multivariate (vectors) and the two Gaussians we are
 multiplying live in spaces of different dimensions.
 That is, we solve the following problem:
-\begin{equation}
-N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V)
- = N(y\given a, A)\,N(\theta\given b, B)
-\quad ,
-\end{equation}
-where $a$ and $A$ don't depend on $\theta$ at all.
 
-The solution is:
+\paragraph{Problem:}
+Find $N$-vector $a$, $N\times N$ variance tensor $A$, $K$-vector $b$,
+and $K\times K$ variance tensor $B$ such that
+\begin{equation}
+N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V) = N(y\given a,
+A)\,N(\theta\given b, B) \quad ,
+\end{equation}
+and such that $a$ and $A$ don't depend on $\theta$ at all.
+
+\paragraph{Solution:}
 \begin{equation}
 A = C + M \cdot V \cdot M\T
 \end{equation}
@@ -151,8 +159,11 @@ b = B \cdot (V\inv \cdot \mu + M\T \cdot C\inv \cdot y)
 \quad .
 \end{equation}
 
-Interesting notes:
+\paragraph{Solution notes:}
 \begin{itemize}
+\item
+We found this by completing the square. Actually we didn't really; we just
+used clever arguments.
 \item
 Check out both the units and the dimensions of $M$ and where it appears!
 \item
@@ -161,6 +172,8 @@ Note that $a$ is the prior-optimal value for the data $y$.
 Note that $b$ is the MAP value for the nuisance parameters $\theta$.
 \item
 Check out how we are zero-safe in the variance tensors.
+\item
+Comment about determinants of the matrices?
 \end{itemize}
 
 \end{document}
