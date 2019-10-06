@@ -1,0 +1,166 @@
+\documentclass[12pt, letterpaper]{article}
+
+% text stuhh
+\newcommand{\documentname}{\textsl{Note}}
+
+% math stuhh
+\newcommand{\given}{\,|\,}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\T}{^{\!\mathsf{T}}}
+\newcommand{\inv}{^{-1}}
+
+\begin{document}
+
+\section*{Products of dependent multivariate Gaussians}
+
+\noindent
+David W. Hogg, Adrian Price-Whelan
+
+\paragraph{Abstract:} Foo and bar.
+
+\section{Marginalizing a likelihood by refactorization}
+
+Imagine that we are doing an inference using data $y$ (which is a
+$N$-dimensional vector, say).
+We are trying to learn parameters $\theta$ and $P$ (the former a
+$K$-dimensional vector and the latter an arbitrary vector, list,
+or blob.
+Whether we are Bayesian or frequentist, the inference is based on
+a likelihood function, or probability for the data given parameters
+\begin{equation}
+\mbox{likelihood} \quad p(y\given\theta,P)
+\quad .
+\end{equation}
+
+Now let's imagine that the parameters $\theta$ are either nuisance
+parameters, or else easily marginalized, so we want to marginalize
+them out.
+This will leave us with a lower-dimensional marginalized likelihood
+function
+\begin{equation}
+\mbox{marginalized likelihood} \quad p(y\given P)
+\quad .
+\end{equation}
+That's good, but the marginalization comes at a cost:
+We have to choose a prior
+\begin{equation}
+\mbox{prior on nuisances} \quad p(\theta\given P)
+\end{equation}
+on the nuisances.
+This is the basis for the claim (stated elsewhere; HOGG) that
+inference requires a likelihood function, and priors on the nuisances.
+It does not require a prior on everything, contrary to some statements
+in the pedagogical literature (for example, HOGG).
+We have said ``$p(\theta\given P)$'' because this prior may depend on
+the parameters $P$. But it certainly doesn't have to.
+
+To perform the marginalization, we have two choices.
+We can either do an integral:
+\begin{equation}
+p(y\given P) = \int p(y\given\theta, P)\,p(\theta\given P)\,\dd\theta
+\quad ,
+\end{equation}
+where the integral is implicitly over the entire domain of the
+nuisances $\theta$ (or the entire support of the prior).
+Or we can do a clever re-factorization of this form:
+\begin{equation}
+p(y\given\theta,P)\,p(\theta\given P)
+ = p(\theta\given y,P)\,p(y\given P)
+\quad .
+\end{equation}
+That is, in certain magical circumstances it is possible to do this
+re-factorization without explicitly doing any integral.
+When this is true, the marginalization is sometimes far easier than
+the relevant integral.
+
+One such magical circumstance can arise when the two probability
+distributions---the likelihood and the prior---are both Gaussian in
+form, and when the model is linear.
+In detail we will assume
+\begin{enumerate}
+\item
+the likelihood $p(y\given\theta, P)$ is a Gaussian in $y$,
+\item
+the prior $p(\theta\given P)$ is a Gaussian in $\theta$,
+\item
+the mean of the likelihood Gaussian depends linearly on the nuisance
+parameters $\theta$, and
+\item
+the nuisance parameters $\theta$ don't enter the likelihood anywhere
+other than in the mean.
+\end{enumerate}
+In equations, this becomes:
+\begin{equation}
+p(y\given\theta, P) = N(y\given M\cdot\theta, C)
+\end{equation}
+\begin{equation}
+p(\theta\given P) = N(\theta\given \mu, V)
+\quad ,
+\end{equation}
+where
+$N(x\given m,V)$ is the multivariate Gaussian pdf for a vector $x$
+given a mean vector $m$ and a variance tensor $V$,
+$M$ is a $N\times K$ rectangular design matrix (which depends, in
+general, on the non-nuisance parameters $P$),
+$C$ is a $N\times N$ covariance matrix of uncertainties for the
+data (diagonal if the data dimensions are independent).
+That is, the likelihood is a Gaussian with a mean that depends
+linearly on the nuisance parameters $\theta$, and
+$\mu$ and $V$ are the $K$-vector mean and $K\times K$ variance tensor
+for the Gaussian prior.
+
+In this incredibly restrictive---but also surprisingly
+common---situation, the re-factored pdfs $p(\theta\given y, P)$ (also
+known as the posterior) and $p(y\given P)$ (the marginalized
+likelihood) will also both be Gaussian.
+Obtaining the specific forms of these Gaussians is the object of this
+\documentname.
+
+\section{Products of Gaussians}
+
+On the internets, there are many documents, slide decks, and videos
+that explain products of Gaussians in terms of other Gaussians.
+The vast majority of these consider either the univariate case (where
+the data $y$ and the parameter $\theta$ are both simple scalars, which
+is completely uninteresting), or the same-dimension case (where the data
+$y$ and the parameter vector $\theta$ are the same length, which never
+occurs in practice).
+Here we solve this problem in the general case:
+The inputs are multivariate (vectors) and the two Gaussians we are
+multiplying live in spaces of different dimensions.
+That is, we solve the following problem:
+\begin{equation}
+N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V)
+ = N(y\given a, A)\,N(\theta\given b, B)
+\quad ,
+\end{equation}
+where $a$ and $A$ don't depend on $\theta$ at all.
+
+The solution is:
+\begin{equation}
+A = C + M \cdot V \cdot M\T
+\end{equation}
+\begin{equation}
+a = M \cdot \mu
+\end{equation}
+\begin{equation}
+B\inv = V\inv + M\T \cdot C\inv \cdot M
+\end{equation}
+\begin{equation}
+b = B \cdot (V\inv \cdot \mu + M\T \cdot C\inv \cdot y)
+\quad .
+\end{equation}
+
+Interesting notes:
+\begin{itemize}
+\item
+Check out both the units and the dimensions of $M$ and where it appears!
+\item
+Note that $a$ is the prior-optimal value for the data $y$.
+\item
+Note that $b$ is the MAP value for the nuisance parameters $\theta$.
+\item
+Check out how we are zero-safe in the variance tensors.
+\end{itemize}
+
+\end{document}
