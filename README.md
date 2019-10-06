@@ -1,4 +1,4 @@
-# Adrian
+# GaussianProductRefactor
 A project to write up one tiny point of math.
 
 ## Authors
