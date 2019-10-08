@@ -21,7 +21,27 @@
 \noindent
 \textbf{David W. Hogg}, \textbf{Adrian Price-Whelan}
 
-\paragraph{Abstract:} Foo and bar.
+\paragraph{Abstract:}
+A product of two Gaussians is another Gaussian.
+That's a valuable and useful fact!
+Here we use it to derive a refactoring of a common product of
+Gaussians:
+The product of a Gaussian likelihood (probability for data given
+parameters) times a Gaussian prior (probability for parameters),
+where some (or all) of those parameters enter the likelihood
+only in the mean (or expectation) and only linearly.
+That is, a linear model, with a Gaussian likelihood and a Gaussian
+prior.
+This product of a likelihood times a prior can be refactored into a
+product of a Bayesian evidence (or fully marginalized likelihood)
+times a posterior, where both of these are also Gaussian.
+Here we deliver the details of this refactorization.
+We also explain how it connects to inferences that arise frequently in
+physics and astronomy.
+
+\section{Linear and non-linear parameters}
+
+HOGG: Say why we have this structure in so many problems!
 
 \section{Marginalization by refactorization}
 
@@ -139,23 +159,23 @@ That is, we solve the following problem:
 Find $N$-vector $a$, $N\times N$ variance tensor $A$, $K$-vector $b$,
 and $K\times K$ variance tensor $B$ such that
 \begin{equation}
-N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V) = N(y\given a,
-A)\,N(\theta\given b, B) \quad ,
+N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V)
+ = N(\theta\given a, A)\,N(y\given b, B) \quad ,
 \end{equation}
 and such that $a$ and $A$ don't depend on $\theta$ at all.
 
 \paragraph{Solution:}
 \begin{equation}
-A = C + M \cdot V \cdot M\T
+A\inv = V\inv + M\T \cdot C\inv \cdot M
 \end{equation}
 \begin{equation}
-a = M \cdot \mu
+a = B \cdot (V\inv \cdot \mu + M\T \cdot C\inv \cdot y)
 \end{equation}
 \begin{equation}
-B\inv = V\inv + M\T \cdot C\inv \cdot M
+B = C + M \cdot V \cdot M\T
 \end{equation}
 \begin{equation}
-b = B \cdot (V\inv \cdot \mu + M\T \cdot C\inv \cdot y)
+b = M \cdot \mu
 \quad .
 \end{equation}
 
@@ -167,9 +187,9 @@ used clever arguments.
 \item
 Check out both the units and the dimensions of $M$ and where it appears!
 \item
-Note that $a$ is the prior-optimal value for the data $y$.
+Note that $a$ is the MAP value for the nuisance parameters $\theta$.
 \item
-Note that $b$ is the MAP value for the nuisance parameters $\theta$.
+Note that $b$ is the prior-optimal value for the data $y$.
 \item
 Check out how we are zero-safe in the variance tensors.
 \item
