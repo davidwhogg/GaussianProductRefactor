@@ -2,6 +2,8 @@
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
+\newcommand{\acronym}[1]{\small{#1}}
+\newcommand{\FML}{\acronym{FML}}
 
 % math stuhh
 \newcommand{\given}{\,|\,}
@@ -19,7 +21,18 @@
 \section*{Products of dependent multivariate Gaussians}
 
 \noindent
-\textbf{David W. Hogg}, \textbf{Adrian Price-Whelan}
+\textbf{David W. Hogg}\\
+{\footnotesize%
+  \textsl{Center for Cosmology and Particle Physics, New York University}\\
+  \textsl{Max-Planck-Institut f\"ur Astronomie, Heidelberg}\\
+  \textsl{Flatiron Institute, a division of the Simons Foundation}%
+}
+
+\noindent
+\textbf{Adrian Price-Whelan}\\
+{\footnotesize%
+  \textsl{Flatiron Institute, a division of the Simons Foundation}%
+}
 
 \paragraph{Abstract:}
 A product of two Gaussians is another Gaussian.
@@ -39,15 +52,86 @@ Here we deliver the details of this refactorization.
 We also explain how it connects to inferences that arise frequently in
 physics and astronomy.
 
-\section{Linear and non-linear parameters}
+\section{Inferences with linear parameters}
 
-HOGG: Say why we have this structure in so many problems!
+It is not uncommon in physics and astronomy that likelihood functions
+(probabilities of data given parameters) are chosen to be Gaussian:
+One reason is that a likelihood function is basically a noise model,
+and it is often case that the noise is treated as Gaussian.
+This Gaussian assumption for the likelihood function is
+\emph{accurate} when the noise model has benefitted from the central
+limit theorem.
+This is true, for example, when the noise is thermal, or when the
+noise is shot noise and the number of detected photons (or other
+particles) is large.
+Another reason that the likelihood function is often treated as
+Gaussian is that Gaussians are generally \emph{tractable}:
+Many computations we like to perform on Gaussians, like integrals and
+derivatives and optimizations, have closed-form solutions.
+Even when we don't use the closed-form solutions, there are many
+spaces in which Gaussians are technically convex, providing simplicity
+and guarantees to inferences.
+
+It is also not uncommon in physics and astronomy that models for data
+include parameters such that the expectation value for the data (in,
+say, a set of repeated experiments) is linearly proportional to some
+subset of the parameters.
+This is true, for example, when we fit a histogram of LHC events
+affected by the Higgs boson; the expected number of counts in each
+energy bin is proportional to a linear combination of the amplitudes
+of various backgrounds and some coupling to the Higgs.
+This is true, for example, when we fit for the radial-velocity
+variation of a star in response to an faint, orbiting companion (the
+problem we will use as an example here), where the expectation of the
+radial-velocity measurements depends linearly on the binary system
+velocity and some combination of masses and system inclination (with
+respect to the line of sight).
+In both of these cases, there are both linear parameters (like the
+amplitudes) and non-linear parameters (like the mass of the Higgs, or
+the period of the binary).
+In what follows, we will spend our energies on the linear parameters,
+though our work on them is in service of learning the non-linear
+parameters too, of course.
+
+Bayes theorem is often written as a ratio of probability density
+functions (pdfs in what follows), but it can be written as a simple
+pdf factorization:
+\begin{equation}
+p(y,\theta\given H) = p(y\given\theta,H)\,p(\theta\given H) = p(\theta\given y,I)\,p(y\given H)
+\end{equation}
+where
+$p(y,\theta\given H)$ is the joint probability of data $y$ and
+parameters $\theta$ given your model assumptions and hyper parameters
+(symbolized jointly as $H$),
+$p(y\given\theta,H)$ is the likelihood, or probability of data $y$
+given parameters (and assumptions),
+$p(\theta\given H)$ is the prior pdf for the parameters $\theta$,
+$p(\theta\given y,H)$ is the posterior pdf for the parameters $\theta$
+given the data,
+and
+$p(y\given H)$ is the pdf for the data, marginalizing out all
+parameters (sometimes called the Bayesian evidence or the fully
+marginalized likelihood or \FML).
+
+The main point of this \documentname\ is that if the likelihood is
+Gaussian, and the expectation of the data depends linearly on the
+parameters, and if we choose the prior pdf to also be Gaussian, then
+eveything else (the joint, the posterior, and the \FML) becomes
+Gaussian too.
+And, moreover, the means and variances of these five Gaussians are all
+related by simple, closed-form expressions.
+One consequence of this math is that \emph{if} you have a Gaussian
+likelihood function, and \emph{if} you have a subset of parameters
+that are linearly related to the expectation of the data, \emph{then}
+you can obtain both the posterior pdf and the FML with just simple
+closed-form transformations of the means and variances of the
+likelihood and prior pdf.
 
 \section{Marginalization by refactorization}
 
 Imagine that we are doing an inference using data $y$ (which is a
 $N$-dimensional vector, say).
-We are trying to learn parameters $\theta$ and $P$ (the former a
+We are trying to learn parameters $\theta$ and also $P$ (the former a
 $K$-dimensional vector and the latter an arbitrary vector, list,
 or blob.
 Whether we are Bayesian or frequentist, the inference is based on
@@ -162,7 +246,7 @@ and $K\times K$ variance tensor $B$ such that
 N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V)
  = N(\theta\given a, A)\,N(y\given b, B) \quad ,
 \end{equation}
-and such that $a$ and $A$ don't depend on $\theta$ at all.
+and such that $a$, $A$, $b$, and $B$ don't depend on $\theta$ at all.
 
 \paragraph{Solution:}
 \begin{equation}
