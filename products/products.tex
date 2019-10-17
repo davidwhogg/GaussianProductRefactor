@@ -203,19 +203,19 @@ In equations, this becomes:
 p(y\given\theta, P) = N(y\given M\cdot\theta, C)
 \end{equation}
 \begin{equation}
-p(\theta\given P) = N(\theta\given \mu, V)
+p(\theta\given P) = N(\theta\given \mu, \Lambda)
 \quad ,
 \end{equation}
 where
-$N(x\given m,V)$ is the multivariate Gaussian pdf for a vector $x$
-given a mean vector $m$ and a variance tensor $V$,
+$N(x\given m,\Lambda)$ is the multivariate Gaussian pdf for a vector $x$
+given a mean vector $m$ and a variance tensor $\Lambda$,
 $M$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the non-nuisance parameters $P$),
 $C$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
 That is, the likelihood is a Gaussian with a mean that depends
 linearly on the nuisance parameters $\theta$, and
-$\mu$ and $V$ are the $K$-vector mean and $K\times K$ variance tensor
+$\mu$ and $\Lambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
 In this incredibly restrictive---but also surprisingly
@@ -243,20 +243,20 @@ That is, we solve the following problem:
 Find $N$-vector $a$, $N\times N$ variance tensor $A$, $K$-vector $b$,
 and $K\times K$ variance tensor $B$ such that
 \begin{equation}
-N(y\given M\cdot\theta, C)\,N(\theta\given\mu, V)
+N(y\given M\cdot\theta, C)\,N(\theta\given\mu, \Lambda)
  = N(\theta\given a, A)\,N(y\given b, B) \quad ,
 \end{equation}
 and such that $a$, $A$, $b$, and $B$ don't depend on $\theta$ at all.
 
 \paragraph{Solution:}
 \begin{equation}
-A\inv = V\inv + M\T \cdot C\inv \cdot M
+A\inv = \Lambda\inv + M\T \cdot C\inv \cdot M
 \end{equation}
 \begin{equation}
-a = A \cdot (V\inv \cdot \mu + M\T \cdot C\inv \cdot y)
+a = A \cdot (\Lambda\inv \cdot \mu + M\T \cdot C\inv \cdot y)
 \end{equation}
 \begin{equation}
-B = C + M \cdot V \cdot M\T
+B = C + M \cdot \Lambda \cdot M\T
 \end{equation}
 \begin{equation}
 b = M \cdot \mu
