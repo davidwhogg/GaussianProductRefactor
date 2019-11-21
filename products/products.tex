@@ -235,9 +235,9 @@ On the internets, there are many documents, slide decks, and videos
 that explain products of Gaussians in terms of other Gaussians.
 The vast majority of these consider either the univariate case (where
 the data $y$ and the parameter $\theta$ are both simple scalars, which
-is completely uninteresting), or the same-dimension case (where the data
+is not useful for our science cases), or the same-dimension case (where the data
 $y$ and the parameter vector $\theta$ are the same length, which never
-occurs in practice).
+occurs in our applications).
 Here we solve this problem in the general case:
 The inputs are multivariate (vectors) and the two Gaussians we are
 multiplying live in spaces of different dimensions.
@@ -283,7 +283,7 @@ Check out how we are zero-safe in the variance tensors.
 \item
 Comment about determinants of the matrices?
 \item
-Note that when you actually compute these pdfs you might need to have the
+Note that when you actually evaluate these pdfs you probably need to have the
 inverse of $B$. To get that, you should use an inversion lemma, duh!
 \end{itemize}
 
