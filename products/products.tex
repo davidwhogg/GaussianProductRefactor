@@ -278,6 +278,9 @@ Note that $b$ is the prior-optimal value for the data $y$.
 Check out how we are zero-safe in the variance tensors.
 \item
 Comment about determinants of the matrices?
+\item
+Note that when you actually compute these pdfs you might need to have the
+inverse of $B$. To get that, you should use an inversion lemma, duh!
 \end{itemize}
 
 \end{document}
