@@ -56,6 +56,7 @@
 % typesetting stuff
 \addtolength{\topmargin}{-0.75in}
 \addtolength{\textheight}{1.5in}
+\setlength{\parindent}{\baselineskip}
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
 \begin{document}
@@ -157,7 +158,7 @@ $p(\vy,\vtheta\given\bH)$ is the joint probability of data $\vy$ and
 parameters $\vtheta$ given your model assumptions and hyper parameters
 (symbolized jointly as $\bH$)\footnote{%
 \textsl{Typographical note:} In this \documentname, we
-typeset vectors as $\va, \vb, \vtheta$, we typeset tensors (which
+typeset vectors (which are column vectors) as $\va, \vb, \vtheta$, we typeset tensors (which
 are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
 we typeset matrices (which will in general be non-square) as $\mM$,
 and we typeset blobs or unstructured
@@ -301,7 +302,7 @@ That is, we solve the following problem:
 \paragraph{Problem:}
 Find $N$-vector $\va$, $N\times N$ variance tensor $\tA$, $K$-vector $\vb$,
 and $K\times K$ variance tensor $\tB$ such that
-\begin{equation}
+\begin{equation}\label{eq:problem}
 \normal(\vy\given\mM\cdot\vtheta,\tC)\,\normal(\vtheta\given\vmu,\tLambda)
  = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) \quad ,
 \end{equation}
@@ -323,8 +324,8 @@ and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
 \end{equation}
 
 \paragraph{Proof:}
-The two expressions are identical if two things are true.
-The first is that the determinant products must be equal:
+The two sides of equation~(\ref{eq:problem}) are identical if two things hold.
+The first thing is that the determinant products must be equal:
 \begin{equation}
 ||\tC||\,||\tLambda|| = ||\tA||\,||\tB||
 \quad ,
@@ -334,17 +335,15 @@ functions.
 This quality of determinant products follows straightforwardly from
 the matrix determinant lemma: .... HOGG
 
-The second thing that is required for the proof is that the quadratic form
+The second thing required for the proof is that the quadratic form
 \begin{equation}
 [\vy-\mM\cdot\vtheta]\T\cdot\tC\inv\cdot[\vy-\mM\cdot\vtheta]
-+
-[\vtheta-\vmu]\T\cdot\tLambda\inv\cdot[\vtheta-\vmu]
++ [\vtheta-\vmu]\T\cdot\tLambda\inv\cdot[\vtheta-\vmu]
 \end{equation}
 must equal the quadratic form
 \begin{equation}
 [\vtheta-\va]\T\cdot\tA\inv\cdot[\vtheta-\va]
-+
-[\vy-\vb]\T\cdot\tB\inv\cdot[\vy-\vb]
++ [\vy-\vb]\T\cdot\tB\inv\cdot[\vy-\vb]
 \quad,
 \end{equation}
 because these quadratic forms appear in the exponents in the functions.
