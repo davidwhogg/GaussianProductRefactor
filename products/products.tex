@@ -48,8 +48,12 @@
 \newcommand{\tA}{\tensor{A}}
 \newcommand{\tB}{\tensor{B}}
 \newcommand{\tC}{\tensor{C}}
+\newcommand{\tI}{\tensor{I}}
+\newcommand{\tQ}{\tensor{Q}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
+\newcommand{\mU}{\matrix{U}}
+\newcommand{\mV}{\matrix{V}}
 \newcommand{\bP}{\blob{P}}
 \newcommand{\bH}{\blob{H}}
 
@@ -160,7 +164,7 @@ parameters $\vtheta$ given your model assumptions and hyper parameters
 \textsl{Typographical note:} In this \documentname, we
 typeset vectors (which are column vectors) as $\va, \vb, \vtheta$, we typeset tensors (which
 are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
-we typeset matrices (which will in general be non-square) as $\mM$,
+we typeset matrices (which will in general be non-square) as $\mM, \mU$,
 and we typeset blobs or unstructured
 collections of information as $\bH, \bP$.},
 $p(\vy\given\vtheta,\bH)$ is the likelihood, or probability of data $\vy$
@@ -307,6 +311,14 @@ and $K\times K$ variance tensor $\tB$ such that
  = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) \quad ,
 \end{equation}
 and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
+Note that
+$\vy$ is a $N$-vector,
+$\mM$ is a $N\times K$ matrix,
+$\vtheta$ is a $K$-vector,
+$\tC$ is a $N\times N$ non-negative semi-definite variance tensor,
+$\vmu$ is a $K$-vector,
+and
+$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
 
 \paragraph{Solution:}
 \begin{equation}
@@ -322,6 +334,9 @@ and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
 \vb = \mM \cdot \vmu
 \quad .
 \end{equation}
+This is the complete solution to the problem, and constitutes the main point
+of this \documentname.
+For completeness, we will give some discussion!
 
 \paragraph{Proof:}
 The two sides of equation~(\ref{eq:problem}) are identical if two things hold.
@@ -333,7 +348,29 @@ The first thing is that the determinant products must be equal:
 because the determinants are involved in the normalizations of the
 functions.
 This quality of determinant products follows straightforwardly from
-the matrix determinant lemma: .... HOGG
+the matrix determinant lemma
+\begin{equation}
+||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
+\quad ,
+\end{equation}
+where $\mU$ and $\mV$ can be rectangular, and $\tI$ is the correct-sized identity matrix.
+This identity implies that
+\begin{equation}
+||\tA\inv|| = ||\tI + \mM\T\cdot\tC\inv\cdot\mM\cdot\tLambda||\,||\tLambda\inv||
+\end{equation}
+\begin{equation}
+||\tB||     = ||\tI + \mM\T\cdot\tC\inv\cdot\mM\cdot\tLambda||\,||\tC||
+\quad,
+\end{equation}
+where we had to apply the identity twice to get the $||\tA\inv||$ expression.
+We can ratio these as follows to prove this first thing:
+\begin{equation}
+||\tA||\,||\tB||
+ = \frac{||\tB||}{||\tA\inv||}
+ = \frac{||\tC||}{||\tLambda\inv||}
+ = ||\tC||\,||\tLambda||
+\quad .
+\end{equation}
 
 The second thing required for the proof is that the quadratic form
 \begin{equation}
