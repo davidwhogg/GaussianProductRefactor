@@ -8,6 +8,8 @@
 % - HOGG: expand solution-notes bullet points into paragraphs.
 % - APW: add a worked-out example with figures.
 % - remove all HOGG and APW from the text.
+% - HOGG: distinguish between FML and partially marginalized likelihood:
+%   sometimes you have parameters that enter non-linearly, and that's ok
 
 % style notes
 % -----------
@@ -100,7 +102,7 @@ only in the mean (or expectation) and only linearly.
 That is, a linear model, with a Gaussian likelihood and a Gaussian
 prior.
 This product of a likelihood times a prior can be refactored into a
-product of a Bayesian evidence (or fully marginalized likelihood)
+product of a Bayesian evidence (or marginalized likelihood)
 times a posterior, where both of these are also Gaussian.
 Here we deliver the details of this refactorization.
 We also explain how it connects to inferences that arise frequently in
@@ -371,5 +373,41 @@ Comment about determinants of the matrices?
 APW: Note that when you actually evaluate these pdfs you probably need to have the
 inverse of $\tB$, and the non-inverse of $\tA$.
 To get those, you should use the inversion lemma!
+
+
+\section{Worked Examples}
+
+When working with a probabilistic model that meets the strong requirements
+imposed above (Gaussians everywhere), the identities described in this
+\documentname\ have a practical use: To reduce the dimensionality of your model.
+This is often desired when your inferences depend on generating posterior
+samples of model parameters.
+Reducing the dimensionality of your parameter-space will in general improve
+convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
+alternate sampling methods (e.g., rejection sampling) that may be intractable
+when the parameter dimensionality is large.
+
+Below, we demonstrate two ways in which these identities can be used and
+incorporated into statistical inferences: TODO APW.
+% One case where the parameter dimensionality is reduced, and another case where
+% standard MCMC is intractable but the straightforward evaluation of the
+% marginal likelihood enables using brute-force rejection sampling to generate
+% posterior samplings.
+
+\subsection{Example 1: Fully Linear Model}
+
+APW: Analog to fitting a line to data, can generate posterior samples with numpy.random.multivariate\_normal - don't turn on MCMC!
+
+
+\subsection{Example 2: Spectral line + background}
+
+APW: Reduced dimensionality from 5 to 2 parameters - compare emcee autocorrelation time for the two cases?
+
+
+\subsection{Example 3: Sparsely Sampled Sinusoid + trend}
+
+APW: Show how to construct an analog to The Joker, but for a simpler model that has 4 linear parameters (constant offset, linear trend, amplitudes of cos/sin) and 1 nonlinear parameter (period)
+
+
 
 \end{document}
