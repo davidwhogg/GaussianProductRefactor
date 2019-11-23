@@ -1,4 +1,24 @@
+% This document is part of the GaussianProductRefactor project.
+% Copyright 2019 the authors. All rights reserved.
+
+% to-do
+% -----
+% - make problem statement more well-posed.
+% - write or sketch proof of the solution.
+% - expand bullet points into paragraphs.
+% - APW: add a worked-out example with figures.
+% - remove all HOGG and APW from the text.
+
+% style notes
+% -----------
+% - use \vA not A or \vector{A} and so on.
+% - modify typesetting above the \begin{document} line, not below.
+% - distinguish types (vector, matrix, tensor).
+% - never say ``the pdf for $\vy$''; instead say ``the pdf for the data $\vy$''.
+% - ...[your pet peeve here]...
+
 \documentclass[12pt, letterpaper]{article}
+\usepackage{bm, mathrsfs}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
@@ -10,6 +30,28 @@
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\T}{^{\!\mathsf{T}}}
 \newcommand{\inv}{^{-1}}
+\newcommand{\scalar}[1]{#1}
+\renewcommand{\vector}[1]{\boldsymbol{#1}}
+\newcommand{\tensor}[1]{\boldsymbol{#1}}
+\renewcommand{\matrix}[1]{\tensor{#1}}
+\newcommand{\blob}[1]{\underline{#1}} % THIS IS HERE TO ANNOY APW
+\newcommand{\normal}{\mathscr{N}\!}
+
+% variables
+\newcommand{\va}{\vector{a}}
+\newcommand{\vb}{\vector{b}}
+\newcommand{\vm}{\vector{m}}
+\newcommand{\vx}{\vector{x}}
+\newcommand{\vy}{\vector{y}}
+\newcommand{\vmu}{\vector{\mu}}
+\newcommand{\vtheta}{\vector{\theta}}
+\newcommand{\tA}{\tensor{A}}
+\newcommand{\tB}{\tensor{B}}
+\newcommand{\tC}{\tensor{C}}
+\newcommand{\tLambda}{\tensor{\Lambda}}
+\newcommand{\mM}{\matrix{M}}
+\newcommand{\bP}{\blob{P}}
+\newcommand{\bH}{\blob{H}}
 
 % typesetting stuff
 \addtolength{\topmargin}{-0.75in}
@@ -101,19 +143,25 @@ Bayes theorem is often written as a ratio of probability density
 functions (pdfs in what follows), but it can be written as a simple
 pdf factorization:
 \begin{equation}
-p(y,\theta\given H) = p(y\given\theta,H)\,p(\theta\given H) = p(\theta\given y,H)\,p(y\given H)
+p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
 where
-$p(y,\theta\given H)$ is the joint probability of data $y$ and
-parameters $\theta$ given your model assumptions and hyper parameters
-(symbolized jointly as $H$),
-$p(y\given\theta,H)$ is the likelihood, or probability of data $y$
+$p(\vy,\vtheta\given\bH)$ is the joint probability of data $\vy$ and
+parameters $\vtheta$ given your model assumptions and hyper parameters
+(symbolized jointly as $\bH$)\footnote{%
+\textsl{Typographical note:} In this \documentname, we
+typeset vectors as $\va, \vb, \vtheta$, we typeset tensors (which
+are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
+we typeset matrices (which will in general be non-square) as $\mM$,
+and we typeset blobs or unstructured
+collections of information as $\bH, \bP$.},
+$p(\vy\given\vtheta,\bH)$ is the likelihood, or probability of data $\vy$
 given parameters (and assumptions),
-$p(\theta\given H)$ is the prior pdf for the parameters $\theta$,
-$p(\theta\given y,H)$ is the posterior pdf for the parameters $\theta$
+$p(\vtheta\given\bH)$ is the prior pdf for the parameters $\vtheta$,
+$p(\vtheta\given\vy,\bH)$ is the posterior pdf for the parameters $\vtheta$
 given the data,
 and
-$p(y\given H)$ is the pdf for the data, marginalizing out all
+$p(\vy\given\bH)$ is the pdf for the data, marginalizing out all
 parameters (sometimes called the Bayesian evidence or the fully
 marginalized likelihood or \FML).
 
@@ -127,58 +175,58 @@ related by simple, closed-form expressions.
 One consequence of this math is that \emph{if} you have a Gaussian
 likelihood function, and \emph{if} you have a subset of parameters
 that are linearly related to the expectation of the data, \emph{then}
-you can obtain both the posterior pdf and the FML with just simple
+you can obtain both the posterior pdf and the \FML\ with just simple
 closed-form transformations of the means and variances of the
 likelihood and prior pdf.
 
 \section{Marginalization by refactorization}
 
-Imagine that we are doing an inference using data $y$ (which is a
+Imagine that we are doing an inference using data $\vy$ (which is a
 $N$-dimensional vector, say).
-We are trying to learn parameters $\theta$ and also $P$ (the former a
+We are trying to learn parameters $\vtheta$ and also $\bP$ (the former a
 $K$-dimensional vector and the latter an arbitrary vector, list,
 or blob.
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{likelihood} \quad p(y\given\theta,P)
+\mbox{likelihood} \quad p(\vy\given\vtheta,\bP)
 \quad .
 \end{equation}
 
-Now let's imagine that the parameters $\theta$ are either nuisance
+Now let's imagine that the parameters $\vtheta$ are either nuisance
 parameters, or else easily marginalized, so we want to marginalize
 them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{marginalized likelihood} \quad p(y\given P)
+\mbox{marginalized likelihood} \quad p(\vy\given\bP)
 \quad .
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
 \begin{equation}
-\mbox{prior on nuisances} \quad p(\theta\given P)
+\mbox{prior on nuisances} \quad p(\vtheta\given\bP)
 \end{equation}
 on the nuisances.
 This is the basis for the claim (stated elsewhere; HOGG) that
 inference requires a likelihood function, and priors on the nuisances.
 It does not require a prior on everything, contrary to some statements
 in the pedagogical literature (for example, HOGG).
-We have said ``$p(\theta\given P)$'' because this prior may depend on
-the parameters $P$. But it certainly doesn't have to.
+We have said ``$p(\vtheta\given\bP)$'' because this prior may depend on
+the parameters $\bP$. But it certainly doesn't have to.
 
 To perform the marginalization, we have two choices.
 We can either do an integral:
 \begin{equation}
-p(y\given P) = \int p(y\given\theta, P)\,p(\theta\given P)\,\dd\theta
+p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \quad ,
 \end{equation}
 where the integral is implicitly over the entire domain of the
-nuisances $\theta$ (or the entire support of the prior).
+nuisances $\vtheta$ (or the entire support of the prior).
 Or we can do a clever re-factorization of this form:
 \begin{equation}
-p(y\given\theta,P)\,p(\theta\given P)
- = p(\theta\given y,P)\,p(y\given P)
+p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
+ = p(\vtheta\given\vy,\bP)\,p(\vy\given\bP)
 \quad .
 \end{equation}
 That is, in certain magical circumstances it is possible to do this
@@ -192,39 +240,39 @@ form, and when the model is linear.
 In detail we will assume
 \begin{enumerate}
 \item
-the likelihood $p(y\given\theta, P)$ is a Gaussian in $y$,
+the likelihood $p(\vy\given\vtheta,\bP)$ is a Gaussian in $\vy$,
 \item
-the prior $p(\theta\given P)$ is a Gaussian in $\theta$,
+the prior $p(\vtheta\given\bP)$ is a Gaussian in $\vtheta$,
 \item
 the mean of the likelihood Gaussian depends linearly on the nuisance
-parameters $\theta$, and
+parameters $\vtheta$, and
 \item
-the nuisance parameters $\theta$ don't enter the likelihood anywhere
+the nuisance parameters $\vtheta$ don't enter the likelihood anywhere
 other than in the mean.
 \end{enumerate}
 In equations, this becomes:
 \begin{equation}
-p(y\given\theta, P) = N(y\given M\cdot\theta, C)
+p(\vy\given\vtheta,\bP) = \normal(\vy\given\mM\cdot\vtheta,\tC)
 \end{equation}
 \begin{equation}
-p(\theta\given P) = N(\theta\given \mu, \Lambda)
+p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 \quad ,
 \end{equation}
 where
-$N(x\given m,\Lambda)$ is the multivariate Gaussian pdf for a vector $x$
-given a mean vector $m$ and a variance tensor $\Lambda$,
+$\normal(\vx\given\vm,\tLambda)$ is the multivariate Gaussian pdf for a vector $\vx$
+given a mean vector $\vm$ and a variance tensor $\tLambda$,
 $M$ is a $N\times K$ rectangular design matrix (which depends, in
-general, on the non-nuisance parameters $P$),
-$C$ is a $N\times N$ covariance matrix of uncertainties for the
+general, on the non-nuisance parameters $\bP$),
+$\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
 That is, the likelihood is a Gaussian with a mean that depends
-linearly on the nuisance parameters $\theta$, and
-$\mu$ and $\Lambda$ are the $K$-vector mean and $K\times K$ variance tensor
+linearly on the nuisance parameters $\vtheta$, and
+$\vmu$ and $\tLambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
 In this incredibly restrictive---but also surprisingly
-common---situation, the re-factored pdfs $p(\theta\given y, P)$ (also
-known as the posterior) and $p(y\given P)$ (the marginalized
+common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$ (also
+known as the posterior) and $p(\vy\given\bP)$ (the marginalized
 likelihood) will also both be Gaussian.
 Obtaining the specific forms of these Gaussians is the object of this
 \documentname.
@@ -234,9 +282,9 @@ Obtaining the specific forms of these Gaussians is the object of this
 On the internets, there are many documents, slide decks, and videos
 that explain products of Gaussians in terms of other Gaussians.
 The vast majority of these consider either the univariate case (where
-the data $y$ and the parameter $\theta$ are both simple scalars, which
+the data $\vy$ and the parameter $\vtheta$ are both simple scalars, which
 is not useful for our science cases), or the same-dimension case (where the data
-$y$ and the parameter vector $\theta$ are the same length, which never
+$\vy$ and the parameter vector $\vtheta$ are the same length, which never
 occurs in our applications).
 Here we solve this problem in the general case:
 The inputs are multivariate (vectors) and the two Gaussians we are
@@ -244,26 +292,26 @@ multiplying live in spaces of different dimensions.
 That is, we solve the following problem:
 
 \paragraph{Problem:}
-Find $N$-vector $a$, $N\times N$ variance tensor $A$, $K$-vector $b$,
-and $K\times K$ variance tensor $B$ such that
+Find $N$-vector $\va$, $N\times N$ variance tensor $\tA$, $K$-vector $\vb$,
+and $K\times K$ variance tensor $\tB$ such that
 \begin{equation}
-N(y\given M\cdot\theta, C)\,N(\theta\given\mu, \Lambda)
- = N(\theta\given a, A)\,N(y\given b, B) \quad ,
+\normal(\vy\given\mM\cdot\vtheta,\tC)\,\normal(\vtheta\given\vmu,\tLambda)
+ = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) \quad ,
 \end{equation}
-and such that $a$, $A$, $b$, and $B$ don't depend on $\theta$ at all.
+and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
 
 \paragraph{Solution:}
 \begin{equation}
-A\inv = \Lambda\inv + M\T \cdot C\inv \cdot M
+\tA\inv = \tLambda\inv + \mM\T \cdot \tC\inv \cdot \mM
 \end{equation}
 \begin{equation}
-a = A \cdot (\Lambda\inv \cdot \mu + M\T \cdot C\inv \cdot y)
+\va = \tA \cdot (\tLambda\inv \cdot \vmu + \mM\T \cdot \tC\inv \cdot \vy)
 \end{equation}
 \begin{equation}
-B = C + M \cdot \Lambda \cdot M\T
+\tB = \tC + \mM \cdot \tLambda \cdot \mM\T
 \end{equation}
 \begin{equation}
-b = M \cdot \mu
+\vb = \mM \cdot \vmu
 \quad .
 \end{equation}
 
@@ -273,18 +321,18 @@ b = M \cdot \mu
 We found this by completing the square. Actually we didn't really; we just
 used clever arguments.
 \item
-Check out both the units and the dimensions of $M$ and where it appears!
+Check out both the units and the dimensions of $\mM$ and where it appears!
 \item
-Note that $a$ is the MAP value for the nuisance parameters $\theta$.
+Note that $\va$ is the MAP value for the nuisance parameters $\vtheta$.
 \item
-Note that $b$ is the prior-optimal value for the data $y$.
+Note that $\vb$ is the prior-optimal value for the data $\vy$.
 \item
 Check out how we are zero-safe in the variance tensors.
 \item
 Comment about determinants of the matrices?
 \item
 Note that when you actually evaluate these pdfs you probably need to have the
-inverse of $B$. To get that, you should use an inversion lemma, duh!
+inverse of $\tB$. To get that, you should use an inversion lemma, duh!
 \end{itemize}
 
 \end{document}
