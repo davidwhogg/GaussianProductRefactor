@@ -365,9 +365,11 @@ Note that $\vb$ is the prior-optimal value for the data $\vy$.
 Check out how we are zero-safe in the variance tensors.
 \item
 Comment about determinants of the matrices?
-\item
-Note that when you actually evaluate these pdfs you probably need to have the
-inverse of $\tB$. To get that, you should use an inversion lemma, duh!
 \end{itemize}
+
+\paragraph{Implementation notes:}
+APW: Note that when you actually evaluate these pdfs you probably need to have the
+inverse of $\tB$, and the non-inverse of $\tA$.
+To get those, you should use the inversion lemma!
 
 \end{document}
