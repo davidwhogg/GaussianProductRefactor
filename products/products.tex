@@ -62,7 +62,14 @@
 
 \section*{Data Analysis Recipes:\\ Products of dependent multivariate Gaussians}
 
-\noindent\textbf{David W. Hogg}\\
+\noindent\textbf{David W. Hogg}\footnote{%
+The authors would like to thank
+  Dan Foreman-Mackey (Flatiron) and
+  Sam Roweis (deceased),
+for help with all these concepts through the years.
+This work was supported in part by the National Science Foundation
+and the National Aeronautics and Space Administration.
+}\\
 {\footnotesize%
   \textsl{Center for Cosmology and Particle Physics, Department of Physics, New York University}\\
   \textsl{Max-Planck-Institut f\"ur Astronomie, Heidelberg}\\
@@ -108,15 +115,15 @@ This Gaussian assumption for the likelihood function is
 \emph{accurate} when the noise model has benefitted from the central
 limit theorem.
 This is true, for example, when the noise is thermal, or when the
-noise is shot noise and the number of detected photons (or other
-particles) is large.
+noise is shot noise and the numbers (numbers of detected photons or other
+particles) are large.
 Another reason that the likelihood function is often treated as
 Gaussian is that Gaussians are generally \emph{tractable}:
 Many computations we like to perform on Gaussians, like integrals and
 derivatives and optimizations, have closed-form solutions.
 Even when we don't use the closed-form solutions, there are many
-spaces in which Gaussians are technically convex, providing simplicity
-and guarantees to inferences.
+contexts in which Gaussians lead to convex functions,
+providing guarantees to resulting inferences.
 
 It is also not uncommon in physics and astronomy that models for data
 include parameters such that the expectation value for the data (in,
