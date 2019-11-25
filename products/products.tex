@@ -418,7 +418,7 @@ When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
 \documentname\ have a practical use: To reduce the dimensionality of your model.
 This is often desired when your inferences depend on generating posterior
-samples of model parameters.
+samples of your model parameters.
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
 alternate sampling methods (e.g., rejection sampling) that may be intractable
@@ -438,7 +438,7 @@ APW: Analog to fitting a line to data, can generate posterior samples with numpy
 
 \subsection{Example 2: Spectral line + background}
 
-APW: Reduced dimensionality from 5 to 2 parameters - compare emcee autocorrelation time for the two cases?
+APW: Reduced dimensionality from 5 to 2 parameters, run with emcee
 
 
 \subsection{Example 3: Sparsely Sampled Sinusoid + trend}
