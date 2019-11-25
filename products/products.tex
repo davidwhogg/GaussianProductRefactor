@@ -20,7 +20,7 @@
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
-\usepackage{bm, mathrsfs}
+\usepackage{amsmath, bm, mathrsfs}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
@@ -39,7 +39,9 @@
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
 \newcommand{\tensor}[1]{\mathbf{#1}}
 \renewcommand{\matrix}[1]{\mathsf{#1}}
-\newcommand{\blob}[1]{\underline{#1}} % THIS IS HERE TO ANNOY APW
+% \setlength{\fboxsep}{0.8pt}
+% \newcommand{\blob}[1]{\boxed{#1}} % THIS IS HERE TO ANNOY APW
+\newcommand{\blob}[1]{\mathscr{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\normal}{\mathcal{N}\!}
 
 % variables
@@ -282,7 +284,7 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 where
 $\normal(\vx\given\vm,\tLambda)$ is the multivariate Gaussian pdf for a vector $\vx$
 given a mean vector $\vm$ and a variance tensor $\tLambda$,
-$M$ is a $N\times K$ rectangular design matrix (which depends, in
+$\mM$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the non-nuisance parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
@@ -292,9 +294,11 @@ $\vmu$ and $\tLambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
 In this incredibly restrictive---but also surprisingly
-common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$ (also
-known as the posterior) and $p(\vy\given\bP)$ (the marginalized
-likelihood) will also both be Gaussian.
+common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$
+(also known as the posterior for the linear parameters, conditioned on
+the nonlinear parameters in $\bP$) and $p(\vy\given\bP)$ (the
+partially marginalized likelihood, marginalizing out the linear
+parameters) will also both be Gaussian.
 Obtaining the specific forms of these Gaussians is the object of this
 \documentname.
 
