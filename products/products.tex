@@ -33,7 +33,7 @@
 % math stuhh
 \newcommand{\given}{\,|\,}
 \newcommand{\dd}{\mathrm{d}}
-\newcommand{\T}{^{\!\mathsf{T}}}
+\newcommand{\T}{^{\!\mathsf{T}\!}}
 \newcommand{\inv}{^{-1}}
 \newcommand{\scalar}[1]{#1}
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
@@ -358,7 +358,7 @@ because the determinants are involved in the normalizations of the
 functions.
 This equality of determinant products follows straightforwardly from
 the matrix determinant lemma
-\begin{equation}
+\begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
 \quad ,
 \end{equation}
@@ -432,22 +432,45 @@ data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
-HOGG: Comment about determinants of the matrices?
+HOGG: Coment on the possibility that there is a solution that flows
+from thinking about the product of Gaussians as one Gaussian for the
+joint. Does that lead to a simpler discussion?
 
 \paragraph{Implementation notes:}
-APW: Note that when you actually evaluate these pdfs you probably need to have the
-inverse of $\tB$, and the non-inverse of $\tA$.
-To get those, you should use the inversion lemma!
+The solution gives an expression for the variance tensor $\tB$, but
+note that when you actually evaluate the pdfs you probably need to
+have either the inverse of $\tB$, or else an operator that computes
+the product of the inverse and vectors, as in $\tB\inv\cdot\vy$ and
+the same for $\vb$.
+To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
+the matrix inversion lemma} (\ref{eq:invlemma}) given above.
+This is often useful because you often know the data noise-variance
+tensor inverse $\tC\inv$, and the prior variance inverse
+$\tLambda\inv$.
 
-Also, general advice: Never use \code{inv()}, always use \code{solve()}.
+We also give the general advice that one should \emph{never take an explicit
+inverse} (unless you know the inverse exactly in closed form, as you do
+for, say, diagonal tensors).
+In your code you should never use the \code{inv()} function; you
+should always use a \code{solve()} function.
+The reason is that the code operation \code{inv(B)} returns the best
+possible inverse to machine precision (if you are lucky), but what you
+really want instead is the best possible product of that inverse times
+a vector.
+So in general \code{solve(B,y)} will deliver more precise results than
+the mathematically equivalent \code{dot(inv(B),y)}.
 
 The expressions in (\ref{eq:problem}) do not require that the tensors
 $\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
 that they be non-negative semi-definite.
 That means that they can have zero eigenvalues.
-If this might happen in your problem (like if your prior freezes the
-parameters to a subspace of the $\vtheta$-space), you might have to
-think about how you implement the linear algebra operations.
+As can their inverses $\tC\inv$, $\tLambda\inv$, $\tA\inv$, $\tB\inv$.
+If either of these might happen in your problem---like if your prior
+freezes the parameters to a subspace of the $\vtheta$-space, which
+would lead to a zero eigenvalue in $\tLambda$, or if a data point is
+unmeasured or missing, which would lead to a zero eigenvalue in
+$\tC\inv$---you might have to \emph{think about how you implement the
+linear algebra operations to be zero-safe}.
 
 \section{Worked Examples}
 
