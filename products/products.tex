@@ -38,7 +38,7 @@
 \newcommand{\scalar}[1]{#1}
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
 \newcommand{\tensor}[1]{\mathbf{#1}}
-\renewcommand{\matrix}[1]{\tensor{#1}}
+\renewcommand{\matrix}[1]{\mathsf{#1}}
 \newcommand{\blob}[1]{\underline{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\normal}{\mathcal{N}\!}
 
@@ -430,7 +430,7 @@ It is the most likely data under the prior pdf.
 And the variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
-data-space prior variance $\mM\cdot\Lambda\cdot\mM\T$.
+data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
 HOGG: Comment about determinants of the matrices?
 
