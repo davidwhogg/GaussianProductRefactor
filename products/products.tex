@@ -449,7 +449,7 @@ If this might happen in your problem (like if your prior freezes the
 parameters to a subspace of the $\vtheta$-space), you might have to
 think about how you implement the linear algebra operations.
 
-\section{Worked Examples}
+\section{Worked Example}
 
 When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
@@ -461,27 +461,16 @@ convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
 alternate sampling methods (e.g., rejection sampling) that may be intractable
 when the parameter dimensionality is large.
 
-Below, we demonstrate two ways in which these identities can be used and
-incorporated into statistical inferences: TODO APW.
+Below, we demonstrate one way in which these identities can be used and
+incorporated into statistical inferences TODO APW.
 % One case where the parameter dimensionality is reduced, and another case where
 % standard MCMC is intractable but the straightforward evaluation of the
 % marginal likelihood enables using brute-force rejection sampling to generate
 % posterior samplings.
 
-\subsection{Example 1: Fully Linear Model}
+APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to get your maximum-likelihood linear parameters, don't turn on MCMC to generate samples if everything is linear and gaussian, (2) Another footnote or note about how this enables other sampling methods like The Joker.
 
-APW: Analog to fitting a line to data, can generate posterior samples with numpy.random.multivariate\_normal - don't turn on MCMC!
-
-
-\subsection{Example 2: Spectral line + background}
-
-APW: Reduced dimensionality from 5 to 2 parameters, run with emcee
-
-
-\subsection{Example 3: Sparsely Sampled Sinusoid + trend}
-
-APW: Show how to construct an analog to The Joker, but for a simpler model that has 4 linear parameters (constant offset, linear trend, amplitudes of cos/sin) and 1 nonlinear parameter (period)
-
+APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to 2 parameters, run with emcee.
 
 
 \end{document}
