@@ -24,8 +24,11 @@
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
+\newcommand{\sectionname}{Section}
 \newcommand{\acronym}[1]{\small{#1}}
 \newcommand{\FML}{\acronym{FML}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\foreign}[1]{\textsl{#1}}
 
 % math stuhh
 \newcommand{\given}{\,|\,}
@@ -35,7 +38,7 @@
 \newcommand{\scalar}[1]{#1}
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
 \newcommand{\tensor}[1]{\mathbf{#1}}
-\renewcommand{\matrix}[1]{\tensor{#1}}
+\renewcommand{\matrix}[1]{\mathsf{#1}}
 \newcommand{\blob}[1]{\underline{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\normal}{\mathcal{N}\!}
 
@@ -52,6 +55,7 @@
 \newcommand{\tC}{\tensor{C}}
 \newcommand{\tI}{\tensor{I}}
 \newcommand{\tQ}{\tensor{Q}}
+\newcommand{\tS}{\tensor{S}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
 \newcommand{\mU}{\matrix{U}}
@@ -111,6 +115,9 @@ times a posterior, where both of these are also Gaussian.
 Here we deliver the details of this refactorization.
 We also explain how it connects to inferences that arise frequently in
 physics and astronomy.
+
+If all you want is the answer, the question is posed and answered
+at the beginning of \sectionname~\ref{sec:problemsolution}.
 
 \section{Inferences with linear parameters}
 
@@ -291,7 +298,7 @@ likelihood) will also both be Gaussian.
 Obtaining the specific forms of these Gaussians is the object of this
 \documentname.
 
-\section{Products of Gaussians}
+\section{Products of Gaussians}\label{sec:problemsolution}
 
 On the internets, there are many documents, slide decks, and videos
 that explain products of Gaussians in terms of other Gaussians.
@@ -349,7 +356,7 @@ The first thing is that the determinant products must be equal:
 \end{equation}
 because the determinants are involved in the normalizations of the
 functions.
-This quality of determinant products follows straightforwardly from
+This equality of determinant products follows straightforwardly from
 the matrix determinant lemma
 \begin{equation}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
@@ -374,43 +381,73 @@ We can ratio these as follows to prove this first thing:
 \quad .
 \end{equation}
 
-The second thing required for the proof is that the quadratic form
-\begin{equation}
+The second thing required for the proof is that the quadratic scalar form
+\begin{equation}\label{eq:LHS}
 [\vy-\mM\cdot\vtheta]\T\cdot\tC\inv\cdot[\vy-\mM\cdot\vtheta]
 + [\vtheta-\vmu]\T\cdot\tLambda\inv\cdot[\vtheta-\vmu]
 \end{equation}
-must equal the quadratic form
-\begin{equation}
+must equal the quadratic scalar form
+\begin{equation}\label{eq:RHS}
 [\vtheta-\va]\T\cdot\tA\inv\cdot[\vtheta-\va]
 + [\vy-\vb]\T\cdot\tB\inv\cdot[\vy-\vb]
 \quad,
 \end{equation}
-because these quadratic forms appear in the exponents in the functions.
+because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
 all the quadratic forms. ... HOGG
 
 \paragraph{Solution notes:}
-\begin{itemize}
-\item
-We found this by completing the square. Actually we didn't really; we just
-used clever arguments.
-\item
-Check out both the units and the dimensions of $\mM$ and where it appears!
-\item
-Note that $\va$ is the MAP value for the nuisance parameters $\vtheta$.
-\item
-Note that $\vb$ is the prior-optimal value for the data $\vy$.
-\item
-Check out how we are zero-safe in the variance tensors.
-\item
-Comment about determinants of the matrices?
-\end{itemize}
+In principle we found this factorization by expanding the quadratic in
+(\ref{eq:LHS}) and then completing the square.
+Of course we didn't really; we used arguments (which physicists love)
+called \emph{detailed balance}:
+We required that the terms that look like
+$\vtheta\T\cdot\tQ\cdot\vtheta$ were equal between the LHS~(\ref{eq:LHS})
+and the RHS~(\ref{eq:RHS}, and then all the terms that look like
+$\vmu\T\cdot\tS\cdot\vmu$, and so on.
+It turns out you don't have to consider them all to get the right solution.
+
+Because the matrix $\mM$ is not square, it has no inverse. And because this
+is a physics problem, it has units (which are the units of $\dd\vy/\dd\vtheta$).
+It's beautiful in the solution that $\mM$ and $\mM\T$ appear only where the
+units make sense.
+They make sense because the units of $\tC$ are inverse data-squared (where $\vy$
+is the data vector) and the units of $\tLambda$ are inverse parameters-squared.
+And they are different sizes.
+
+Various parts of the solution are highly interpretable in terms of the
+objects of Bayesian inference. For example, the vector $\va$ is the
+maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
+$\vtheta$.
+It is found by inverse-variance-weigted combinations of the data and the prior.
+The variance tensor $\tA$ is the posterior variance in the parameter space.
+It is strictly non-larger (in eigenvalues or determinant) than either
+the prior variance $\tLambda$ or the parameter-space data-noise
+variance $\mM\T\cdot\tC\cdot\mM$.
+The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
+value for the data $\vy$.
+It is the most likely data under the prior pdf.
+And the variance tensor $\tB$ is the prior variance expanded out to the
+data space, and including the noise variance in the data.
+It is strictly non-smaller than both the data noise variance $\tC$ and the
+data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
+
+HOGG: Comment about determinants of the matrices?
 
 \paragraph{Implementation notes:}
 APW: Note that when you actually evaluate these pdfs you probably need to have the
 inverse of $\tB$, and the non-inverse of $\tA$.
 To get those, you should use the inversion lemma!
 
+Also, general advice: Never use \code{inv()}, always use \code{solve()}.
+
+The expressions in (\ref{eq:problem}) do not require that the tensors
+$\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
+that they be non-negative semi-definite.
+That means that they can have zero eigenvalues.
+If this might happen in your problem (like if your prior freezes the
+parameters to a subspace of the $\vtheta$-space), you might have to
+think about how you implement the linear algebra operations.
 
 \section{Worked Examples}
 
