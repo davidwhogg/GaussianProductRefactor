@@ -20,23 +20,28 @@
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
-\usepackage{bm, mathrsfs}
+\usepackage{amsmath, bm, mathrsfs}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
+\newcommand{\sectionname}{Section}
 \newcommand{\acronym}[1]{\small{#1}}
 \newcommand{\FML}{\acronym{FML}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\foreign}[1]{\textsl{#1}}
 
 % math stuhh
 \newcommand{\given}{\,|\,}
 \newcommand{\dd}{\mathrm{d}}
-\newcommand{\T}{^{\!\mathsf{T}}}
+\newcommand{\T}{^{\!\mathsf{T}\!}}
 \newcommand{\inv}{^{-1}}
 \newcommand{\scalar}[1]{#1}
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
 \newcommand{\tensor}[1]{\mathbf{#1}}
-\renewcommand{\matrix}[1]{\tensor{#1}}
-\newcommand{\blob}[1]{\underline{#1}} % THIS IS HERE TO ANNOY APW
+\renewcommand{\matrix}[1]{\mathsf{#1}}
+% \setlength{\fboxsep}{0.8pt}
+% \newcommand{\blob}[1]{\boxed{#1}} % THIS IS HERE TO ANNOY APW
+\newcommand{\blob}[1]{\mathscr{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\normal}{\mathcal{N}\!}
 
 % variables
@@ -53,6 +58,7 @@
 \newcommand{\tI}{\tensor{I}}
 \newcommand{\tS}{\tensor{S}}
 \newcommand{\tQ}{\tensor{Q}}
+\newcommand{\tS}{\tensor{S}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
 \newcommand{\mU}{\matrix{U}}
@@ -112,6 +118,9 @@ times a posterior, where both of these are also Gaussian.
 Here we deliver the details of this refactorization.
 We also explain how it connects to inferences that arise frequently in
 physics and astronomy.
+
+If all you want is the answer, the question is posed and answered
+at the beginning of \sectionname~\ref{sec:problemsolution}.
 
 \section{Inferences with linear parameters}
 
@@ -276,7 +285,7 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 where
 $\normal(\vx\given\vm,\tLambda)$ is the multivariate Gaussian pdf for a vector $\vx$
 given a mean vector $\vm$ and a variance tensor $\tLambda$,
-$M$ is a $N\times K$ rectangular design matrix (which depends, in
+$\mM$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the non-nuisance parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
@@ -286,13 +295,15 @@ $\vmu$ and $\tLambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
 In this incredibly restrictive---but also surprisingly
-common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$ (also
-known as the posterior) and $p(\vy\given\bP)$ (the marginalized
-likelihood) will also both be Gaussian.
+common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$
+(also known as the posterior for the linear parameters, conditioned on
+the nonlinear parameters in $\bP$) and $p(\vy\given\bP)$ (the
+partially marginalized likelihood, marginalizing out the linear
+parameters) will also both be Gaussian.
 Obtaining the specific forms of these Gaussians is the object of this
 \documentname.
 
-\section{Products of Gaussians}
+\section{Products of Gaussians}\label{sec:problemsolution}
 
 On the internets, there are many documents, slide decks, and videos
 that explain products of Gaussians in terms of other Gaussians.
@@ -350,7 +361,7 @@ The first thing is that the determinant products must be equal:
 \end{equation}
 because the determinants are involved in the normalizations of the
 functions.
-This quality of determinant products follows straightforwardly from
+This equality of determinant products follows straightforwardly from
 the matrix determinant lemma
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
@@ -375,18 +386,18 @@ We can ratio these as follows to prove this first thing:
 ~ .
 \end{equation}
 
-The second thing required for the proof is that the quadratic form
-\begin{equation}
+The second thing required for the proof is that the quadratic scalar form
+\begin{equation}\label{eq:LHS}
 [\vy-\mM\cdot\vtheta]\T\cdot\tC\inv\cdot[\vy-\mM\cdot\vtheta]
 + [\vtheta-\vmu]\T\cdot\tLambda\inv\cdot[\vtheta-\vmu]
 \end{equation}
-must equal the quadratic form
-\begin{equation}
+must equal the quadratic scalar form
+\begin{equation}\label{eq:RHS}
 [\vtheta-\va]\T\cdot\tA\inv\cdot[\vtheta-\va]
 + [\vy-\vb]\T\cdot\tB\inv\cdot[\vy-\vb]
 ~,
 \end{equation}
-because these quadratic forms appear in the exponents in the functions.
+because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
 all the quadratic forms, plus some use of the matrix inversion lemma,
 \begin{equation}\label{eq:invlemma}
@@ -403,61 +414,103 @@ APW: DO YOU THINK WE SHOULD COMPLETE THIS? I (HOGG) DON'T SEE A BRIEF VERSION.
 AM I NOT SEEING IT RIGHT?
 
 \paragraph{Solution notes:}
-\begin{itemize}
-\item
-We found this by completing the square. Actually we didn't really; we just
-used clever arguments.
-\item
-Check out both the units and the dimensions of $\mM$ and where it appears!
-\item
-Note that $\va$ is the MAP value for the nuisance parameters $\vtheta$.
-\item
-Note that $\vb$ is the prior-optimal value for the data $\vy$.
-\item
-Check out how we are zero-safe in the variance tensors.
-\item
-Comment about determinants of the matrices?
-\end{itemize}
+In principle we found this factorization by expanding the quadratic in
+(\ref{eq:LHS}) and then completing the square.
+Of course we didn't really; we used arguments (which physicists love)
+called \emph{detailed balance}:
+We required that the terms that look like
+$\vtheta\T\cdot\tQ\cdot\vtheta$ were equal between the LHS~(\ref{eq:LHS})
+and the RHS~(\ref{eq:RHS}), and then all the terms that look like
+$\vmu\T\cdot\tS\cdot\vmu$, and so on.
+It turns out you don't have to consider them all to get the right solution.
+
+Because the matrix $\mM$ is not square, it has no inverse. And because this
+is a physics problem, it has units (which are the units of $\dd\vy/\dd\vtheta$).
+It's beautiful in the solution that $\mM$ and $\mM\T$ appear only where the
+units make sense.
+They make sense because the units of $\tC$ are inverse data-squared (where $\vy$
+is the data vector) and the units of $\tLambda$ are inverse parameters-squared.
+And they are different sizes.
+
+Various parts of the solution are highly interpretable in terms of the
+objects of Bayesian inference. For example, the vector $\va$ is the
+maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
+$\vtheta$.
+It is found by inverse-variance-weigted combinations of the data and the prior.
+The variance tensor $\tA$ is the posterior variance in the parameter space.
+It is strictly non-larger (in eigenvalues or determinant) than either
+the prior variance $\tLambda$ or the parameter-space data-noise
+variance $\mM\T\cdot\tC\cdot\mM$.
+The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
+value for the data $\vy$.
+It is the most likely data under the prior pdf.
+And the variance tensor $\tB$ is the prior variance expanded out to the
+data space, and including the noise variance in the data.
+It is strictly non-smaller than both the data noise variance $\tC$ and the
+data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
+
+HOGG: Coment on the possibility that there is a solution that flows
+from thinking about the product of Gaussians as one Gaussian for the
+joint. Does that lead to a simpler discussion?
 
 \paragraph{Implementation notes:}
-APW: Note that when you actually evaluate these pdfs you probably need to have the
-inverse of $\tB$, and the non-inverse of $\tA$.
-To get those, you should use the inversion lemma!
+The solution gives an expression for the variance tensor $\tB$, but
+note that when you actually evaluate the pdfs you probably need to
+have either the inverse of $\tB$, or else an operator that computes
+the product of the inverse and vectors, as in $\tB\inv\cdot\vy$ and
+the same for $\vb$.
+To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
+the matrix inversion lemma} (\ref{eq:invlemma}) given above.
+This is often useful because you often know the data noise-variance
+tensor inverse $\tC\inv$, and the prior variance inverse
+$\tLambda\inv$.
 
+We also give the general advice that one should \emph{never take an explicit
+inverse} (unless you know the inverse exactly in closed form, as you do
+for, say, diagonal tensors).
+In your code you should never use the \code{inv()} function; you
+should always use a \code{solve()} function.
+The reason is that the code operation \code{inv(B)} returns the best
+possible inverse to machine precision (if you are lucky), but what you
+really want instead is the best possible product of that inverse times
+a vector.
+So in general \code{solve(B,y)} will deliver more precise results than
+the mathematically equivalent \code{dot(inv(B),y)}.
 
-\section{Worked Examples}
+The expressions in (\ref{eq:problem}) do not require that the tensors
+$\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
+that they be non-negative semi-definite.
+That means that they can have zero eigenvalues.
+As can their inverses $\tC\inv$, $\tLambda\inv$, $\tA\inv$, $\tB\inv$.
+If either of these might happen in your problem---like if your prior
+freezes the parameters to a subspace of the $\vtheta$-space, which
+would lead to a zero eigenvalue in $\tLambda$, or if a data point is
+unmeasured or missing, which would lead to a zero eigenvalue in
+$\tC\inv$---you might have to \emph{think about how you implement the
+linear algebra operations to be zero-safe}.
+
+\section{Worked Example}
 
 When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
 \documentname\ have a practical use: To reduce the dimensionality of your model.
 This is often desired when your inferences depend on generating posterior
-samples of model parameters.
+samples of your model parameters.
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
 alternate sampling methods (e.g., rejection sampling) that may be intractable
 when the parameter dimensionality is large.
 
-Below, we demonstrate two ways in which these identities can be used and
-incorporated into statistical inferences: TODO APW.
+Below, we demonstrate one way in which these identities can be used and
+incorporated into statistical inferences TODO APW.
 % One case where the parameter dimensionality is reduced, and another case where
 % standard MCMC is intractable but the straightforward evaluation of the
 % marginal likelihood enables using brute-force rejection sampling to generate
 % posterior samplings.
 
-\subsection{Example 1: Fully Linear Model}
+APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to get your maximum-likelihood linear parameters, don't turn on MCMC to generate samples if everything is linear and gaussian, (2) Another footnote or note about how this enables other sampling methods like The Joker.
 
-APW: Analog to fitting a line to data, can generate posterior samples with numpy.random.multivariate\_normal - don't turn on MCMC!
-
-
-\subsection{Example 2: Spectral line + background}
-
-APW: Reduced dimensionality from 5 to 2 parameters - compare emcee autocorrelation time for the two cases?
-
-
-\subsection{Example 3: Sparsely Sampled Sinusoid + trend}
-
-APW: Show how to construct an analog to The Joker, but for a simpler model that has 4 linear parameters (constant offset, linear trend, amplitudes of cos/sin) and 1 nonlinear parameter (period)
-
+APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to 2 parameters, run with emcee.
 
 
 \end{document}
