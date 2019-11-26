@@ -408,9 +408,14 @@ which gives an expression for the inverse $\tB\inv$ of the \FML\ variance:
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
 ~ .
 \end{equation}
-After that it's just a lot of grinding through matrix expressions.
-APW: DO YOU THINK WE SHOULD COMPLETE THIS? I (HOGG) DON'T SEE A BRIEF VERSION.
-AM I NOT SEEING IT RIGHT?
+After that it's just a lot of grinding through matrix expressions.\footnote{%
+We leave this grinding to the avid reader.
+For guidance, it might help to realize that there are terms that
+contain $\vtheta\T\cdots\vtheta$, terms that contain
+$\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$, $\vtheta\T\cdots\vmu$, and
+$\vmu\T\cdots\vmu$.
+If you expand out each of these five kinds of terms, each of the five
+should lead to an indepenent-ish equality.}
 
 \paragraph{Solution notes:}
 In principle we found this factorization by expanding the quadratic in
