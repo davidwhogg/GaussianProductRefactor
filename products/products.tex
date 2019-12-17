@@ -50,16 +50,21 @@
 \newcommand{\vm}{\vector{m}}
 \newcommand{\vx}{\vector{x}}
 \newcommand{\vy}{\vector{y}}
+\newcommand{\vz}{\vector{z}}
 \newcommand{\vmu}{\vector{\mu}}
+\newcommand{\veta}{\vector{\eta}}
 \newcommand{\vtheta}{\vector{\theta}}
 \newcommand{\tA}{\tensor{A}}
 \newcommand{\tB}{\tensor{B}}
 \newcommand{\tC}{\tensor{C}}
+\newcommand{\tD}{\tensor{D}}
 \newcommand{\tI}{\tensor{I}}
 \newcommand{\tQ}{\tensor{Q}}
 \newcommand{\tS}{\tensor{S}}
+\newcommand{\tH}{\tensor{H}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
+\newcommand{\mN}{\matrix{N}}
 \newcommand{\mU}{\matrix{U}}
 \newcommand{\mV}{\matrix{V}}
 \newcommand{\bP}{\blob{P}}
@@ -70,6 +75,10 @@
 \addtolength{\textheight}{1.5in}
 \setlength{\parindent}{\baselineskip}
 \raggedbottom\sloppy\sloppypar\frenchspacing
+
+
+\usepackage{color}
+\newcommand{\bl}[1]{\textcolor{red}{[BL: #1]}}
 
 \begin{document}
 
@@ -96,7 +105,7 @@ and the National Aeronautics and Space Administration.
 
 \medskip\noindent\textbf{Boris Leistedt}\\
 {\footnotesize%
-  \textsl{Imperial College, London}\\
+  \textsl{Department of Physics, Imperial College, London}\\
   \textsl{Center for Cosmology and Particle Physics, Department of Physics, New York University}%
 }
 
@@ -246,7 +255,7 @@ p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \end{equation}
 where the integral is implicitly over the entire domain of the
 nuisances $\vtheta$ (or the entire support of the prior).
-Or we can do a clever re-factorization of this form:
+Or we can do a clever re-factorization of this form \bl{Isn't just Bayes theorem again? I wouldn't say a re-factorization, but rather simply emphasize that the posterior and evidence have closed form solutions.}:
 \begin{equation}
 p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
  = p(\vtheta\given\vy,\bP)\,p(\vy\given\bP)
@@ -441,6 +450,7 @@ objects of Bayesian inference. For example, the vector $\va$ is the
 maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
 $\vtheta$.
 It is found by inverse-variance-weigted combinations of the data and the prior.
+\bl{I would say this is worth highlighting more since there are definitely some problems where this MAP interpretation is useful and could be used elsewhere.}
 The variance tensor $\tA$ is the posterior variance in the parameter space.
 It is strictly non-larger (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
@@ -458,6 +468,7 @@ from thinking about the product of Gaussians as one Gaussian for the
 joint. Does that lead to a simpler discussion?
 
 \paragraph{Implementation notes:}
+\bl{I would expand this section into bullet points, and say more about the necessity of using the matrix inversion lemma for numerical stability, especially when the dimensions differ greatly.}
 The solution gives an expression for the variance tensor $\tB$, but
 note that when you actually evaluate the pdfs you probably need to
 have either the inverse of $\tB$, or else an operator that computes
@@ -515,6 +526,63 @@ incorporated into statistical inferences TODO APW.
 APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to get your maximum-likelihood linear parameters, don't turn on MCMC to generate samples if everything is linear and gaussian, (2) Another footnote or note about how this enables other sampling methods like The Joker.
 
 APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to 2 parameters, run with emcee.
+
+\section{Alternative proof and generalization}
+
+An interesting case is when the likelihood is made of multiple Gaussian terms, for example with independent subsets of data points, therefore yielding the product of many Gaussians, with arbitrary design matrices
+\begin{equation}\label{eq:generalgaussianproduct}
+\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) 
+~ ,
+\end{equation}
+
+For the specific case of two subsets of data points, this would be
+\begin{equation}
+\mbox{likelihood} \quad \normal(\vy\given\mM\cdot\vtheta,\tC) \ \normal(\vz\given\mN\cdot\vtheta,\tD)
+\end{equation}
+\begin{equation}
+\mbox{prior} \quad \normal(\vtheta\given\vmu,\tLambda)
+~ ,
+\end{equation}
+which is trivial if the design matrices are identical, $\mM = \mN$, since one can write a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived above. But for $\mM \neq \mN$, a more sophisticated method is necessary. The techniques from above (completing the square and detailed balance) can be used but become cumbersome. The general case is even more difficult. We will derive a proof with \textit{the canonical form of Gaussian distributions}. 
+For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is written as 
+\begin{equation}
+\normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
+~ ,
+\end{equation}
+The parameters are obtained by equating the canonical form with the standard form, $\tH = \tLambda^{\ -1}$, $\veta = \tH\cdot \vm = \tLambda^{-1}\cdot \vm$, and the normalization
+$\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\cdot \veta \right)$
+with $d$ the dimensionality of $\vx$.
+
+Equipped with the canonical form, it is easy to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\ref{eq:generalgaussianproduct}):
+
+\begin{eqnarray}
+\prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
+&=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
+\end{eqnarray}
+naturally grouping the terms depending on $\theta$ and following the convention of the previous section.
+
+
+The parameters of the individual Gaussians in canonical form are
+\begin{eqnarray}
+&\veta_i = \tLambda_i^{-1} \cdot \vmu_i \\
+&\tH_i = \tLambda_i^{-1}\\
+&\xi_i = -\frac{1}{2}\left( K\log 2\pi -\log|\tH_i| + \veta_i^T \cdot \tH_i\cdot \veta_i \right) 
+\end{eqnarray}
+and that of the total Gaussian is,
+\begin{eqnarray}
+&\bar{\veta} = \sum_i \mM_i \cdot \veta_i = \sum_i \mM_i \cdot  \tLambda_i^{-1} \cdot \vmu_i  \\
+&\bar{\tH} = \sum_i  \mM_i^T\cdot \tH_i\cdot \mM_i = \sum_i  \mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i \\ 
+& \bar{\xi} =  -\frac{1}{2}\left( N\log 2\pi -\log|\bar{\tH} | + \bar{\veta}^T \cdot \bar{\tH}\cdot \bar{\veta} \right)\\
+&\va =  \bar{\tH}^{-1} \bar{\xi} \\
+&\tA = \bar{\tH}^{-1} 
+\end{eqnarray}
+
+We can easily verify that this matches the results from the previous sections.
+As before, we can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian variance.  
+Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ vanishes when marginalizing over $\vtheta$, and we are left with $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
+
+
+\bl{TODO: more computational remarks about how hard it can be to actually compute those terms: one may need to use the matrix inversion lemma multiple times, which is not easy, and may require some analytic simplifications in some cases, depending on the condition numbers of the individual matrixes.}
 
 
 \end{document}
