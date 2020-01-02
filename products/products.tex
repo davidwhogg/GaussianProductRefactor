@@ -463,7 +463,7 @@ data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
-HOGG: Coment on the possibility that there is a solution that flows
+HOGG: Comment on the possibility that there is a solution that flows
 from thinking about the product of Gaussians as one Gaussian for the
 joint. Does that lead to a simpler discussion?
 
@@ -503,6 +503,21 @@ would lead to a zero eigenvalue in $\tLambda$, or if a data point is
 unmeasured or missing, which would lead to a zero eigenvalue in
 $\tC\inv$---you might have to \emph{think about how you implement the
 linear algebra operations to be zero-safe}.
+
+
+\paragraph{Simplification: single multiplicative scaling}
+
+One interesting case is when $K=1$, so the design matrix in fact reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and $\mu$ and $\Lambda$ are now scalars as well.
+
+\begin{equation}
+\mbox{likelihood} \times \mbox{prior} \quad \normal(\vy\given\vm\cdot\theta,\tC)\normal(\theta\given \mu, \Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB) 
+~ .
+\end{equation}
+
+In this case, the previous equations are simplified and no longer involve as matrix matrix operations (in particular inversions), which results in them being typically more numerically stable (in which case the matrix inversion lemma reduces to the Sherman–Morrison formula, applicable to derive $A$ and $\tB$).
+
+
+
 
 \section{Worked Example}
 
