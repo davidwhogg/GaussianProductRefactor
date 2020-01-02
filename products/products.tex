@@ -468,7 +468,7 @@ from thinking about the product of Gaussians as one Gaussian for the
 joint. Does that lead to a simpler discussion?
 
 \paragraph{Implementation notes:}
-\bl{I would expand this section into bullet points, and say more about the necessity of using the matrix inversion lemma for numerical stability, especially when the dimensions differ greatly.}
+\bl{If this paragraph gets any bigger I would break it into bullet points, and say more about the necessity of using the matrix inversion lemma for numerical stability, especially when the dimensions differ greatly (M "very non square").}
 The solution gives an expression for the variance tensor $\tB$, but
 note that when you actually evaluate the pdfs you probably need to
 have either the inverse of $\tB$, or else an operator that computes
@@ -527,14 +527,14 @@ APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to g
 
 APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to 2 parameters, run with emcee.
 
-
+\bl{Simple example would be to marginalize over a couple of nuisance parameters, say additive nuisance polynomials on top of a model of interest, for SDSS stars or galaxies for example?}
 
 \section{Generalization: product of many Gaussians}
 
-An interesting case is when the likelihood is made of multiple Gaussian terms, for example with independent subsets of data points, therefore yielding the product of many Gaussians, with arbitrary design matrices
+An interesting case that may arise in some applications is when the likelihood is made of multiple Gaussian terms, for example when including independent subsets of data points in an analysis. This results in having to treat the product of many Gaussians, with arbitrary design matrices, which we can write as
 \begin{equation}\label{eq:generalgaussianproduct}
-\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) 
-~ ,
+\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal(  \vmu_i \given \mM_i\cdot\vtheta ,\tLambda_i) 
+~ .
 \end{equation}
 
 For the specific case of two subsets of data points, this could look like
@@ -545,8 +545,8 @@ For the specific case of two subsets of data points, this could look like
 \mbox{prior} \quad \normal(\vtheta\given\vmu,\tLambda)
 ~ .
 \end{equation}
-This is trivial if the design matrices are identical, $\mM = \mN$, since one can write a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived above. But for $\mM \neq \mN$, this does not apply. The techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a proof using \textit{the canonical form of Gaussian distributions}. 
-For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is written as 
+This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}. 
+For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
 \begin{equation}
 \normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
 ~ ,
@@ -561,7 +561,7 @@ Equipped with the canonical form, it is easy to see that the product of any numb
 \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
 &=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
 \end{eqnarray}
-naturally grouping the terms depending on $\theta$ and following the convention of the previous section.
+naturally grouping the terms depending on $\vtheta$ and following the convention of the previous section.
 
 
 The parameters of the individual Gaussians in canonical form are
@@ -570,7 +570,7 @@ The parameters of the individual Gaussians in canonical form are
 \tH_i  &=& \tLambda_i^{-1}\\
 \xi_i &=& -\frac{1}{2}\left( K\log 2\pi -\log|\tH_i| + \veta_i^T \cdot \tH_i\cdot \veta_i \right) 
 \end{eqnarray}
-and that of the total Gaussian is,
+and that of the total Gaussian are
 \begin{eqnarray}
 \bar{\veta} &=& \sum_i \mM_i \cdot \veta_i = \sum_i \mM_i \cdot  \tLambda_i^{-1} \cdot \vmu_i  \\
 \bar{\tH} &=& \sum_i  \mM_i^T\cdot \tH_i\cdot \mM_i = \sum_i  \mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i \\ 
@@ -579,12 +579,14 @@ and that of the total Gaussian is,
 \tA &=& \bar{\tH}^{-1} 
 \end{eqnarray}
 
-We can easily verify that with this formula we can re-derive the results from the previous sections.
-As before, we can identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian variance.  
-Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the FML, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
+Equipped with this result, we can re-derive the formulae of the previous sections.
+We can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian covariance.  
+Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the \FML, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
 
-
-\bl{TODO: more computational remarks about how hard it can be to actually compute those terms: one may need to use the matrix inversion lemma multiple times, which is not easy, and may require some analytic simplifications in some cases, depending on the condition numbers of the individual matrixes.}
+One culprit of this approach is that its implementation. Indeed, it involves inverting the individual covariances $\tLambda_i$, projecting them with $\mM_i$, in order to form $\bar{\tH}$ and  $\bar{\veta}$ and apply them onto each other to obtain $\va$, $\tA$ and $ \bar{\xi}$. Depending on the condition numbers of the square matrices, and the dimensionality of the projection matrices, applying those formulae may be numerically unstable. In practice, this could simply result from the noise levels in the data and how the model is projected from the parameters $\vtheta$ onto the data.
+It is therefore highly recommended to apply those formulae with care, and verify the stability of the results.
+If matrices with bad condition numbers are involved, one solution would be to apply the matrix inversion lemma. Unfortunately this would only apply to one term $\mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i$ at a time, and it may be necessary to apply it multiple times, resulting in long expressions (that lead to numerically stable results). 
+Since this is application-specific, we do not derive those expressions here.
 
 
 
