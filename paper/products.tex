@@ -550,18 +550,19 @@ the solutions are given below.
 
 \subsection{Exercise 1: A fully linear model}
 
-\textbf{Problem:} We observe a set of $N>2$ data $(x_i, y_i)$ (indexed by $i$)
-with known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in
-$x$.
-Our parametric model for this data is a straight line,
+\textbf{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+Our parametric model for this data is a quadratic polynomial,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
-  f(x \,;\, \alpha, \beta) = \alpha\,x + \beta
+  f(x \,;\, \alpha, \beta, \gamma) = \alpha\,x^2 + \beta\,x + \gamma
 \end{equation}
-and we assume we have Gaussian prior pdfs on the parameters $(\alpha, \beta)$,
+and we assume we have Gaussian prior pdfs on the parameters $(\alpha, \beta,
+\gamma)$,
 \begin{align}
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
-  p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)
+  p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
+  p(\gamma) &= \normal(\gamma \given \mu_\gamma, \sigma_\gamma)
   \quad .
 \end{align}
 Derive the form of the posterior pdf and the value of the MAP parameter vector.
@@ -570,9 +571,11 @@ Table~\ref{tbl:data1} contains 5 data points, $(x_i, y_i, \sigma_{y_i})$.
 Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
-  (\mu_\beta, \sigma_\beta) &= (3, 2) \quad ,
+  (\mu_\beta, \sigma_\beta) &= (3, 2)\\
+  (\mu_\gamma, \sigma_\gamma) &= (9, 8) \quad ,
 \end{align}
-compute the MAP parameter values $(\alpha_{\rm MAP}, \beta_{\rm MAP})$;
+compute the MAP parameter values $(\alpha_{\rm MAP}, \beta_{\rm MAP},
+\gamma_{\rm MAP})$;
 Plot the data (with error bars) and over-plot the model evaluated at the
 MAP parameter values.
 Generate 4096 posterior samples of the parameters;
@@ -586,9 +589,10 @@ estimated using these samples.
     \begin{tabular}{c|c|c}
       $x$ & $y$ & $\sigma_y$ \\
       \hline
-      $-1.4$ & $0.8$ & $-2.4$ \\
-      $2.5$ & $1.2$ & $8.8$ \\
-      $3.1$ & $1.9$ & $13.8$ \\
+      $-0.6$ & 14.5 & 0.8 \\
+      2.0 & 29.8 & 3.2 \\
+      2.7 & 47.7 & 3.3 \\
+      3.6 & 68.2 & 3.9 \\
     \end{tabular}
     \caption{Data used in Exercise 1. \href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{$\boxplus$}}\todo{Replace url with Zenodo link.}
   \end{center}
