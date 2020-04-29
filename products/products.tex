@@ -22,6 +22,11 @@
 \documentclass[12pt, letterpaper]{article}
 \usepackage{amsmath, bm, mathrsfs}
 
+\usepackage[utf8]{inputenc}
+\inputencoding{latin1}
+\inputencoding{utf8}
+\usepackage{pifont}
+
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
@@ -67,8 +72,10 @@
 \newcommand{\mN}{\matrix{N}}
 \newcommand{\mU}{\matrix{U}}
 \newcommand{\mV}{\matrix{V}}
-\newcommand{\bP}{\blob{P}}
-\newcommand{\bH}{\blob{H}}
+% \newcommand{\bP}{\blob{P}}
+% \newcommand{\bH}{\blob{H}}
+\newcommand{\bP}{\ensuremath{\textrm{\ding{170}}}} % THIS IS HERE TO ANNOY DWH
+\newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH
 
 % typesetting stuff
 \addtolength{\topmargin}{-0.75in}
