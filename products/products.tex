@@ -24,9 +24,14 @@
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
-\usepackage{amsmath, bm, mathrsfs}
-
+\usepackage{amsmath, bm, mathrsfs, amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[hidelinks,
+            colorlinks=true,
+            linkcolor=black,
+            urlcolor=CornflowerBlue]{hyperref}
 \usepackage{pifont}
+\usepackage{graphicx}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
@@ -86,8 +91,8 @@
 \setlength{\parindent}{\baselineskip}
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
-\usepackage{color}
-\newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
+\newcommand{\todo}[1]{\textcolor{BrickRed}{[TODO: #1]}}
+\newcommand{\bl}[1]{\textcolor{DarkOrchid}{[BL says: #1]}}
 
 \begin{document}
 
@@ -585,12 +590,19 @@ estimated using these samples.
       $2.5$ & $1.2$ & $8.8$ \\
       $3.1$ & $1.9$ & $13.8$ \\
     \end{tabular}
-    \caption{Data used in .}
+    \caption{Data used in Exercise 1. \href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{$\boxplus$}}\todo{Replace url with Zenodo link.}
   \end{center}
 \end{table}
 
 
-\textbf{Solution:} TODO: some notes
+\textbf{Solution:}
+TODO:
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{exercise1.pdf}
+  \caption{Wassup.}
+\end{figure}
 
 % FML as a function of nonlinear parameters
 % MAP value and posterior for the linear parameters
