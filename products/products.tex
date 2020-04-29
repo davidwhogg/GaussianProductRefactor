@@ -10,9 +10,13 @@
 % - remove all HOGG and APW from the text.
 % - HOGG: distinguish between FML and partially marginalized likelihood:
 %   sometimes you have parameters that enter non-linearly, and that's ok
+% - should we say "positive semi-definite" instead of "non-negative semi-definite"?
+% - audit all style notes
+% - fix typesetting for "canonical form" of normal in final section
 
-% style notes
-% -----------
+% style notes -- audit for these.
+% -------------------------------
+% - no condescending language; no "it is easy to show" or equivalent...!
 % - use \vA not A or \vector{A} and so on.
 % - modify typesetting above the \begin{document} line, not below.
 % - distinguish types (vector, matrix, tensor).
@@ -47,7 +51,7 @@
 % \setlength{\fboxsep}{0.8pt}
 % \newcommand{\blob}[1]{\boxed{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\blob}[1]{\mathscr{#1}} % THIS IS HERE TO ANNOY APW
-\newcommand{\normal}{\mathcal{N}\!}
+\newcommand{\normal}{\mathcal{N}\!\,}
 
 % variables
 \newcommand{\va}{\vector{a}}
