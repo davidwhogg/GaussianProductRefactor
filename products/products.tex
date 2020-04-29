@@ -201,13 +201,11 @@ $p(\vy\given\bH)$ is the pdf for the data, marginalizing out all
 parameters (sometimes called the Bayesian evidence or the fully
 marginalized likelihood or \FML).
 
-The main point of this \documentname\ is that if the likelihood is
-Gaussian, and the expectation of the data depends linearly on the
-parameters, and if we choose the prior pdf to also be Gaussian, then
-eveything else (the joint, the posterior, and the \FML) becomes
-Gaussian too.
-And, moreover, the means and variances of these five Gaussians are all
-related by simple, closed-form expressions.
+If the likelihood is Gaussian, and the expectation of the data depends linearly
+on the parameters, and if we choose the prior pdf to also be Gaussian, then
+eveything else (the joint, the posterior, and the \FML) becomes Gaussian too.
+The main point of this \documentname\ is that the means and variances of these
+five Gaussians are all related by simple, closed-form expressions, given below.
 One consequence of this math is that \emph{if} you have a Gaussian
 likelihood function, and \emph{if} you have a subset of parameters
 that are linearly related to the expectation of the data, \emph{then}
@@ -424,9 +422,8 @@ which gives an expression for the inverse $\tB\inv$ of the \FML\ variance:
 After that it's just a lot of grinding through matrix expressions.\footnote{%
 We leave this grinding to the avid reader.
 For guidance, it might help to realize that there are terms that
-contain $\vtheta\T\cdots\vtheta$, terms that contain
-$\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$, $\vtheta\T\cdots\vmu$, and
-$\vmu\T\cdots\vmu$.
+contain $\vtheta\T\cdots\vtheta$, $\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$,
+$\vtheta\T\cdots\vmu$, and $\vmu\T\cdots\vmu$.
 If you expand out each of these five kinds of terms, each of the five
 should lead to an indepenent-ish equality.}
 
@@ -453,7 +450,7 @@ Various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, the vector $\va$ is the
 maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
 $\vtheta$.
-It is found by inverse-variance-weigted combinations of the data and the prior.
+It is found by inverse-variance-weighted combinations of the data and the prior.
 \bl{I would say this is worth highlighting more since there are definitely some problems where this MAP interpretation is useful and could be used elsewhere.}
 The variance tensor $\tA$ is the posterior variance in the parameter space.
 It is strictly non-larger (in eigenvalues or determinant) than either
@@ -514,7 +511,7 @@ linear algebra operations to be zero-safe}.
 One interesting case is when $K=1$, so the design matrix in fact reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and $\mu$ and $\Lambda$ are now scalars as well.
 
 \begin{equation}
-\mbox{likelihood} \times \mbox{prior} \quad \normal(\vy\given\vm\cdot\theta,\tC)\normal(\theta\given \mu, \Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB) 
+\mbox{likelihood} \times \mbox{prior} \quad \normal(\vy\given\vm\cdot\theta,\tC)\normal(\theta\given \mu, \Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 ~ .
 \end{equation}
 
@@ -552,7 +549,7 @@ APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to
 
 An interesting case that may arise in some applications is when the likelihood is made of multiple Gaussian terms, for example when including independent subsets of data points in an analysis. This results in having to treat the product of many Gaussians, with arbitrary design matrices, which we can write as
 \begin{equation}\label{eq:generalgaussianproduct}
-\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal(  \vmu_i \given \mM_i\cdot\vtheta ,\tLambda_i) 
+\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal(  \vmu_i \given \mM_i\cdot\vtheta ,\tLambda_i)
 ~ .
 \end{equation}
 
@@ -564,7 +561,7 @@ For the specific case of two subsets of data points, this could look like
 \mbox{prior} \quad \normal(\vtheta\given\vmu,\tLambda)
 ~ .
 \end{equation}
-This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}. 
+This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
 For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
 \begin{equation}
 \normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
@@ -587,24 +584,24 @@ The parameters of the individual Gaussians in canonical form are
 \begin{eqnarray}
 \veta_i &=& \tLambda_i^{-1} \cdot \vmu_i \\
 \tH_i  &=& \tLambda_i^{-1}\\
-\xi_i &=& -\frac{1}{2}\left( d_i \log 2\pi -\log|\tH_i| + \veta_i^T \cdot \tH_i\inv\cdot \veta_i \right) 
+\xi_i &=& -\frac{1}{2}\left( d_i \log 2\pi -\log|\tH_i| + \veta_i^T \cdot \tH_i\inv\cdot \veta_i \right)
 \end{eqnarray}
 where $d_i$ is the dimensionality of $\vmu_i$, and that of the total Gaussian are
 \begin{eqnarray}
 \bar{\veta} &=& \sum_i \mM_i \cdot \veta_i = \sum_i \mM_i \cdot  \tLambda_i^{-1} \cdot \vmu_i  \\
-\bar{\tH} &=& \sum_i  \mM_i^T\cdot \tH_i\cdot \mM_i = \sum_i  \mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i \\ 
+\bar{\tH} &=& \sum_i  \mM_i^T\cdot \tH_i\cdot \mM_i = \sum_i  \mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i \\
  \bar{\xi} &=&  -\frac{1}{2}\left( N\log 2\pi -\log|\bar{\tH} | + \bar{\veta}^T \cdot \bar{\tH}\inv\cdot \bar{\veta} \right)\\
 \va &=&  \bar{\tH}^{-1} \bar{\xi} \\
-\tA &=& \bar{\tH}^{-1} 
+\tA &=& \bar{\tH}^{-1}
 \end{eqnarray}
 where $N$ is the dimensionality of $\vtheta$.
 Equipped with this result, we can re-derive the formulae of the previous sections.
-We can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian covariance.  
+We can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian covariance.
 Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the \FML, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
 
 One culprit of this approach is that its implementation. Indeed, it involves inverting the individual covariances $\tLambda_i$, projecting them with $\mM_i$, in order to form $\bar{\tH}$ and  $\bar{\veta}$ and apply them onto each other to obtain $\va$, $\tA$ and $ \bar{\xi}$. Depending on the condition numbers of the square matrices, and the dimensionality of the projection matrices, applying those formulae may be numerically unstable. In practice, this could simply result from the noise levels in the data and how the model is projected from the parameters $\vtheta$ onto the data.
 It is therefore highly recommended to apply those formulae with care, and verify the stability of the results.
-If matrices with bad condition numbers are involved, one solution would be to apply the matrix inversion lemma. Unfortunately this would only apply to one term $\mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i$ at a time, and it may be necessary to apply it multiple times, resulting in long expressions (that lead to numerically stable results). 
+If matrices with bad condition numbers are involved, one solution would be to apply the matrix inversion lemma. Unfortunately this would only apply to one term $\mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i$ at a time, and it may be necessary to apply it multiple times, resulting in long expressions (that lead to numerically stable results).
 Since this is application-specific, we do not derive those expressions here.
 
 
