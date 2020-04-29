@@ -33,6 +33,9 @@
 \usepackage{pifont}
 \usepackage{graphicx}
 
+\usepackage{caption}
+\captionsetup{font=footnotesize}
+
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
@@ -355,16 +358,16 @@ and
 $\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
 
 \paragraph{Solution:}
-\begin{equation}
+\begin{equation}\label{eq:A}
 \tA\inv = \tLambda\inv + \mM\T \cdot \tC\inv \cdot \mM
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:a}
 \va = \tA \cdot (\tLambda\inv \cdot \vmu + \mM\T \cdot \tC\inv \cdot \vy)
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:B}
 \tB = \tC + \mM \cdot \tLambda \cdot \mM\T
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:b}
 \vb = \mM \cdot \vmu
 ~ .
 \end{equation}
@@ -435,7 +438,7 @@ For guidance, it might help to realize that there are terms that
 contain $\vtheta\T\cdots\vtheta$, $\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$,
 $\vtheta\T\cdots\vmu$, and $\vmu\T\cdots\vmu$.
 If you expand out each of these five kinds of terms, each of the five
-should lead to an indepenent-ish equality.}
+should lead to an independent-ish equality.}
 
 \paragraph{Solution notes:}
 In principle we found this factorization by expanding the quadratic in
@@ -535,55 +538,55 @@ In this case, the previous equations are simplified and no longer involve as mat
 When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
 \documentname\ have practical uses: (1) To simplify the posterior pdf of your
-model (which makes generating samples or computing integrals far easier), and
+model (which makes generating samples or computing integrals far simpler), and
 (2) to reduce the dimensionality of your model (i.e., by enabling analytic
-marginalizations of your linear parameters).
+marginalizations over any linear parameters).
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
 alternate sampling methods (e.g., rejection sampling) that may be intractable
 when the parameter dimensionality is large.
 
-Here, we demonstrate the utility of the identities shown above with two toy
-examples: The examples are written such that the problems are set up first, and
-the solutions are given below.
+Here, we demonstrate the utility of the identities shown above with two toy,
+worked exercises: The examples are written such that the problems are set up
+first, and the solutions are given below.
 
 
 \subsection{Exercise 1: A fully linear model}
 
 \textbf{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
-Our parametric model for this data is a quadratic polynomial,
+The parametric model we will use for this data is a quadratic polynomial,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
   f(x \,;\, \alpha, \beta, \gamma) = \alpha\,x^2 + \beta\,x + \gamma
 \end{equation}
-and we assume we have Gaussian prior pdfs on the parameters $(\alpha, \beta,
-\gamma)$,
+and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
+\beta, \gamma)$,
 \begin{align}
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
   p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
   p(\gamma) &= \normal(\gamma \given \mu_\gamma, \sigma_\gamma)
   \quad .
 \end{align}
-Derive the form of the posterior pdf and the value of the MAP parameter vector.
 
-Table~\ref{tbl:data1} contains 5 data points, $(x_i, y_i, \sigma_{y_i})$.
+Table~\ref{tbl:data1} contains 4 data points, $(x_i, y_i, \sigma_{y_i})$.
 Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
   (\mu_\beta, \sigma_\beta) &= (3, 2)\\
   (\mu_\gamma, \sigma_\gamma) &= (9, 8) \quad ,
 \end{align}
-compute the MAP parameter values $(\alpha_{\rm MAP}, \beta_{\rm MAP},
-\gamma_{\rm MAP})$;
+compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+\gamma_{\rm MAP})$.
 Plot the data (with error bars) and over-plot the model evaluated at the
 MAP parameter values.
-Generate 4096 posterior samples of the parameters;
+Generate 4096 posterior samples of the parameters.
 Over-plot a shaded region showing the 68\% credible region for the model,
 estimated using these samples.
 
 % Generated with Exercise1.ipynb
 \begin{table}[h!]
+  \footnotesize
   \begin{center}
     \label{tbl:data1}
     \begin{tabular}{c|c|c}
@@ -594,18 +597,45 @@ estimated using these samples.
       2.7 & 47.7 & 3.3 \\
       3.6 & 68.2 & 3.9 \\
     \end{tabular}
-    \caption{Data used in Exercise 1. \href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{$\boxplus$}}\todo{Replace url with Zenodo link.}
+    \caption{Simulated data used in Exercise 1
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.}
   \end{center}
 \end{table}
 
 
-\textbf{Solution:}
-TODO:
+\noindent\textbf{Solution:} Given the assumptions and prior parameter values
+above,
+\begin{align}
+  \vmu &= (1, 3, 9)\\
+  \tLambda &=
+    \begin{pmatrix}
+      5^2 & 0 & 0\\
+      0 & 2^2 & 0\\
+      0 & 0 & 8^2
+    \end{pmatrix}\\
+  \mM &= \begin{pmatrix}
+      0.36 & -0.6 & 1\\
+      4.0 & 2.0 & 1\\
+      7.29 & 2.7 & 1\\
+      12.96 & 3.6 & 1
+    \end{pmatrix} \quad .
+\end{align}
+By plugging in to Equation~\ref{eq:a}, we find MAP parameter values
+\begin{equation}
+  \va =
+    (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
+      (3.61, 1.98, 14.26) \quad .
+\end{equation}
+Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
+MAP parameter values (blue line), and the 68\% credible region (shaded blue
+region) estimated using posterior samples generated from
+$\normal(\vtheta\given\va,\tA)$.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{exercise1.pdf}
   \caption{Wassup.}
+  \label{fig:ex1}
 \end{figure}
 
 % FML as a function of nonlinear parameters
