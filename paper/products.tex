@@ -553,7 +553,7 @@ first, and the solutions are given below.
 
 \subsection{Exercise 1: A fully linear model}
 
-\textbf{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
 The parametric model we will use for this data is a quadratic polynomial,
 \begin{equation}
@@ -584,26 +584,26 @@ Generate 4096 posterior samples of the parameters.
 Over-plot a shaded region showing the 68\% credible region for the model,
 estimated using these samples.
 
-% Generated with Exercise1.ipynb
-\begin{table}[h!]
+% Generated with notebooks/Exercise1.ipynb
+\begin{table}[t!]
   \footnotesize
   \begin{center}
-    \label{tbl:data1}
     \begin{tabular}{c|c|c}
       $x$ & $y$ & $\sigma_y$ \\
       \hline
       $-0.6$ & 14.5 & 0.8 \\
       2.0 & 29.8 & 3.2 \\
       2.7 & 47.7 & 3.3 \\
-      3.6 & 68.2 & 3.9 \\
+      3.6 & 68.2 & 3.9
     \end{tabular}
     \caption{Simulated data used in Exercise 1
-    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.}
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
+    \label{tbl:data1}}
   \end{center}
 \end{table}
 
 
-\noindent\textbf{Solution:} Given the assumptions and prior parameter values
+\paragraph{Solution:} Given the assumptions and prior parameter values
 above,
 \begin{align}
   \vmu &= (1, 3, 9)\\
@@ -631,17 +631,55 @@ MAP parameter values (blue line), and the 68\% credible region (shaded blue
 region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
 
-\begin{figure}[h]
+% Generated with notebooks/Exercise1.ipynb
+\begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{exercise1.pdf}
-  \caption{Wassup.}
+  \caption{The solution to Exercise 1. The MAP parameter values were found using
+    Equation~\ref{eq:a}.}
   \label{fig:ex1}
 \end{figure}
 
-% PML as a function of nonlinear parameters
-% MAP value and posterior for the linear parameters
 
-% APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to get your maximum-likelihood linear parameters, don't turn on MCMC to generate samples if everything is linear and gaussian, (2) Another footnote or note about how this enables other sampling methods like The Joker.
+\subsection{Exercise 2: A model with linear and non-linear parameters}
+
+\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+The parametric model we will use for this data is a generalized sinusoid with a
+constant offset,
+\begin{equation}
+  % APW: I used greek here because a, b are used in expressions above...
+  f(x \,;\, \alpha, \beta, \gamma, \omega) =
+    \alpha\,\cos(\omega \, x) + \beta\,\sin(\omega \, x) + \gamma
+\end{equation}
+and we again assume we have Gaussian prior pdfs on all of the \emph{linear}
+parameters $(\alpha, \beta, \gamma)$.
+Here, we can no longer analytically express the posterior pdf because of the
+non-linear parameter $\omega$, but we can compute the marginal likelihood
+(marginalizing over the linear parameters).
+
+Table~\ref{tbl:data2}
+Write a function to compute the design matrix and components of the marginal
+likelihood ($\va, \tA, \vb, \tB$) given a value of $\omega$.
+Compute the marginal likelihood
+
+% Generated with notebooks/Exercise2.ipynb
+\begin{table}[t!]
+  \footnotesize
+  \begin{center}
+    \begin{tabular}{c|c|c}
+      $x$ & $y$ & $\sigma_y$ \\
+      \hline
+      $-1.2$ & 11.2 & 0.2 \\
+      1.3 & 16.1 & 0.2 \\
+      3.1 & 10.2 & 0.3 \\
+      4.1 & 13.5 & 0.3
+    \end{tabular}
+    \caption{Simulated data used in Exercise 2
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data2.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
+    \label{tbl:data2}}
+  \end{center}
+\end{table}
 
 
 \section{Generalization: product of many Gaussians}
