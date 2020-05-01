@@ -89,7 +89,7 @@
 % \newcommand{\bH}{\blob{H}}
 % This is the star:
 % \newcommand{\bP}{\ensuremath{\textrm{\ding{87}}}} % THIS IS HERE TO ANNOY DWH
-\newcommand{\bP}{\ensuremath{\textrm{\ding{170}}}} % THIS IS HERE TO ANNOY DWH
+\newcommand{\bP}{\ensuremath{\textrm{\ding{80}}}} % THIS IS HERE TO ANNOY DWH
 \newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH
 
 % typesetting stuff
@@ -137,25 +137,27 @@ A product of two Gaussians is another Gaussian.
 That's a valuable and useful fact!
 Here we use it to derive a refactoring of a common product of
 Gaussians:
-The product of a Gaussian likelihood (probability for data given
-parameters) times a Gaussian prior (probability for parameters),
-where some (or all) of those parameters enter the likelihood
-only in the mean (or expectation) and only linearly.
-That is, a linear model, with a Gaussian likelihood and a Gaussian
-prior.
-This product of a likelihood times a prior can be refactored into a
-product of a Bayesian evidence (or marginalized likelihood)
-times a posterior, where both of these are also Gaussian.
-Here we deliver the details of this refactorization.
-We also explain how it connects to inferences that arise frequently in
-physics and astronomy.
+The product of a Gaussian likelihood times a Gaussian prior, where some or all
+of those parameters enter the likelihood only in the mean and only linearly.
+That is, a linear model, with a Gaussian likelihood and a Gaussian prior.
+This product of a likelihood times a prior can be refactored into a product of a
+Bayesian evidence (or marginalized likelihood) times a posterior, where both of
+these are also Gaussian.
+The means and variance tensors of the refactored Gaussians are straightforward
+to obtain as closed-form expressions;
+Here we deliver the details of this refactorization, and the closed-form
+expressions.
+We also explain how it connects to inferences that arise frequently in physics
+and astronomy, and show two toy examples (posed as worked exercises) of how
+these results are used in practice.
 
-If all you want is the answer, the question is posed and answered
-at the beginning of \sectionname~\ref{sec:problemsolution}.
+If all you want is the answer, the question is posed and answered at the
+beginning of \sectionname~\ref{sec:problemsolution}, and a generalization to
+products of many Gaussians is given in \sectionname~\ref{sec:generalization}.
 
 \section{Inferences with linear parameters}
 
-It is not uncommon in physics and astronomy that likelihood functions
+It is common in physics and astronomy that likelihood functions
 (probabilities of data given parameters) are chosen to be Gaussian:
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
@@ -170,10 +172,10 @@ Gaussian is that Gaussians are generally \emph{tractable}:
 Many computations we like to perform on Gaussians, like integrals and
 derivatives and optimizations, have closed-form solutions.
 Even when we don't use the closed-form solutions, there are many
-contexts in which Gaussians lead to convex functions,
+contexts in which Gaussians lead to convex optimizations,
 providing guarantees to resulting inferences.
 
-It is also not uncommon in physics and astronomy that models for data
+It is also common in physics and astronomy that models for data
 include parameters such that the expectation value for the data (in,
 say, a set of repeated experiments) is linearly proportional to some
 subset of the parameters.
@@ -559,6 +561,7 @@ first, and the solutions are given below.
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+\todo{Connect this to centroiding peaks in spectroscopy or whatever - give it negative curvature}
 The parametric model we will use for this data is a quadratic polynomial,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
@@ -657,6 +660,7 @@ constant offset,
 \end{equation}
 and we again assume we have Gaussian prior pdfs on all of the \emph{linear}
 parameters $(\alpha, \beta, \gamma)$.
+\todo{Set up this problem by stating some explicit Astro problems with this structure. Mention asteroseismology, if summing over frequency}
 Here, we can no longer analytically express the posterior pdf because of the
 non-linear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters).
@@ -693,6 +697,7 @@ Compute the marginal likelihood
 \end{table}
 
 \section{Generalization: product of many Gaussians}
+\label{sec:generalization}
 
 An interesting case that arises in some applications is that the
 likelihood is made of multiple Gaussian terms, each of which is a
