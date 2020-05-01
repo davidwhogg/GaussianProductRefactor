@@ -43,7 +43,9 @@
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
-\newcommand{\acronym}[1]{\small{#1}}
+\newcommand{\equationname}{equation}
+\renewcommand{\tablename}{Table}
+\newcommand{\acronym}[1]{{\small{#1}}}
 \newcommand{\FML}{\acronym{FML}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\foreign}[1]{\textsl{#1}}
@@ -384,7 +386,8 @@ of this \documentname.
 For completeness, we will give some discussion!
 
 \paragraph{Proof:}
-The two sides of equation~(\ref{eq:problem}) are identical if two things hold.
+The two sides of \equationname~(\ref{eq:problem}) are identical if two things
+hold.
 The first thing is that the determinant products must be equal:
 \begin{equation}
 ||\tC||\,||\tLambda|| = ||\tA||\,||\tB||
@@ -576,7 +579,8 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
   \quad .
 \end{align}
 
-Table~\ref{tbl:data1} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
+\tablename~\ref{tbl:data1} contains four data points, $(x_i, y_i,
+\sigma_{y_i})$.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
 \begin{align}
@@ -626,7 +630,7 @@ above, the design matrix, $\mM$, is
       12.96 & 3.6 & 1
     \end{pmatrix} \quad .
 \end{align}
-By plugging in to Equation~\ref{eq:a}, we find MAP parameter values
+By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values
 \begin{equation}
   \va =
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
@@ -642,7 +646,7 @@ $\normal(\vtheta\given\va,\tA)$.
   \centering
   \includegraphics[width=0.7\textwidth]{exercise1.pdf}
   \caption{The solution to Exercise 1. The MAP parameter values were found using
-    Equation~\ref{eq:a}.}
+  \equationname~\ref{eq:a}.}
   \label{fig:ex1}
 \end{figure}
 
@@ -665,7 +669,8 @@ Here, we can no longer analytically express the posterior pdf because of the
 non-linear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters).
 
-Table~\ref{tbl:data2} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
+\tablename~\ref{tbl:data2} contains four data points, $(x_i, y_i,
+\sigma_{y_i})$.
 Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (0, 5)\\
