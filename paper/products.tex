@@ -691,7 +691,6 @@ Compute the marginal likelihood
   \end{center}
 \end{table}
 
-
 \section{Generalization: product of many Gaussians}
 
 An interesting case that arises in some applications is that the
@@ -710,18 +709,33 @@ and $K\times K$ variance tensors $\tB_i$ such that
 and such that $\va$, $\tA$, all the $\vb_i$, and all the $\tB_i$
 don't depend on $\vtheta$ at all.
 Note that
+$\vtheta$ is a $K$-vector,
+$\vmu$ is a $K$-vector,
+$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor,
 each $\vy_i$ is an $N_i$-vector,
 each $\mM_i$ is a $N_i\times K$ matrix,
-$\vtheta$ is a $K$-vector,
-each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor,
-$\vmu$ is a $K$-vector,
 and
-$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
+each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor.
 
 \paragraph{Solution:}
-\hogg{BL, please write stuff here!}
+\hogg{BL: IS THIS SOLUTION CORRECT? I intuited it!}
 
-\hogg{BL, I think we should give the solution first, like we do in section 3, and then discuss how we found that solution using the canonical form. Does that work?}
+\begin{equation}\label{eq:A}
+\tA\inv = \tLambda\inv + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \mM_i
+\end{equation}
+\begin{equation}\label{eq:a}
+\va = \tA \cdot (\tLambda\inv \cdot \vmu + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \vy_i)
+\end{equation}
+\begin{equation}\label{eq:B}
+\tB_i = \tC_i + \mM_i \cdot \tLambda \cdot \mM_i\T
+\end{equation}
+\begin{equation}\label{eq:b}
+\vb_i = \mM_i \cdot \vmu
+~ .
+\end{equation}
+
+\paragraph{Argument, proof, or notes:}
+\hogg{BL, please write stuff here!}
 
 This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
 For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
@@ -733,7 +747,7 @@ The parameters are obtained by equating the canonical form with the standard for
 $\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\inv\cdot \veta \right)$
 with $d$ the dimensionality of $\vx$.
 
-Equipped with the canonical form, it is easy to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\ref{eq:generalgaussianproduct}):
+Equipped with the canonical form, it is easy to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
 
 \begin{eqnarray}
 \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
