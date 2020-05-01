@@ -19,6 +19,7 @@
 
 % style notes -- audit for these.
 % -------------------------------
+% - use \, for multiplication
 % - no condescending language; no "it is easy to show" or equivalent...!
 % - use \vA not A or \vector{A} and so on.
 % - modify typesetting above the \begin{document} line, not below.
@@ -735,7 +736,8 @@ each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor.
 \end{equation}
 
 \paragraph{Argument, proof, or notes:}
-\hogg{BL, please write stuff here!}
+\hogg{BL, please write stuff here! Also I think you are using $\tLambda_i$ when
+  you mean to be using $\tC_i$.}
 
 This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
 For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
