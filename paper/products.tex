@@ -15,6 +15,7 @@
 % - should we say "positive semi-definite" instead of "non-negative semi-definite"?
 % - audit all style notes
 % - fix typesetting for "canonical form" of normal in final section
+% - APW: update links to data files when archived with Zenodo
 
 % style notes -- audit for these.
 % -------------------------------
@@ -572,11 +573,16 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
 \end{align}
 
 Table~\ref{tbl:data1} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
-Assuming
+Assuming values for the prior means, $\vmu$, and prior variance tensor,
+$\tLambda$,
 \begin{align}
-  (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
-  (\mu_\beta, \sigma_\beta) &= (3, 2)\\
-  (\mu_\gamma, \sigma_\gamma) &= (9, 8) \quad ,
+  \vmu\T &= (\mu_\alpha, \mu_\beta, \mu_\gamma) = (1, 3, 9)\\
+  \tLambda &=
+    \begin{pmatrix}
+      5^2 & 0 & 0\\
+      0 & 2^2 & 0\\
+      0 & 0 & 8^2
+    \end{pmatrix}\\
 \end{align}
 compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
@@ -599,22 +605,16 @@ estimated using these samples.
       3.6 & 68.2 & 3.9
     \end{tabular}
     \caption{Simulated data used in Exercise 1
-    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}).
+    These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
     \label{tbl:data1}}
   \end{center}
 \end{table}
 
 
 \paragraph{Solution:} Given the assumptions and prior parameter values
-above,
+above, the design matrix, $\mM$, is
 \begin{align}
-  \vmu &= (1, 3, 9)\\
-  \tLambda &=
-    \begin{pmatrix}
-      5^2 & 0 & 0\\
-      0 & 2^2 & 0\\
-      0 & 0 & 8^2
-    \end{pmatrix}\\
   \mM &= \begin{pmatrix}
       0.36 & -0.6 & 1\\
       4.0 & 2.0 & 1\\
