@@ -51,7 +51,6 @@
 \renewcommand{\tablename}{Table}
 \newcommand{\acronym}[1]{{\small{#1}}}
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\FML}{\todo{CHANGE ME}}
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math stuhh
@@ -448,7 +447,8 @@ all the quadratic forms, plus some use of the matrix inversion lemma,
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
 ~ ,
 \end{equation}
-which gives an expression for the inverse $\tB\inv$ of the \FML\ variance:
+which gives an expression for the inverse $\tB\inv$ of the marginalized
+likelihood variance:
 \begin{equation}
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
 ~ .
@@ -795,7 +795,7 @@ where $d_i$ is the dimensionality of $\vmu_i$, and that of the total Gaussian ar
 where $N$ is the dimensionality of $\vtheta$.
 Equipped with this result, we can re-derive the formulae of the previous sections.
 We can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian covariance.
-Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the \FML, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
+Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the marginalized likelihood, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
 
 One culprit of this approach is that its implementation. Indeed, it involves inverting the individual covariances $\tLambda_i$, projecting them with $\mM_i$, in order to form $\bar{\tH}$ and  $\bar{\veta}$ and apply them onto each other to obtain $\va$, $\tA$ and $ \bar{\xi}$. Depending on the condition numbers of the square matrices, and the dimensionality of the projection matrices, applying those formulae may be numerically unstable. In practice, this could simply result from the noise levels in the data and how the model is projected from the parameters $\vtheta$ onto the data.
 It is therefore highly recommended to apply those formulae with care, and verify the stability of the results.
