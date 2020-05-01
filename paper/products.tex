@@ -10,6 +10,8 @@
 % - remove all HOGG and APW from the text.
 % - HOGG: distinguish between FML and partially marginalized likelihood:
 %   sometimes you have parameters that enter non-linearly, and that's ok
+%   TODO: Say "marginalized likelihood", but if your parameters are all linear,
+%         it's the "fully marginalized likelihood"
 % - should we say "positive semi-definite" instead of "non-negative semi-definite"?
 % - audit all style notes
 % - fix typesetting for "canonical form" of normal in final section
@@ -24,9 +26,17 @@
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
-\usepackage{amsmath, bm, mathrsfs}
-
+\usepackage{amsmath, bm, mathrsfs, amssymb}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[hidelinks,
+            colorlinks=true,
+            linkcolor=black,
+            urlcolor=CornflowerBlue]{hyperref}
 \usepackage{pifont}
+\usepackage{graphicx}
+
+\usepackage{caption}
+\captionsetup{font=footnotesize}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
@@ -87,6 +97,7 @@
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
 \usepackage{color}
+\newcommand{\todo}[1]{\textcolor{BrickRed}{[TODO: #1]}}
 \newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
 \newcommand{\hogg}[1]{\textcolor{magenta}{[Hogg says: #1]}}
 
@@ -351,16 +362,16 @@ and
 $\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
 
 \paragraph{Solution:}
-\begin{equation}
+\begin{equation}\label{eq:A}
 \tA\inv = \tLambda\inv + \mM\T \cdot \tC\inv \cdot \mM
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:a}
 \va = \tA \cdot (\tLambda\inv \cdot \vmu + \mM\T \cdot \tC\inv \cdot \vy)
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:B}
 \tB = \tC + \mM \cdot \tLambda \cdot \mM\T
 \end{equation}
-\begin{equation}
+\begin{equation}\label{eq:b}
 \vb = \mM \cdot \vmu
 ~ .
 \end{equation}
@@ -431,7 +442,7 @@ For guidance, it might help to realize that there are terms that
 contain $\vtheta\T\cdots\vtheta$, $\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$,
 $\vtheta\T\cdots\vmu$, and $\vmu\T\cdots\vmu$.
 If you expand out each of these five kinds of terms, each of the five
-should lead to an indepenent-ish equality.}
+should lead to an independent-ish equality.}
 
 \paragraph{Solution notes:}
 In principle we found this factorization by expanding the quadratic in
@@ -528,26 +539,158 @@ In this case, the previous equations are simplified and no longer involve as mat
 
 When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
-\documentname\ have a practical use: To reduce the dimensionality of your model.
-This is often desired when your inferences depend on generating posterior
-samples of your model parameters.
+\documentname\ have practical uses: (1) To simplify the posterior pdf of your
+model (which makes generating samples or computing integrals far simpler), and
+(2) to reduce the dimensionality of your model (i.e., by enabling analytic
+marginalizations over any linear parameters).
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
 alternate sampling methods (e.g., rejection sampling) that may be intractable
 when the parameter dimensionality is large.
 
-Below, we demonstrate one way in which these identities can be used and
-incorporated into statistical inferences TODO APW.
-% One case where the parameter dimensionality is reduced, and another case where
-% standard MCMC is intractable but the straightforward evaluation of the
-% marginal likelihood enables using brute-force rejection sampling to generate
-% posterior samplings.
+Here, we demonstrate the utility of the identities shown above with two toy,
+worked exercises: The examples are written such that the problems are set up
+first, and the solutions are given below.
 
-APW: other notes as footnotes. (1) Like you wouldn't turn on scipy.optimize to get your maximum-likelihood linear parameters, don't turn on MCMC to generate samples if everything is linear and gaussian, (2) Another footnote or note about how this enables other sampling methods like The Joker.
 
-APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to 2 parameters, run with emcee.
+\subsection{Exercise 1: A fully linear model}
 
-\bl{Simple example would be to marginalize over a couple of nuisance parameters, say additive nuisance polynomials on top of a model of interest, for SDSS stars or galaxies for example?}
+\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+The parametric model we will use for this data is a quadratic polynomial,
+\begin{equation}
+  % APW: I used greek here because a, b are used in expressions above...
+  f(x \,;\, \alpha, \beta, \gamma) = \alpha\,x^2 + \beta\,x + \gamma
+\end{equation}
+and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
+\beta, \gamma)$,
+\begin{align}
+  p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
+  p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
+  p(\gamma) &= \normal(\gamma \given \mu_\gamma, \sigma_\gamma)
+  \quad .
+\end{align}
+
+Table~\ref{tbl:data1} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
+Assuming
+\begin{align}
+  (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
+  (\mu_\beta, \sigma_\beta) &= (3, 2)\\
+  (\mu_\gamma, \sigma_\gamma) &= (9, 8) \quad ,
+\end{align}
+compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+\gamma_{\rm MAP})$.
+Plot the data (with error bars) and over-plot the model evaluated at the
+MAP parameter values.
+Generate 4096 posterior samples of the parameters.
+Over-plot a shaded region showing the 68\% credible region for the model,
+estimated using these samples.
+
+% Generated with notebooks/Exercise1.ipynb
+\begin{table}[t!]
+  \footnotesize
+  \begin{center}
+    \begin{tabular}{c|c|c}
+      $x$ & $y$ & $\sigma_y$ \\
+      \hline
+      $-0.6$ & 14.5 & 0.8 \\
+      2.0 & 29.8 & 3.2 \\
+      2.7 & 47.7 & 3.3 \\
+      3.6 & 68.2 & 3.9
+    \end{tabular}
+    \caption{Simulated data used in Exercise 1
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
+    \label{tbl:data1}}
+  \end{center}
+\end{table}
+
+
+\paragraph{Solution:} Given the assumptions and prior parameter values
+above,
+\begin{align}
+  \vmu &= (1, 3, 9)\\
+  \tLambda &=
+    \begin{pmatrix}
+      5^2 & 0 & 0\\
+      0 & 2^2 & 0\\
+      0 & 0 & 8^2
+    \end{pmatrix}\\
+  \mM &= \begin{pmatrix}
+      0.36 & -0.6 & 1\\
+      4.0 & 2.0 & 1\\
+      7.29 & 2.7 & 1\\
+      12.96 & 3.6 & 1
+    \end{pmatrix} \quad .
+\end{align}
+By plugging in to Equation~\ref{eq:a}, we find MAP parameter values
+\begin{equation}
+  \va =
+    (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
+      (3.61, 1.98, 14.26) \quad .
+\end{equation}
+Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
+MAP parameter values (blue line), and the 68\% credible region (shaded blue
+region) estimated using posterior samples generated from
+$\normal(\vtheta\given\va,\tA)$.
+
+% Generated with notebooks/Exercise1.ipynb
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\textwidth]{exercise1.pdf}
+  \caption{The solution to Exercise 1. The MAP parameter values were found using
+    Equation~\ref{eq:a}.}
+  \label{fig:ex1}
+\end{figure}
+
+
+\subsection{Exercise 2: A model with linear and non-linear parameters}
+
+\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+The parametric model we will use for this data is a generalized sinusoid with a
+constant offset,
+\begin{equation}
+  % APW: I used greek here because a, b are used in expressions above...
+  f(x \,;\, \alpha, \beta, \gamma, \omega) =
+    \alpha\,\cos(\omega \, x) + \beta\,\sin(\omega \, x) + \gamma
+\end{equation}
+and we again assume we have Gaussian prior pdfs on all of the \emph{linear}
+parameters $(\alpha, \beta, \gamma)$.
+Here, we can no longer analytically express the posterior pdf because of the
+non-linear parameter $\omega$, but we can compute the marginal likelihood
+(marginalizing over the linear parameters).
+
+Table~\ref{tbl:data2} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
+Assuming
+\begin{align}
+  (\mu_\alpha, \sigma_\alpha) &= (0, 5)\\
+  (\mu_\beta, \sigma_\beta) &= (0, 5)\\
+  (\mu_\gamma, \sigma_\gamma) &= (0, 10) \quad ,
+\end{align}
+compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+\gamma_{\rm MAP})$.
+Write a function to compute the design matrix and components of the marginal
+likelihood ($\va, \tA, \vb, \tB$) given a value of $\omega$.
+Compute the marginal likelihood
+
+% Generated with notebooks/Exercise2.ipynb
+\begin{table}[t!]
+  \footnotesize
+  \begin{center}
+    \begin{tabular}{c|c|c}
+      $x$ & $y$ & $\sigma_y$ \\
+      \hline
+      $-1.2$ & 11.2 & 0.2 \\
+      1.3 & 16.1 & 0.2 \\
+      3.1 & 10.2 & 0.3 \\
+      4.1 & 13.5 & 0.3
+    \end{tabular}
+    \caption{Simulated data used in Exercise 2
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data2.csv}{link to data}). These data were generated with the true parameter values $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
+    \label{tbl:data2}}
+  \end{center}
+\end{table}
+
 
 \section{Generalization: product of many Gaussians}
 
