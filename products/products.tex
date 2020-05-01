@@ -88,6 +88,7 @@
 
 \usepackage{color}
 \newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
+\newcommand{\hogg}[1]{\textcolor{magenta}{[Hogg says: #1]}}
 
 \begin{document}
 
@@ -520,9 +521,7 @@ One interesting case is when $K=1$, so the design matrix in fact reduces to a mo
 ~ .
 \end{equation}
 
-In this case, the previous equations are simplified and no longer involve as matrix matrix operations (in particular inversions), which results in them being typically more numerically stable (in which case the matrix inversion lemma reduces to the Sherman–Morrison formula, applicable to derive $A$ and $\tB$).
-
-
+In this case, the previous equations are simplified and no longer involve as matrix matrix operations (in particular inversions), which results in them being typically more numerically stable (in which case the matrix inversion lemma reduces to a simpler formula, applicable to derive $A$ and $\tB$).
 
 
 \section{Worked Examples}
@@ -552,20 +551,35 @@ APW: Example: Fit a spectral line + background. Reduced dimensionality from 5 to
 
 \section{Generalization: product of many Gaussians}
 
-An interesting case that may arise in some applications is when the likelihood is made of multiple Gaussian terms, for example when including independent subsets of data points in an analysis. This results in having to treat the product of many Gaussians, with arbitrary design matrices, which we can write as
-\begin{equation}\label{eq:generalgaussianproduct}
-\mbox{likelihood}\times\mbox{prior:} \quad \prod_i \normal(  \vmu_i \given \mM_i\cdot\vtheta ,\tLambda_i)
-~ .
-\end{equation}
+An interesting case that arises in some applications is that the
+likelihood is made of multiple Gaussian terms, each of which is a
+different linear combination of the linear parameters $\vtheta$.
+That is, there are many data vectors $y_i$, each of which has an expectation
+set by a different design matrix $\mM_i$.
 
-For the specific case of two subsets of data points, this could look like
-\begin{equation}
-\mbox{likelihood} \quad \normal(\vy\given\mM\cdot\vtheta,\tC) \ \normal(\vz\given\mN\cdot\vtheta,\tD)
+\paragraph{Problem:}
+Find $N$-vector $\va$, $N\times N$ variance tensor $\tA$, $K$-vectors $\vb_i$,
+and $K\times K$ variance tensors $\tB_i$ such that
+\begin{equation}\label{eq:genproblem}
+\normal(\vtheta\given\vmu,\tLambda)\,\prod_i\normal(\vy_i\given\mM_i\cdot\vtheta,\tC_i)\,
+ = \normal(\vtheta\given\va,\tA)\,\prod_i\normal(\vy_i\given\vb_i,\tB_i) ~ ,
 \end{equation}
-\begin{equation}
-\mbox{prior} \quad \normal(\vtheta\given\vmu,\tLambda)
-~ .
-\end{equation}
+and such that $\va$, $\tA$, all the $\vb_i$, and all the $\tB_i$
+don't depend on $\vtheta$ at all.
+Note that
+each $\vy_i$ is an $N_i$-vector,
+each $\mM_i$ is a $N_i\times K$ matrix,
+$\vtheta$ is a $K$-vector,
+each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor,
+$\vmu$ is a $K$-vector,
+and
+$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
+
+\paragraph{Solution:}
+\hogg{BL, please write stuff here!}
+
+\hogg{BL, I think we should give the solution first, like we do in section 3, and then discuss how we found that solution using the canonical form. Does that work?}
+
 This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
 For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
 \begin{equation}
