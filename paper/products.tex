@@ -16,6 +16,8 @@
 % - audit all style notes
 % - fix typesetting for "canonical form" of normal in final section
 % - APW: update links to data files when archived with Zenodo
+% - HOGG: audit terms defined in quotation marks
+% - APW: audit non-linear's
 
 % style notes -- audit for these.
 % -------------------------------
@@ -25,6 +27,8 @@
 % - modify typesetting above the \begin{document} line, not below.
 % - distinguish types (vector, matrix, tensor).
 % - never say ``the pdf for $\vy$''; instead say ``the pdf for the data $\vy$''.
+% - put term name definitions in \textsl{}, *not* quotations
+% - nonlinear not non-linear
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
@@ -46,8 +50,8 @@
 \newcommand{\equationname}{equation}
 \renewcommand{\tablename}{Table}
 \newcommand{\acronym}[1]{{\small{#1}}}
-\newcommand{\FML}{\acronym{FML}}
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\FML}{\todo{CHANGE ME}}
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math stuhh
@@ -82,6 +86,7 @@
 \newcommand{\tQ}{\tensor{Q}}
 \newcommand{\tS}{\tensor{S}}
 \newcommand{\tH}{\tensor{H}}
+\newcommand{\tL}{\tensor{L}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
 \newcommand{\mN}{\matrix{N}}
@@ -220,29 +225,34 @@ $p(\vtheta\given\bH)$ is the prior pdf for the parameters $\vtheta$,
 $p(\vtheta\given\vy,\bH)$ is the posterior pdf for the parameters $\vtheta$
 given the data,
 and
-$p(\vy\given\bH)$ is the pdf for the data, marginalizing out all
-parameters (sometimes called the Bayesian evidence or the fully
-marginalized likelihood or \FML).
+$p(\vy\given\bH)$ is the pdf for the data, marginalizing out all of the linear
+parameters (hereafter, we refer to this as the \textsl{marginalized
+likelihood}).\footnote{In the case that the problem has no parameters other than
+the linear parameters $\vtheta$, this term, $p(\vy \given \bH)$, is sometimes
+called the \textsl{Bayesian evidence} or the \textsl{fully marginalized
+likelihood}.}
 
 If the likelihood is Gaussian, and the expectation of the data depends linearly
 on the parameters, and if we choose the prior pdf to also be Gaussian, then
-eveything else (the joint, the posterior, and the \FML) becomes Gaussian too.
+everything else (the joint, the posterior, and the marginalized likelihood)
+becomes Gaussian too.
 The main point of this \documentname\ is that the means and variances of these
 five Gaussians are all related by simple, closed-form expressions, given below.
 One consequence of this math is that \emph{if} you have a Gaussian
-likelihood function, and \emph{if} you have a subset of parameters
-that are linearly related to the expectation of the data, \emph{then}
-you can obtain both the posterior pdf and the \FML\ with just simple
-closed-form transformations of the means and variances of the
-likelihood and prior pdf.
+likelihood function, and \emph{if} you have a subset of parameters that are
+linearly related to the expectation of the data, \emph{then} you can obtain both
+the posterior pdf $p(\vtheta\given\vy,\bH)$ and the marginalized likelihood
+$p(\vy\given\bH)$ with closed-form transformations of the means and variances of
+the likelihood and prior pdf.
 
 \section{Marginalization by refactorization}
 
 Imagine that we are doing an inference using data $\vy$ (which is a
 $N$-dimensional vector, say).
-We are trying to learn parameters $\vtheta$ and also $\bP$ (the former a
-$K$-dimensional vector and the latter an arbitrary vector, list,
-or blob.
+We are trying to learn linear parameters $\vtheta$ (a $K$-dimensional vector)
+and also nonlinear parameters $\bP$ (an arbitrary vector, list, or
+blob).\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
+assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
@@ -262,15 +272,15 @@ function
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
 \begin{equation}
-\mbox{prior on nuisances} \quad p(\vtheta\given\bP)
+\mbox{prior on nuisance parameters} \quad p(\vtheta\given\bP)
 \end{equation}
 on the nuisances.
 This is the basis for the claim (stated elsewhere; HOGG) that
-inference requires a likelihood function, and priors on the nuisances.
+inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
 in the pedagogical literature (for example, HOGG).
 We have said ``$p(\vtheta\given\bP)$'' because this prior may depend on
-the parameters $\bP$. But it certainly doesn't have to.
+the nonlinear parameters $\bP$, but it certainly doesn't have to.
 
 To perform the marginalization, we have two choices.
 We can either do an integral:
@@ -280,7 +290,7 @@ p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \end{equation}
 where the integral is implicitly over the entire domain of the
 nuisances $\vtheta$ (or the entire support of the prior).
-Or we can do a clever re-factorization of this form \bl{Isn't just Bayes theorem again? I wouldn't say a re-factorization, but rather simply emphasize that the posterior and evidence have closed form solutions.}:
+Or we can re-factorize the expression using Bayes' theorem:
 \begin{equation}
 p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
  = p(\vtheta\given\vy,\bP)\,p(\vy\given\bP)
@@ -316,10 +326,10 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 ~ ,
 \end{equation}
 where
-$\normal(\vx\given\vm,\tLambda)$ is the multivariate Gaussian pdf for a vector $\vx$
-given a mean vector $\vm$ and a variance tensor $\tLambda$,
+$\normal(\vx\given\vm,\tL)$ is the multivariate Gaussian pdf for a vector $\vx$
+given a mean vector $\vm$ and a variance tensor $\tL$,
 $\mM$ is a $N\times K$ rectangular design matrix (which depends, in
-general, on the non-nuisance parameters $\bP$),
+general, on the nonlinear parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
 That is, the likelihood is a Gaussian with a mean that depends
