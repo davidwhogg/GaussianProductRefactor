@@ -573,11 +573,16 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
 \end{align}
 
 Table~\ref{tbl:data1} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
-Assuming
+Assuming values for the prior means, $\vmu$, and prior variance tensor,
+$\tLambda$,
 \begin{align}
-  (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
-  (\mu_\beta, \sigma_\beta) &= (3, 2)\\
-  (\mu_\gamma, \sigma_\gamma) &= (9, 8) \quad ,
+  \vmu\T &= (\mu_\alpha, \mu_\beta, \mu_\gamma) = (1, 3, 9)\\
+  \tLambda &=
+    \begin{pmatrix}
+      5^2 & 0 & 0\\
+      0 & 2^2 & 0\\
+      0 & 0 & 8^2
+    \end{pmatrix}\\
 \end{align}
 compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
@@ -607,15 +612,8 @@ estimated using these samples.
 
 
 \paragraph{Solution:} Given the assumptions and prior parameter values
-above,
+above, the design matrix, $\mM$, is
 \begin{align}
-  \vmu &= (1, 3, 9)\\
-  \tLambda &=
-    \begin{pmatrix}
-      5^2 & 0 & 0\\
-      0 & 2^2 & 0\\
-      0 & 0 & 8^2
-    \end{pmatrix}\\
   \mM &= \begin{pmatrix}
       0.36 & -0.6 & 1\\
       4.0 & 2.0 & 1\\
