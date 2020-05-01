@@ -10,6 +10,8 @@
 % - remove all HOGG and APW from the text.
 % - HOGG: distinguish between FML and partially marginalized likelihood:
 %   sometimes you have parameters that enter non-linearly, and that's ok
+%   TODO: Say "marginalized likelihood", but if your parameters are all linear,
+%         it's the "fully marginalized likelihood"
 % - should we say "positive semi-definite" instead of "non-negative semi-definite"?
 % - audit all style notes
 % - fix typesetting for "canonical form" of normal in final section
@@ -569,7 +571,7 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
   \quad .
 \end{align}
 
-Table~\ref{tbl:data1} contains 4 data points, $(x_i, y_i, \sigma_{y_i})$.
+Table~\ref{tbl:data1} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
 Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (1, 5)\\
@@ -658,7 +660,15 @@ Here, we can no longer analytically express the posterior pdf because of the
 non-linear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters).
 
-Table~\ref{tbl:data2}
+Table~\ref{tbl:data2} contains four data points, $(x_i, y_i, \sigma_{y_i})$.
+Assuming
+\begin{align}
+  (\mu_\alpha, \sigma_\alpha) &= (0, 5)\\
+  (\mu_\beta, \sigma_\beta) &= (0, 5)\\
+  (\mu_\gamma, \sigma_\gamma) &= (0, 10) \quad ,
+\end{align}
+compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+\gamma_{\rm MAP})$.
 Write a function to compute the design matrix and components of the marginal
 likelihood ($\va, \tA, \vb, \tB$) given a value of $\omega$.
 Compute the marginal likelihood
