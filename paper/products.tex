@@ -162,7 +162,7 @@ products of many Gaussians is given in \sectionname~\ref{sec:generalization}.
 
 \section{Inferences with linear parameters}
 
-It is common in physics and astronomy that likelihood functions
+It is common in physics and astronomy and engineering and machine learning and many other fields that likelihood functions
 (probabilities of data given parameters) are chosen to be Gaussian
 (or normal\footnote{In this \documentname, we obey physics and astronomy
   conventions and refer to the normal pdf as the Gaussian pdf. We apologize;
@@ -193,20 +193,22 @@ say, a set of repeated experiments) is linearly proportional to some
 subset of the parameters.
 This is true, for example, when we fit a histogram of \textsl{Large Hadron Collider}
 events
-affected by the Higgs boson (see, for example, HOGG CITE);
+affected by the Higgs boson\footnote{See, for example, HOGG CITE};
 the expected number of counts in each
 energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
 This is true, for example, when we fit for the radial-velocity
-variation of a star in response to an faint, orbiting companion (see, for
-example, APW CITE JOKER; this is also a
-problem we will use as an example below), where the expectation of the
+variation of a star in response to an faint, orbiting companion\footnote{See,
+  for an example in our own work, APW CITE JOKER. That project and paper would have been
+  impossible without the speed-ups provided by the expressions derived in this
+  \documentname.} (this is a context 
+we will use for one of our toy examples below), where the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
 respect to the line of sight).
 In both of these cases, there are both linear parameters (like the
 amplitudes) and non-linear parameters (like the mass of the Higgs, or
-the period of the binary).
+the orbital period of the binary).
 In what follows, we will spend our energies on the linear parameters,
 though our work on them is in service of learning the non-linear
 parameters too, of course.
