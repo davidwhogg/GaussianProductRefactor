@@ -9,7 +9,6 @@
 % - fix typesetting for "canonical form" of normal in final section
 % - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks
-% - APW: audit non-linear's
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
 % - APW: We mention SPEED of computation in the abstract; we should say that again
 %   in the introduction and parts of the conversation below it. Maybe even refer to
@@ -201,16 +200,16 @@ This is true, for example, when we fit for the radial-velocity
 variation of a star in response to an faint, orbiting companion\footnote{See,
   for an example in our own work, APW CITE JOKER. That project and paper would have been
   impossible without the speed-ups provided by the expressions derived in this
-  \documentname.} (this is a context 
+  \documentname.} (this is a context
 we will use for one of our toy examples below), where the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
 respect to the line of sight).
 In both of these cases, there are both linear parameters (like the
-amplitudes) and non-linear parameters (like the mass of the Higgs, or
+amplitudes) and nonlinear parameters (like the mass of the Higgs, or
 the orbital period of the binary).
 In what follows, we will spend our energies on the linear parameters,
-though our work on them is in service of learning the non-linear
+though our work on them is in service of learning the nonlinear
 parameters too, of course.
 
 Bayes theorem is often written as a ratio of probability density
@@ -670,7 +669,7 @@ $\normal(\vtheta\given\va,\tA)$.
 \end{figure}
 
 
-\subsection{Exercise 2: A model with linear and non-linear parameters}
+\subsection{Exercise 2: A model with linear and nonlinear parameters}
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
@@ -685,7 +684,7 @@ and we again assume we have Gaussian prior pdfs on all of the \emph{linear}
 parameters $(\alpha, \beta, \gamma)$.
 \todo{Set up this problem by stating some explicit Astro problems with this structure. Mention asteroseismology, if summing over frequency}
 Here, we can no longer analytically express the posterior pdf because of the
-non-linear parameter $\omega$, but we can compute the marginal likelihood
+nonlinear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters).
 
 \tablename~\ref{tbl:data2} contains four data points, $(x_i, y_i,
@@ -727,7 +726,7 @@ A case that arises in some applications is that the
 likelihood is made of multiple Gaussian terms, each of which is a
 different linear combination of the linear parameters $\vtheta$.
 That is, there are many data vectors $y_i$, each of which has size or length $N_i$,
-and each of which has an expectation 
+and each of which has an expectation
 set linearly by the parameters $v\theta$ but through a different design matrix $\mM_i$.
 Provided that the different data vectors $y_i$ are independently ``observed'' (that
 is, they have independent noise draws), the total likelihood is just the product of
