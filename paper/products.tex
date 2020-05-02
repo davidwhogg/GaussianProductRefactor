@@ -3,15 +3,7 @@
 
 % to-do
 % -----
-% - HOGG: make problem statement more well-posed.
-% - HOGG: write or sketch proof of the solution.
-% - HOGG: expand solution-notes bullet points into paragraphs.
-% - APW: add a worked-out example with figures.
-% - remove all HOGG and APW from the text.
-% - HOGG: distinguish between FML and partially marginalized likelihood:
 %   sometimes you have parameters that enter non-linearly, and that's ok
-%   TODO: Say "marginalized likelihood", but if your parameters are all linear,
-%         it's the "fully marginalized likelihood"
 % - should we say "positive semi-definite" instead of "non-negative semi-definite"?
 % - audit all style notes
 % - fix typesetting for "canonical form" of normal in final section
@@ -19,6 +11,10 @@
 % - HOGG: audit terms defined in quotation marks
 % - APW: audit non-linear's
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
+% - APW: We mention SPEED of computation in the abstract; we should say that again
+%   in the introduction and parts of the conversation below it. Maybe even refer to
+%   The Joker appropriately.
+% - audit for and remove all HOGG, DWH, APW, and BL from the text.
 
 % style notes -- audit for these.
 % -------------------------------
@@ -140,10 +136,10 @@ and the National Aeronautics and Space Administration.
 }
 
 \paragraph{Abstract:}
-A product of two Gaussians is another Gaussian.
+A product of two Gaussians---or normal distributions---is another Gaussian.
 That's a valuable and useful fact!
 Here we use it to derive a refactoring of a common product of
-Gaussians:
+multivariate Gaussians:
 The product of a Gaussian likelihood times a Gaussian prior, where some or all
 of those parameters enter the likelihood only in the mean and only linearly.
 That is, a linear model, with a Gaussian likelihood and a Gaussian prior.
@@ -166,7 +162,14 @@ products of many Gaussians is given in \sectionname~\ref{sec:generalization}.
 \section{Inferences with linear parameters}
 
 It is common in physics and astronomy that likelihood functions
-(probabilities of data given parameters) are chosen to be Gaussian:
+(probabilities of data given parameters) are chosen to be Gaussian
+(or normal\footnote{In this \documentname, we obey physics and astronomy
+  conventions and refer to the normal pdf as the Gaussian pdf. We apologize;
+  we realize that it is dumb and inaccurate to name things after people when
+  they have generic names. On the other hand, ``normal'' isn't the finest
+  name either. Perhaps they should be called ``central'' since they are the
+  limit produced by the central limit theorem. Anyway, we will continue with
+  the name ``Gaussian'' despite our own reservations. Apologies.}):
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
 This Gaussian assumption for the likelihood function is
@@ -187,8 +190,10 @@ It is also common in physics and astronomy that models for data
 include parameters such that the expectation value for the data (in,
 say, a set of repeated experiments) is linearly proportional to some
 subset of the parameters.
-This is true, for example, when we fit a histogram of LHC events
-affected by the Higgs boson; the expected number of counts in each
+This is true, for example, when we fit a histogram of \textsl{Large Hadron Collider}
+events
+affected by the Higgs boson (see, for example, HOGG CITE);
+the expected number of counts in each
 energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
 This is true, for example, when we fit for the radial-velocity
@@ -257,8 +262,7 @@ assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{likelihood} \quad p(\vy\given\vtheta,\bP)
-~ .
+\mbox{likelihood} \quad p(\vy\given\vtheta,\bP) ~ .
 \end{equation}
 
 Now let's imagine that the parameters $\vtheta$ are either nuisance
@@ -267,8 +271,7 @@ them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{marginalized likelihood} \quad p(\vy\given\bP)
-~ .
+\mbox{marginalized likelihood} \quad p(\vy\given\bP) ~ .
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
@@ -588,7 +591,7 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
   p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
   p(\gamma) &= \normal(\gamma \given \mu_\gamma, \sigma_\gamma)
-  \quad .
+  ~ .
 \end{align}
 
 \tablename~\ref{tbl:data1} contains four data points, $(x_i, y_i,
@@ -640,13 +643,13 @@ above, the design matrix, $\mM$, is
       4.0 & 2.0 & 1\\
       7.29 & 2.7 & 1\\
       12.96 & 3.6 & 1
-    \end{pmatrix} \quad .
+    \end{pmatrix} ~ .
 \end{align}
 By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values
 \begin{equation}
   \va =
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
-      (3.61, 1.98, 14.26) \quad .
+      (3.61, 1.98, 14.26) ~ .
 \end{equation}
 Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
 MAP parameter values (blue line), and the 68\% credible region (shaded blue
@@ -687,7 +690,7 @@ Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (0, 5)\\
   (\mu_\beta, \sigma_\beta) &= (0, 5)\\
-  (\mu_\gamma, \sigma_\gamma) &= (0, 10) \quad ,
+  (\mu_\gamma, \sigma_\gamma) &= (0, 10) ~ ,
 \end{align}
 compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
