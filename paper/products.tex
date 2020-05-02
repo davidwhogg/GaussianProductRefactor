@@ -747,16 +747,16 @@ each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor.
 \paragraph{Solution:}
 \hogg{BL: IS THIS SOLUTION CORRECT? I intuited it!}
 
-\begin{equation}\label{eq:A}
+\begin{equation}\label{eq:genA}
 \tA\inv = \tLambda\inv + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \mM_i
 \end{equation}
-\begin{equation}\label{eq:a}
+\begin{equation}\label{eq:gena}
 \va = \tA \cdot (\tLambda\inv \cdot \vmu + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \vy_i)
 \end{equation}
-\begin{equation}\label{eq:B}
+\begin{equation}\label{eq:genB}
 \tB_i = \tC_i + \mM_i \cdot \tLambda \cdot \mM_i\T
 \end{equation}
-\begin{equation}\label{eq:b}
+\begin{equation}\label{eq:genb}
 \vb_i = \mM_i \cdot \vmu
 ~ .
 \end{equation}
