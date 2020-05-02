@@ -18,6 +18,7 @@
 % - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks
 % - APW: audit non-linear's
+% - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
 
 % style notes -- audit for these.
 % -------------------------------
@@ -360,8 +361,8 @@ multiplying live in spaces of different dimensions.
 That is, we solve the following problem:
 
 \paragraph{Problem:}
-Find $N$-vector $\va$, $N\times N$ variance tensor $\tA$, $K$-vector $\vb$,
-and $K\times K$ variance tensor $\tB$ such that
+Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $N$-vector $\vb$,
+and $N\times N$ variance tensor $\tB$ such that
 \begin{equation}\label{eq:problem}
 \normal(\vy\given\mM\cdot\vtheta,\tC)\,\normal(\vtheta\given\vmu,\tLambda)
  = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) ~ ,
@@ -714,15 +715,20 @@ Compute the marginal likelihood
 \section{Generalization: product of many Gaussians}
 \label{sec:generalization}
 
-An interesting case that arises in some applications is that the
+A case that arises in some applications is that the
 likelihood is made of multiple Gaussian terms, each of which is a
 different linear combination of the linear parameters $\vtheta$.
-That is, there are many data vectors $y_i$, each of which has an expectation
-set by a different design matrix $\mM_i$.
+That is, there are many data vectors $y_i$, each of which has size or length $N_i$,
+and each of which has an expectation 
+set linearly by the parameters $v\theta$ but through a different design matrix $\mM_i$.
+Provided that the different data vectors $y_i$ are independently ``observed'' (that
+is, they have independent noise draws), the total likelihood is just the product of
+the individual-data-vector likelihoods.
+That setup leads to the following problem:
 
 \paragraph{Problem:}
-Find $N$-vector $\va$, $N\times N$ variance tensor $\tA$, $K$-vectors $\vb_i$,
-and $K\times K$ variance tensors $\tB_i$ such that
+Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $N_i$-vectors $\vb_i$,
+and $N_i\times N_i$ variance tensors $\tB_i$ such that
 \begin{equation}\label{eq:genproblem}
 \normal(\vtheta\given\vmu,\tLambda)\,\prod_i\normal(\vy_i\given\mM_i\cdot\vtheta,\tC_i)\,
  = \normal(\vtheta\given\va,\tA)\,\prod_i\normal(\vy_i\given\vb_i,\tB_i) ~ ,
@@ -777,7 +783,6 @@ Equipped with the canonical form, it is easy to see that the product of any numb
 \end{eqnarray}
 naturally grouping the terms depending on $\vtheta$ and following the convention of the previous section.
 
-
 The parameters of the individual Gaussians in canonical form are
 \begin{eqnarray}
 \veta_i &=& \tLambda_i^{-1} \cdot \vmu_i \\
@@ -801,9 +806,5 @@ One culprit of this approach is that its implementation. Indeed, it involves inv
 It is therefore highly recommended to apply those formulae with care, and verify the stability of the results.
 If matrices with bad condition numbers are involved, one solution would be to apply the matrix inversion lemma. Unfortunately this would only apply to one term $\mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i$ at a time, and it may be necessary to apply it multiple times, resulting in long expressions (that lead to numerically stable results).
 Since this is application-specific, we do not derive those expressions here.
-
-
-
-
 
 \end{document}
