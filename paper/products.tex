@@ -3,18 +3,19 @@
 
 % to-do
 % -----
-%   sometimes you have parameters that enter non-linearly, and that's ok
-% - should we say "positive semi-definite" instead of "non-negative semi-definite"?
 % - audit all style notes
-% - fix typesetting for "canonical form" of normal in final section
+% - fix typesetting for "canonical form" of normal
 % - APW: update links to data files when archived with Zenodo
-% - HOGG: audit terms defined in quotation marks
+% - HOGG: audit terms defined in quotation marks; should we use \textsl instead?
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
 % - APW: We mention SPEED of computation in the abstract; we should say that again
-%   in the introduction and parts of the conversation below it. Maybe even refer to
+%   in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately. THERE NEED TO BE CITATIONS! ArXiv rejects papers that
 %   don't have bibliographies.
 % - audit for and remove all HOGG, DWH, APW, BL, CITE from the text.
+% - send to friendlies (DFM, Lang, Bovy, Rix, others??)
+% - post to arXiv
+% - profit
 
 % style notes -- audit for these.
 % -------------------------------
@@ -495,29 +496,29 @@ of $\mM$ are data over parameters.
 And they are all different sizes.
 
 Various parts of the solution are highly interpretable in terms of the
-objects of Bayesian inference. For example, the vector $\va$ is the
+objects of Bayesian inference. For example, because the term $p(\vtheta\given \va,\tA)$
+is the conditional
+posterior pdf for the linear parameters $\vtheta$, the vector $\va$ is the
 maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
 $\vtheta$.
 It is found by inverse-variance-weighted combinations of the data and the prior.
-\bl{I would say this is worth highlighting more since there are definitely some problems where this MAP interpretation is useful and could be used elsewhere.}
+In some projects posterior pdfs or \acronym{MAP} parameter values are the goal
+(although we don't think it often should be\footnote{HOGG WRITE STUFF ABOUT WHY YOU WANT TO PUBLISH LFs and marginalized LFs.}); these expressions deliver the posterior
+straightforwardly too.
 The variance tensor $\tA$ is the posterior variance in the parameter space.
 It is strictly non-larger (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
 variance $\mM\T\cdot\tC\cdot\mM$.
 The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
 value for the data $\vy$.
-It is the most likely data under the prior pdf.
+It is the most likely data vector, and also the expectation for the data,
+under the prior pdf.
 And the variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
-HOGG: Comment on the possibility that there is a solution that flows
-from thinking about the product of Gaussians as one Gaussian for the
-joint. Does that lead to a simpler discussion?
-
 \paragraph{Implementation notes:}
-\bl{If this paragraph gets any bigger I would break it into bullet points, and say more about the necessity of using the matrix inversion lemma for numerical stability, especially when the dimensions differ greatly (M "very non square").}
 The solution gives an expression for the variance tensor $\tB$, but
 note that when you actually evaluate the pdfs you probably need to
 have either the inverse of $\tB$, or else an operator that computes
@@ -527,7 +528,11 @@ To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
 the matrix inversion lemma} (\ref{eq:invlemma}) given above.
 This is often useful because you often know the data noise-variance
 tensor inverse $\tC\inv$, and the prior variance inverse
-$\tLambda\inv$.
+$\tLambda\inv$, and the lemma manipulates these into the answer without
+any heavy linear algebra.
+The lemma saves you the most time and precision when the parameter size $K$
+is much smaller than the data size $N$ (or vice versa); that is, when $\mM$
+is ``very non-square''.
 
 We also give the general advice that one should \emph{never take an explicit
 inverse} (unless you know the inverse exactly in closed form, as you do
@@ -787,7 +792,9 @@ each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor.
 \hogg{BL, please write stuff here! Also I think you are using $\tLambda_i$ when
   you mean to be using $\tC_i$.}
 
-This is trivial if the design matrices are identical, $\mM = \mN$, since one can rewrite the likelihood as a single multivariate Gaussian (concatenating the vectors $\vy$ and $\vz$ and forming a block diagonal matrix with $\tC$ and $\tD$) and apply the formulae derived previously. But for $\mM \neq \mN$, this does not apply. For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
+\hogg{BL: I think you should move the canonical-form discussion above to the ``solution notes'' part of Section~\ref{sec:problemsolution}; it is useful there too! And then you can just name-check it here in your commentary.}
+
+For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
 For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
 \begin{equation}
 \normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
@@ -798,7 +805,6 @@ $\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\inv\cdot \ve
 with $d$ the dimensionality of $\vx$.
 
 Equipped with the canonical form, it is easy to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
-
 \begin{eqnarray}
 \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
 &=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
