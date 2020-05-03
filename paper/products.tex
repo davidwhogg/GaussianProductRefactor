@@ -484,9 +484,10 @@ Because the matrix $\mM$ is not square, it has no inverse. And because this
 is a physics problem, it has units (which are the units of $\dd\vy/\dd\vtheta$).
 It's beautiful in the solution that $\mM$ and $\mM\T$ appear only where the
 units make sense.
-They make sense because the units of $\tC$ are inverse data-squared (where $\vy$
-is the data vector) and the units of $\tLambda$ are inverse parameters-squared.
-And they are different sizes.
+They make sense because the units of $\tC\inv$ are inverse data-squared (where $\vy$
+is the data vector) and the units of $\tLambda$ are parameters-squared and the units
+of $\mM$ are data over parameters.
+And they are all different sizes.
 
 Various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, the vector $\va$ is the
@@ -725,10 +726,10 @@ Compute the marginal likelihood
 A case that arises in some applications is that the
 likelihood is made of multiple Gaussian terms, each of which is a
 different linear combination of the linear parameters $\vtheta$.
-That is, there are many data vectors $y_i$, each of which has size or length $N_i$,
+That is, there are many data vectors $\vy_i$, each of which has size or length $N_i$,
 and each of which has an expectation
-set linearly by the parameters $v\theta$ but through a different design matrix $\mM_i$.
-Provided that the different data vectors $y_i$ are independently ``observed'' (that
+set linearly by the parameters $\vtheta$ but through a different design matrix $\mM_i$.
+Provided that the different data vectors $\vy_i$ are independently ``observed'' (that
 is, they have independent noise draws), the total likelihood is just the product of
 the individual-data-vector likelihoods.
 That setup leads to the following problem:
