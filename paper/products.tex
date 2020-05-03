@@ -20,6 +20,7 @@
 % style notes -- audit for these.
 % -------------------------------
 % - use \, for multiplication
+% - put punctuation after equations as necessary, with "~," or equivalent. Use ~
 % - no condescending language; no "it is easy to show" or equivalent...!
 % - use \vA not A or \vector{A} and so on.
 % - modify typesetting above the \begin{document} line, not below.
@@ -61,9 +62,6 @@
 \renewcommand{\vector}[1]{\boldsymbol{#1}}
 \newcommand{\tensor}[1]{\mathbf{#1}}
 \renewcommand{\matrix}[1]{\mathsf{#1}}
-% \setlength{\fboxsep}{0.8pt}
-% \newcommand{\blob}[1]{\boxed{#1}} % THIS IS HERE TO ANNOY APW
-\newcommand{\blob}[1]{\mathscr{#1}} % THIS IS HERE TO ANNOY APW
 \newcommand{\normal}{\mathcal{N}\!\,}
 
 % variables
@@ -90,12 +88,8 @@
 \newcommand{\mN}{\matrix{N}}
 \newcommand{\mU}{\matrix{U}}
 \newcommand{\mV}{\matrix{V}}
-% \newcommand{\bP}{\blob{P}}
-% \newcommand{\bH}{\blob{H}}
-% This is the star:
-% \newcommand{\bP}{\ensuremath{\textrm{\ding{87}}}} % THIS IS HERE TO ANNOY DWH
-\newcommand{\bP}{\ensuremath{\textrm{\ding{80}}}} % THIS IS HERE TO ANNOY DWH
-\newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH
+\newcommand{\bP}{\ensuremath{\textrm{\ding{80}}}} % THIS IS HERE TO ANNOY DWH / you failed
+\newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH / you failed
 
 % typesetting stuff
 \addtolength{\topmargin}{-0.75in}
@@ -118,7 +112,9 @@ The authors would like to thank
   Sam Roweis (deceased),
 for help with all these concepts through the years.
 This work was supported in part by the National Science Foundation
-and the National Aeronautics and Space Administration.
+and the National Aeronautics and Space Administration. It was developed
+in part at \textsl{AstroHackWeek 2016}, which was hosted at Berkeley
+by the Moore--Sloan Data Science Environment.
 }\\
 {\footnotesize%
   \textsl{Center for Cosmology and Particle Physics, Department of Physics, New York University}\\
