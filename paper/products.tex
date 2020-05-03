@@ -142,22 +142,24 @@ Here we use it to derive a refactoring of a common product of
 multivariate Gaussians:
 The product of a Gaussian likelihood times a Gaussian prior, where some or all
 of those parameters enter the likelihood only in the mean and only linearly.
-That is, a linear model, with a Gaussian likelihood and a Gaussian prior.
+That is, a linear, Gaussian model.
 This product of a likelihood times a prior can be refactored into a product of a
-Bayesian evidence (or marginalized likelihood) times a posterior, where both of
-these are also Gaussian.
+Bayesian evidence (or marginalized likelihood) times a posterior, where
+(in this case) both of these are also Gaussian.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
 The closed-form expressions can be used to speed up and improve the precision
 of inferences that contain linear parameters with Gaussian priors.
 We connect the methods to inferences that arise frequently in physics
-and astronomy, and show two toy examples (posed as worked exercises) of how
-these results are used in practice.
+and astronomy.
 
 If all you want is the answer, the question is posed and answered at the
 beginning of \sectionname~\ref{sec:problemsolution}, and a generalization to
 products of many Gaussians is given in \sectionname~\ref{sec:generalization}.
+We show two toy examples, in the form of worked exercises, in
+\sectionname~\ref{sec:examples}.
+
 
 \section{Inferences with linear parameters}
 
@@ -561,7 +563,7 @@ One interesting case is when $K=1$, so the design matrix in fact reduces to a mo
 In this case, the previous equations are simplified and no longer involve as matrix matrix operations (in particular inversions), which results in them being typically more numerically stable (in which case the matrix inversion lemma reduces to a simpler formula, applicable to derive $A$ and $\tB$).
 
 
-\section{Worked Examples}
+\section{Worked Examples}\label{sec:examples}
 
 When working with a probabilistic model that meets the strong requirements
 imposed above (Gaussians everywhere), the identities described in this
@@ -611,12 +613,12 @@ $\tLambda$,
       0 & 0 & 8^2
     \end{pmatrix}\\
 \end{align}
-compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
 Plot the data (with error bars) and over-plot the model evaluated at the
 MAP parameter values.
 Generate 4096 posterior samples of the parameters.
-Over-plot a shaded region showing the 68\% credible region for the model,
+Over-plot a shaded region showing the 68~percent credible region for the model,
 estimated using these samples.
 
 % Generated with notebooks/Exercise1.ipynb
@@ -638,7 +640,6 @@ estimated using these samples.
   \end{center}
 \end{table}
 
-
 \paragraph{Solution:} Given the assumptions and prior parameter values
 above, the design matrix, $\mM$, is
 \begin{align}
@@ -651,12 +652,12 @@ above, the design matrix, $\mM$, is
 \end{align}
 By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values
 \begin{equation}
-  \va =
+  \va\T =
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
       (3.61, 1.98, 14.26) ~ .
 \end{equation}
 Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
-MAP parameter values (blue line), and the 68\% credible region (shaded blue
+MAP parameter values (blue line), and the 68-percent credible region (shaded blue
 region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
 
@@ -668,7 +669,6 @@ $\normal(\vtheta\given\va,\tA)$.
   \equationname~\ref{eq:a}.}
   \label{fig:ex1}
 \end{figure}
-
 
 \subsection{Exercise 2: A model with linear and nonlinear parameters}
 
@@ -696,11 +696,11 @@ Assuming
   (\mu_\beta, \sigma_\beta) &= (0, 5)\\
   (\mu_\gamma, \sigma_\gamma) &= (0, 10) ~ ,
 \end{align}
-compute the MAP parameter values $\va = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
-Write a function to compute the design matrix and components of the marginal
-likelihood ($\va, \tA, \vb, \tB$) given a value of $\omega$.
-Compute the marginal likelihood
+Write a function to compute the design matrix and components ($\va, \tA, \vb, \tB$) of the factorization
+ given a value of $\omega$.
+Compute the marginal likelihood $p(\vy\given\omega)$.
 
 % Generated with notebooks/Exercise2.ipynb
 \begin{table}[t!]
