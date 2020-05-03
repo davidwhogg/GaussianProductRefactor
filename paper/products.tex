@@ -26,6 +26,7 @@
 % - never say ``the pdf for $\vy$''; instead say ``the pdf for the data $\vy$''.
 % - put term name definitions in \textsl{}, *not* quotations
 % - nonlinear not non-linear
+% - don't say "i.e.," say "that is,". Don't say "e.g.," say "for example,".
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
@@ -82,7 +83,7 @@
 \newcommand{\tQ}{\tensor{Q}}
 \newcommand{\tS}{\tensor{S}}
 \newcommand{\tH}{\tensor{H}}
-\newcommand{\tL}{\tensor{L}}
+\newcommand{\tV}{\tensor{V}}
 \newcommand{\tLambda}{\tensor{\Lambda}}
 \newcommand{\mM}{\matrix{M}}
 \newcommand{\mN}{\matrix{N}}
@@ -168,9 +169,10 @@ It is common in physics and astronomy and engineering and machine learning and m
 (or normal\footnote{In this \documentname, we obey physics and astronomy
   conventions and refer to the normal pdf as the Gaussian pdf. We apologize;
   we realize that it is dumb and inaccurate to name things after people when
-  they have generic names. On the other hand, ``normal'' isn't the finest
-  name either. Perhaps they should be called ``central'' since they are the
-  limit produced by the central limit theorem. Anyway, we will continue with
+  those things also have generic, descriptive names.
+  On the other hand, ``normal'' isn't the finest
+  name either. Perhaps Gaussian pdfs should be called ``central'' since they are
+  produced by the central limit theorem. Anyway, we will continue with
   the name ``Gaussian'' despite our own reservations. Apologies.}):
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
@@ -238,10 +240,10 @@ given the data,
 and
 $p(\vy\given\bH)$ is the pdf for the data, marginalizing out all of the linear
 parameters (hereafter, we refer to this as the \textsl{marginalized
-likelihood}).\footnote{In the case that the problem has no parameters other than
+likelihood}\footnote{In the case that the problem has no parameters other than
 the linear parameters $\vtheta$, this term, $p(\vy \given \bH)$, is sometimes
 called the \textsl{Bayesian evidence} or the \textsl{fully marginalized
-likelihood}.}
+likelihood}.}).
 
 If the likelihood is Gaussian, and the expectation of the data depends linearly
 on the parameters, and if we choose the prior pdf to also be Gaussian, then
@@ -335,8 +337,8 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 ~ ,
 \end{equation}
 where
-$\normal(\vx\given\vm,\tL)$ is the multivariate Gaussian pdf for a vector $\vx$
-given a mean vector $\vm$ and a variance tensor $\tL$,
+$\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian pdf for a vector $\vx$
+given a mean vector $\vm$ and a variance tensor $\tV$,
 $\mM$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the nonlinear parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
@@ -415,7 +417,7 @@ The first thing is that the determinant products must be equal:
 because the determinants are involved in the normalizations of the
 functions.
 This equality of determinant products follows straightforwardly from
-the matrix determinant lemma
+the matrix determinant lemma (APW CITE WIKIPEDIA OR ??)
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
 ~ ,
@@ -452,7 +454,8 @@ must equal the quadratic scalar form
 \end{equation}
 because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
-all the quadratic forms, plus some use of the matrix inversion lemma,
+all the quadratic forms, plus some use of the matrix inversion lemma
+(APW CITE WIKIPEDIA OR ??),
 \begin{equation}\label{eq:invlemma}
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
 ~ ,
@@ -548,32 +551,43 @@ freezes the parameters to a subspace of the $\vtheta$-space, which
 would lead to a zero eigenvalue in $\tLambda$, or if a data point is
 unmeasured or missing, which would lead to a zero eigenvalue in
 $\tC\inv$---you might have to \emph{think about how you implement the
-linear algebra operations to be zero-safe}.
+  linear algebra operations to be zero-safe}\footnote{HOGG: WRITE SOMETHING
+  here about what it looks like when, say, $\tA$ or $\tB$ contains
+  zero eigenvalues. It leads to directions in $\vtheta$ or $\vy$ space
+  in which log probabilities are negative-infinity. These are
+  disallowed directions. In this world, data and parameters \emph{are
+    not permitted} to go in those directions. What does ``zero-safe''
+  look like in this context?}.
 
 
 \paragraph{Simplification: single multiplicative scaling}
 
-One interesting case is when $K=1$, so the design matrix in fact reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and $\mu$ and $\Lambda$ are now scalars as well.
-
+One interesting case is when $K=1$, so the design matrix in fact
+reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and
+$\mu$ and $\Lambda$ are now scalars as well:
 \begin{equation}
-\mbox{likelihood} \times \mbox{prior} \quad \normal(\vy\given\vm\cdot\theta,\tC)\normal(\theta\given \mu, \Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
+\mbox{likelihood} \times \mbox{prior} \quad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 ~ .
 \end{equation}
-
-In this case, the previous equations are simplified and no longer involve as matrix matrix operations (in particular inversions), which results in them being typically more numerically stable (in which case the matrix inversion lemma reduces to a simpler formula, applicable to derive $A$ and $\tB$).
+In this case, the previous equations are simplified and no longer
+involve many matrix operations. It's a nice exercise to simplify the
+solution above for this scalar case.
 
 
 \section{Worked Examples}\label{sec:examples}
 
 When working with a probabilistic model that meets the strong requirements
-imposed above (Gaussians everywhere), the identities described in this
+imposed above (Gaussians everywhere; expectations linear in parameters),
+the identities described in this
 \documentname\ have practical uses: (1) To simplify the posterior pdf of your
 model (which makes generating samples or computing integrals far simpler), and
-(2) to reduce the dimensionality of your model (i.e., by enabling analytic
-marginalizations over any linear parameters).
+(2) to reduce the dimensionality of your model (by enabling closed-form
+marginalizations over linear parameters).
 Reducing the dimensionality of your parameter-space will in general improve
-convergence of Markov Chain Monte Carlo (MCMC) sampling methods, or enable
-alternate sampling methods (e.g., rejection sampling) that may be intractable
+convergence of Markov Chain Monte Carlo\footnote{We have also written a tutorial
+  on MCMC in this series (APW CITE HOGG \& DFM).} (MCMC)
+sampling methods, or enable
+alternate sampling methods (for example, rejection sampling) that may be intractable
 when the parameter dimensionality is large.
 
 Here, we demonstrate the utility of the identities shown above with two toy,
