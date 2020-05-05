@@ -155,8 +155,7 @@ We connect the methods to inferences that arise frequently in physics
 and astronomy.
 
 If all you want is the answer, the question is posed and answered at the
-beginning of \sectionname~\ref{sec:problemsolution}, and a generalization to
-products of many Gaussians is given in \sectionname~\ref{sec:generalization}.
+beginning of \sectionname~\ref{sec:problemsolution}.
 We show two toy examples, in the form of worked exercises, in
 \sectionname~\ref{sec:examples}.
 
@@ -516,6 +515,22 @@ data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
+\hogg{BL: Can you move the canonical-form discussion here? It is useful here!---
+For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
+\begin{equation}
+\normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
+~ ,
+\end{equation}
+The parameters are obtained by equating the canonical form with the standard form, $\tH = \tLambda^{\ -1}$, $\veta = \tH\cdot \vm = \tLambda^{-1}\cdot \vm$, and the normalization
+$\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\inv\cdot \veta \right)$
+with $d$ the dimensionality of $\vx$. Equipped with the canonical form, it may become simpler to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
+\begin{eqnarray}
+\prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
+&=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
+\end{eqnarray}
+naturally grouping the terms depending on $\vtheta$ and following the convention of the previous section.}
+
+
 \paragraph{Implementation notes:}
 The solution gives an expression for the variance tensor $\tB$, but
 note that when you actually evaluate the pdfs you probably need to
@@ -575,6 +590,70 @@ $\mu$ and $\Lambda$ are now scalars as well:
 In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
 solution above for this scalar case.
+
+
+\paragraph{Generalization: product of many Gaussians}
+
+A case that arises in some applications is that the
+likelihood is made of multiple Gaussian terms, each of which is a
+different linear combination of the linear parameters $\vtheta$.
+That is, there are $J$ data vectors $\vy_j$, each of which has size or length $N_j$,
+and each of which has an expectation
+set linearly by the parameters $\vtheta$ but through a different design matrix $\mM_j$.
+Provided that the different data vectors $\vy_j$ are independently ``observed'' (that
+is, they have independent noise draws with noise variance tensors $\tC_j$),
+the total likelihood is just the product of
+the individual-data-vector likelihoods.
+That setup leads to the following generalized problem statement:
+
+Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ $N_j$-vectors $\vb_j$,
+and $J$ $N_j\times N_j$ variance tensors $\tB_j$ such that
+\begin{equation}\label{eq:genproblem}
+\normal(\vtheta\given\vmu,\tLambda)\,\prod_{j=1}^J\normal(\vy_j\given\mM_j\cdot\vtheta,\tC_j)\,
+ = \normal(\vtheta\given\va,\tA)\,\prod_{j=1}^J\normal(\vy_j\given\vb_j,\tB_j) ~ ,
+\end{equation}
+and such that $\va$, $\tA$, all the $\vb_j$, and all the $\tB_j$
+don't depend on $\vtheta$ at all.
+Note that
+$\vtheta$ is a $K$-vector,
+$\vmu$ is a $K$-vector,
+$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor,
+each $\vy_j$ is an $N_j$-vector,
+each $\mM_j$ is a $N_j\times K$ matrix,
+and
+each $\tC_j$ is a $N_j\times N_j$ non-negative semi-definite variance tensor.
+
+The solution to this is an iteration over data vectors $\vy_j$.
+\begin{equation}
+  \tA_0\inv = \tLambda\inv ~;~ \va_0 = \vmu ~;~ \vx_0 = \tLambda\inv\cdot\vmu
+\end{equation}
+\begin{equation}
+  \tB_j = \tC_j + \mM_j \cdot A_{j-1} \cdot \mM_j\T
+\end{equation}
+\begin{equation}
+  \vb_j = \mM_j \cdot \va_{j-1}
+\end{equation}
+\begin{equation}
+  \tA_j\inv = \tA_{j-1}\inv + \mM_j\T \cdot \tC_j\inv \cdot \mM_j
+\end{equation}
+\begin{equation}
+  \vx_j = \vx_{j-1} + \mM_j\T \cdot \tC_j\inv \cdot \vy_j
+\end{equation}
+\begin{equation}
+  \va_j = \tA_j \cdot \vx_j
+\end{equation}
+\begin{equation}
+  \tA = \tA_J ~;~ \va = \va_J
+  ~.
+\end{equation}
+The solution is an iteration because you can think of adding each new data
+set $\vy_j$ sequentially, with the prior for set $j$ being the posterior from
+set $j-1$.
+This solution is unpleasant, because the specific values you get for the
+$\vb_j$ and the $\tB_j$ depend on the order in which you insert the data.
+But---and very importantly for the rules of Bayesian inference---the posterior
+mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{HOGG say
+  things about the consistency of Bayesian reasoning and Cox theorems; CITE Jaynes.}
 
 
 \section{Worked Examples}\label{sec:examples}
@@ -737,100 +816,5 @@ Compute the marginal likelihood $p(\vy\given\omega)$.
   \end{center}
 \end{table}
 
-\section{Generalization: product of many Gaussians}
-\label{sec:generalization}
-
-A case that arises in some applications is that the
-likelihood is made of multiple Gaussian terms, each of which is a
-different linear combination of the linear parameters $\vtheta$.
-That is, there are many data vectors $\vy_i$, each of which has size or length $N_i$,
-and each of which has an expectation
-set linearly by the parameters $\vtheta$ but through a different design matrix $\mM_i$.
-Provided that the different data vectors $\vy_i$ are independently ``observed'' (that
-is, they have independent noise draws), the total likelihood is just the product of
-the individual-data-vector likelihoods.
-That setup leads to the following problem:
-
-\paragraph{Problem:}
-Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $N_i$-vectors $\vb_i$,
-and $N_i\times N_i$ variance tensors $\tB_i$ such that
-\begin{equation}\label{eq:genproblem}
-\normal(\vtheta\given\vmu,\tLambda)\,\prod_i\normal(\vy_i\given\mM_i\cdot\vtheta,\tC_i)\,
- = \normal(\vtheta\given\va,\tA)\,\prod_i\normal(\vy_i\given\vb_i,\tB_i) ~ ,
-\end{equation}
-and such that $\va$, $\tA$, all the $\vb_i$, and all the $\tB_i$
-don't depend on $\vtheta$ at all.
-Note that
-$\vtheta$ is a $K$-vector,
-$\vmu$ is a $K$-vector,
-$\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor,
-each $\vy_i$ is an $N_i$-vector,
-each $\mM_i$ is a $N_i\times K$ matrix,
-and
-each $\tC_i$ is a $N_i\times N_i$ non-negative semi-definite variance tensor.
-
-\paragraph{Solution:}
-\hogg{BL: IS THIS SOLUTION CORRECT? I intuited it!}
-
-\begin{equation}\label{eq:genA}
-\tA\inv = \tLambda\inv + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \mM_i
-\end{equation}
-\begin{equation}\label{eq:gena}
-\va = \tA \cdot (\tLambda\inv \cdot \vmu + \sum_i\mM_i\T \cdot \tC_i\inv \cdot \vy_i)
-\end{equation}
-\begin{equation}\label{eq:genB}
-\tB_i = \tC_i + \mM_i \cdot \tLambda \cdot \mM_i\T
-\end{equation}
-\begin{equation}\label{eq:genb}
-\vb_i = \mM_i \cdot \vmu
-~ .
-\end{equation}
-
-\paragraph{Argument, proof, or notes:}
-\hogg{BL, please write stuff here! Also I think you are using $\tLambda_i$ when
-  you mean to be using $\tC_i$.}
-
-\hogg{BL: I think you should move the canonical-form discussion above to the ``solution notes'' part of Section~\ref{sec:problemsolution}; it is useful there too! And then you can just name-check it here in your commentary.}
-
-For a fixed number of terms, the techniques from above (completing the square and detailed balance) could be used but become cumbersome. We will derive a general formula using \textit{the canonical form of Gaussian distributions}.
-For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
-\begin{equation}
-\normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
-~ ,
-\end{equation}
-The parameters are obtained by equating the canonical form with the standard form, $\tH = \tLambda^{\ -1}$, $\veta = \tH\cdot \vm = \tLambda^{-1}\cdot \vm$, and the normalization
-$\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\inv\cdot \veta \right)$
-with $d$ the dimensionality of $\vx$.
-
-Equipped with the canonical form, it is easy to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
-\begin{eqnarray}
-\prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
-&=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
-\end{eqnarray}
-naturally grouping the terms depending on $\vtheta$ and following the convention of the previous section.
-
-The parameters of the individual Gaussians in canonical form are
-\begin{eqnarray}
-\veta_i &=& \tLambda_i^{-1} \cdot \vmu_i \\
-\tH_i  &=& \tLambda_i^{-1}\\
-\xi_i &=& -\frac{1}{2}\left( d_i \log 2\pi -\log|\tH_i| + \veta_i^T \cdot \tH_i\inv\cdot \veta_i \right)
-\end{eqnarray}
-where $d_i$ is the dimensionality of $\vmu_i$, and that of the total Gaussian are
-\begin{eqnarray}
-\bar{\veta} &=& \sum_i \mM_i \cdot \veta_i = \sum_i \mM_i \cdot  \tLambda_i^{-1} \cdot \vmu_i  \\
-\bar{\tH} &=& \sum_i  \mM_i^T\cdot \tH_i\cdot \mM_i = \sum_i  \mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i \\
- \bar{\xi} &=&  -\frac{1}{2}\left( N\log 2\pi -\log|\bar{\tH} | + \bar{\veta}^T \cdot \bar{\tH}\inv\cdot \bar{\veta} \right)\\
-\va &=&  \bar{\tH}^{-1} \bar{\xi} \\
-\tA &=& \bar{\tH}^{-1}
-\end{eqnarray}
-where $N$ is the dimensionality of $\vtheta$.
-Equipped with this result, we can re-derive the formulae of the previous sections.
-We can again identify $\va$ as the maximum a posteriori value for $\vtheta$, and $\tA$ the associated Gaussian covariance.
-Furthermore, the term $ \normal(\vtheta\given\va,\tA) $ reduces to one when marginalizing over $\vtheta$, and we are left with the marginalized likelihood, $ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)$.
-
-One culprit of this approach is that its implementation. Indeed, it involves inverting the individual covariances $\tLambda_i$, projecting them with $\mM_i$, in order to form $\bar{\tH}$ and  $\bar{\veta}$ and apply them onto each other to obtain $\va$, $\tA$ and $ \bar{\xi}$. Depending on the condition numbers of the square matrices, and the dimensionality of the projection matrices, applying those formulae may be numerically unstable. In practice, this could simply result from the noise levels in the data and how the model is projected from the parameters $\vtheta$ onto the data.
-It is therefore highly recommended to apply those formulae with care, and verify the stability of the results.
-If matrices with bad condition numbers are involved, one solution would be to apply the matrix inversion lemma. Unfortunately this would only apply to one term $\mM_i^T\cdot \tLambda_i^{-1}\cdot \mM_i$ at a time, and it may be necessary to apply it multiple times, resulting in long expressions (that lead to numerically stable results).
-Since this is application-specific, we do not derive those expressions here.
 
 \end{document}
