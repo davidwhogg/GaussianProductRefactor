@@ -4,11 +4,9 @@
 % to-do
 % -----
 % - audit all style notes
-% - fix typesetting for "canonical form" of normal
 % - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks; should we use \textsl instead?
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
-% - HOGG: Check Gaussian Processes literature for a relevant thing to cite
 % - HOGG: cite Rasmussen, Matrix cookbook, Roweis notes
 % - HOGG: Refer to Luger, F-M, Hogg RNAAS? https://arxiv.org/pdf/1710.11136.pdf
 % - APW: We mention SPEED of computation in the abstract; we should say that again
@@ -16,6 +14,7 @@
 %   The Joker appropriately. THERE NEED TO BE CITATIONS! ArXiv rejects papers that
 %   don't have bibliographies.
 % - make a comment about the connection to GPs, and what it means.
+% - Audit canonical form very carefully; it has been re-typeset three times.
 % - audit for and remove all HOGG, DWH, APW, BL, CITE from the text.
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
@@ -269,7 +268,7 @@ assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{likelihood} \quad p(\vy\given\vtheta,\bP) ~ .
+\mbox{likelihood} \quad p(\vy\given\vtheta,\bP) ~.
 \end{equation}
 
 Now let's imagine that the parameters $\vtheta$ are either nuisance
@@ -278,7 +277,7 @@ them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{marginalized likelihood} \quad p(\vy\given\bP) ~ .
+\mbox{marginalized likelihood} \quad p(\vy\given\bP) ~.
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
@@ -297,7 +296,7 @@ To perform the marginalization, we have two choices.
 We can either do an integral:
 \begin{equation}
 p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
-~ ,
+~,
 \end{equation}
 where the integral is implicitly over the entire domain of the
 nuisances $\vtheta$ (or the entire support of the prior).
@@ -305,7 +304,7 @@ Or we can re-factorize the expression using Bayes' theorem:
 \begin{equation}
 p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
  = p(\vtheta\given\vy,\bP)\,p(\vy\given\bP)
-~ .
+~.
 \end{equation}
 That is, in certain magical circumstances it is possible to do this
 re-factorization without explicitly doing any integral.
@@ -336,8 +335,8 @@ p(\vy\given\vtheta,\bP) = \normal(\vy\given\mM\cdot\vtheta,\tC)
 p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 \end{equation}
 \begin{equation}\label{eq:Gaussian}
-\normal(\vx\given\vm,\tV) \equiv \frac{1}{||2\pi\,\tV||^{1/2}}\,\exp\left(\frac{1}{2}[\vx-\vm]\T \cdot \tV\inv \cdot [\vx - \vm]\right)
-~ ,
+\normal(\vx\given\vm,\tV) \equiv \frac{1}{||2\pi\,\tV||^{1/2}}\,\exp\left(-\frac{1}{2}\,[\vx-\vm]\T \cdot \tV\inv \cdot [\vx - \vm]\right)
+~,
 \end{equation}
 where $\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian
 pdf\footnote{Check out what we did with the ``$2\pi$'' in
@@ -386,7 +385,7 @@ Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $N$-vector $\vb$,
 and $N\times N$ variance tensor $\tB$ such that
 \begin{equation}\label{eq:problem}
 \normal(\vy\given\mM\cdot\vtheta,\tC)\,\normal(\vtheta\given\vmu,\tLambda)
- = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) ~ ,
+ = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) ~,
 \end{equation}
 and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
 Note that
@@ -410,7 +409,7 @@ $\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
 \end{equation}
 \begin{equation}\label{eq:b}
 \vb = \mM \cdot \vmu
-~ .
+~.
 \end{equation}
 This is the complete solution to the problem, and constitutes the main point
 of this \documentname.
@@ -422,7 +421,7 @@ hold.
 The first thing is that the determinant products must be equal:
 \begin{equation}
 ||\tC||\,||\tLambda|| = ||\tA||\,||\tB||
-~ ,
+~,
 \end{equation}
 because the determinants are involved in the normalizations of the
 functions.
@@ -430,7 +429,7 @@ This equality of determinant products follows straightforwardly from
 the matrix determinant lemma (APW CITE WIKIPEDIA OR ??)
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
-~ ,
+~,
 \end{equation}
 where $\mU$ and $\mV$ can be rectangular, and $\tI$ is the correct-sized identity matrix.
 This identity implies that
@@ -448,7 +447,7 @@ We can ratio these as follows to prove this first thing:
  = \frac{||\tB||}{||\tA\inv||}
  = \frac{||\tC||}{||\tLambda\inv||}
  = ||\tC||\,||\tLambda||
-~ .
+~.
 \end{equation}
 
 The second thing required for the proof is that the quadratic scalar form
@@ -468,13 +467,13 @@ all the quadratic forms, plus some use of the matrix inversion lemma
 (APW CITE WIKIPEDIA OR ??),
 \begin{equation}\label{eq:invlemma}
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
-~ ,
+~,
 \end{equation}
 which gives an expression for the inverse $\tB\inv$ of the marginalized
 likelihood variance:
 \begin{equation}
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
-~ .
+~.
 \end{equation}
 After that it's just a lot of grinding through matrix expressions.\footnote{%
 We leave this grinding to the avid reader.
@@ -494,6 +493,21 @@ $\vtheta\T\cdot\tQ\cdot\vtheta$ were equal between the LHS~(\ref{eq:LHS})
 and the RHS~(\ref{eq:RHS}), and then all the terms that look like
 $\vmu\T\cdot\tS\cdot\vmu$, and so on.
 It turns out you don't have to consider them all to get the right solution.
+
+There is an alternative derivation or proof involving the
+\textsl{canonical form} for the multivariate Gaussian. This form is
+\begin{equation}
+\normal(\vx\given\vm,\tV) = \exp\left(-\frac{1}{2}\vx^T \cdot\tH \cdot \vx + \veta^T \cdot \vx - \frac{1}{2}\,\xi\right)
+\end{equation}
+\begin{equation}
+\tH\equiv\tV\inv ~;~
+\veta\equiv\tV\inv\cdot\vm ~;~
+\xi\equiv\ln||2\pi\,\tV||+\veta^T\cdot\tV\cdot\veta ~.
+\end{equation}
+In the canonical form, many products and other manipulations become
+simpler. \hogg{BL: Do you want to write more here? If you do, go to town! Note
+  that I adjusted your typesetting to make it more consistent with the rest of
+  the \documentname}.
 
 Because the matrix $\mM$ is not square, it has no inverse. And because this
 is a physics problem, it has units (which are the units of $\dd\vy/\dd\vtheta$).
@@ -526,21 +540,6 @@ And the variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
 It is strictly non-smaller than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
-
-\hogg{BL: Can you move the canonical-form discussion here? It is useful here!---
-For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form is
-\begin{equation}
-\normal^{\ -1}(\vx\given\veta, \tH) = \exp\left(\xi +  \veta^T\cdot\vx - \frac{1}{2}\vx^T \cdot\tH \cdot \vx\right)
-~ ,
-\end{equation}
-The parameters are obtained by equating the canonical form with the standard form, $\tH = \tLambda^{\ -1}$, $\veta = \tH\cdot \vm = \tLambda^{-1}\cdot \vm$, and the normalization
-$\xi = -\frac{1}{2}\left( d\log 2\pi -\log||\tH|| + \veta^T \cdot \tH\inv\cdot \veta \right)$
-with $d$ the dimensionality of $\vx$. Equipped with the canonical form, it may become simpler to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
-\begin{eqnarray}
-\prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
-&=&   \underbrace{\normal^{\ -1}(\vtheta\given\bar{\veta}, \bar{\tH})}_{ \normal(\vtheta\given\va,\tA) } \ \times \ \exp\left(\textstyle{\sum_i} \xi_i - \bar{\xi} \right)
-\end{eqnarray}
-naturally grouping the terms depending on $\vtheta$ and following the convention of the previous section.}
 
 
 \paragraph{Implementation notes:}
