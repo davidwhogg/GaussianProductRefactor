@@ -15,7 +15,6 @@
 %   in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately. THERE NEED TO BE CITATIONS! ArXiv rejects papers that
 %   don't have bibliographies.
-% - WE NEED TO GIVE THE FORM FOR A GAUSSIAN!! WE DON'T GIVE THAT.
 % - make a comment about the connection to GPs, and what it means.
 % - audit for and remove all HOGG, DWH, APW, BL, CITE from the text.
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
@@ -335,10 +334,20 @@ p(\vy\given\vtheta,\bP) = \normal(\vy\given\mM\cdot\vtheta,\tC)
 \end{equation}
 \begin{equation}
 p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
+\end{equation}
+\begin{equation}\label{eq:Gaussian}
+\normal(\vx\given\vm,\tV) \equiv \frac{1}{||2\pi\,\tV||^{1/2}}\,\exp\left(\frac{1}{2}[\vx-\vm]\T \cdot \tV\inv \cdot [\vx - \vm]\right)
 ~ ,
 \end{equation}
-where
-$\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian pdf for a vector $\vx$
+where $\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian
+pdf\footnote{Check out what we did with the ``$2\pi$'' in
+  \equationname~(\ref{eq:Gaussian}): We wrote an expression for the
+  multivariate Gaussian that never makes any reference to the
+  dimension $d$ of the $\vx$-space. Most expressions in the literature
+  have a pesky $d/2$ in them, which is ugly and implies some need for
+  code or equations to know the dimension explicitly, even though all
+  the terms (determinant, inner product) are coordinate-free scalar
+  forms.} for a vector $\vx$
 given a mean vector $\vm$ and a variance tensor $\tV$,
 $\mM$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the nonlinear parameters $\bP$),
@@ -525,7 +534,7 @@ For a multivariate Gaussian $\normal(\vx\given\vm,\tLambda)$, the canonical form
 ~ ,
 \end{equation}
 The parameters are obtained by equating the canonical form with the standard form, $\tH = \tLambda^{\ -1}$, $\veta = \tH\cdot \vm = \tLambda^{-1}\cdot \vm$, and the normalization
-$\xi = -\frac{1}{2}\left( d\log 2\pi -\log|\tH| + \veta^T \cdot \tH\inv\cdot \veta \right)$
+$\xi = -\frac{1}{2}\left( d\log 2\pi -\log||\tH|| + \veta^T \cdot \tH\inv\cdot \veta \right)$
 with $d$ the dimensionality of $\vx$. Equipped with the canonical form, it may become simpler to see that the product of any number of Gaussians will reduce to the product of two terms: one with all of the terms in $\veta$ and $\vx$, and the other one the normalization necessary to turn the first term into a valid canonical form. We will apply this idea to (\hogg{what}):
 \begin{eqnarray}
 \prod_i \normal( \mM_i\cdot\vtheta \given \vmu_i,\tLambda_i) &=& \prod_i \normal^{\ -1}( \mM_i\cdot\vtheta\given\veta_i, \tH_i) \\
