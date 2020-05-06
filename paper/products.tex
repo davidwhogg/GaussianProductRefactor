@@ -36,6 +36,7 @@
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
+
 \usepackage{amsmath, bm, mathrsfs, amssymb}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[hidelinks,
@@ -45,8 +46,13 @@
 \usepackage{pifont}
 \usepackage{graphicx}
 
+\usepackage{doi}
+
 \usepackage{caption}
 \captionsetup{font=footnotesize}
+
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
 
 % text stuhh
 \newcommand{\documentname}{\textsl{Note}}
@@ -94,6 +100,9 @@
 \newcommand{\mV}{\matrix{V}}
 \newcommand{\bP}{\ensuremath{\textrm{\ding{80}}}} % THIS IS HERE TO ANNOY DWH / you failed
 \newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH / you failed
+
+% Journal keys
+\newcommand{\apj}{ApJ} % Astrophysical Journal
 
 % typesetting stuff
 \addtolength{\topmargin}{-0.75in}
@@ -202,7 +211,7 @@ energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
 This is true, for example, when we fit for the radial-velocity
 variation of a star in response to an faint, orbiting companion\footnote{See,
-  for an example in our own work, APW CITE JOKER. That project and paper would have been
+  for an example in our own work, \cite{Price-Whelan:2017}. That project and paper would have been
   impossible without the speed-ups provided by the expressions derived in this
   \documentname.} (this is a context
 we will use for one of our toy examples below), where the expectation of the
@@ -828,5 +837,8 @@ Compute the marginal likelihood $p(\vy\given\omega)$.
   \end{center}
 \end{table}
 
+% Render the references
+\clearpage
+\bibliography{refs}
 
 \end{document}
