@@ -32,6 +32,7 @@
 % - put term name definitions in \textsl{}, *not* quotations
 % - nonlinear not non-linear
 % - don't say "i.e.," say "that is,". Don't say "e.g.," say "for example,".
+% - words in equations should be \small
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
@@ -269,7 +270,7 @@ assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{likelihood} \hoggquad p(\vy\given\vtheta,\bP) \hoggquad.
+\mbox{\small likelihood} \hoggquad p(\vy\given\vtheta,\bP) \hoggquad.
 \end{equation}
 
 Now let's imagine that the parameters $\vtheta$ are either nuisance
@@ -278,12 +279,12 @@ them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{marginalized likelihood} \hoggquad p(\vy\given\bP) \hoggquad.
+\mbox{\small marginalized likelihood} \hoggquad p(\vy\given\bP) \hoggquad.
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
 \begin{equation}
-\mbox{prior on nuisance parameters} \hoggquad p(\vtheta\given\bP)
+\mbox{\small prior on nuisance parameters} \hoggquad p(\vtheta\given\bP)
 \end{equation}
 on the nuisances.
 This is the basis for the claim (stated elsewhere; HOGG) that
@@ -596,7 +597,7 @@ One interesting case is when $K=1$, so the design matrix in fact
 reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and
 $\mu$ and $\Lambda$ are now scalars as well:
 \begin{equation}
-\mbox{likelihood} \times \mbox{prior} \hoggquad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
+\mbox{\small likelihood} \times \mbox{\small prior} \hoggquad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 \hoggquad.
 \end{equation}
 In this case, the previous equations are simplified and no longer
