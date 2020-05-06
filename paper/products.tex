@@ -3,19 +3,17 @@
 
 % to-do
 % -----
-% - audit all style notes
 % - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks; should we use \textsl instead?
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
-% - HOGG: cite Rasmussen, Matrix cookbook, Roweis notes
+% - HOGG: Matrix cookbook, Roweis notes
 % - HOGG: Refer to Luger, F-M, Hogg RNAAS? https://arxiv.org/pdf/1710.11136.pdf
 % - APW: We mention SPEED of computation in the abstract; we should say that again
 %   in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately. THERE NEED TO BE CITATIONS! ArXiv rejects papers that
 %   don't have bibliographies.
-% - make a comment about the connection to GPs, and what it means.
-% - Audit canonical form very carefully; it has been re-typeset three times.
 % - audit for and remove all HOGG, DWH, APW, BL, CITE from the text.
+% - audit all style notes
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
 % - profit
@@ -149,6 +147,7 @@ That is, a linear, Gaussian model.
 This product of a likelihood times a prior can be refactored into a product of a
 Bayesian evidence (or marginalized likelihood) times a posterior, where
 (in this case) both of these are also Gaussian.
+This magic also holds in many Gaussian-process contexts.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
@@ -259,6 +258,19 @@ the posterior pdf $p(\vtheta\given\vy,\bH)$ and the marginalized likelihood
 $p(\vy\given\bH)$ with closed-form transformations of the means and variances of
 the likelihood and prior pdf.
 
+A currently popular data-analysis context in which Gaussian likelihoods are
+multiplied by Gaussian priors is \emph{Gaussian processes} (\acronym{GP}s),
+which is a kind of
+non-parametric fitting in which a kernel function sets the flexibility of a
+data-driven model. A full discussion of \acronym{GP}s is out of scope for this
+\documentname, but excellent discussions abound.\footnote{We like the free
+  book by Rasmussen \& Williams (CITE).}
+The math below can be applied in many \acronym{GP} contexts.
+Indeed, most linear model fits of the kind we describe below can be translated
+into the language of \acronym{GP}s;
+they are generally \acronym{GP}s with a trivial kernel function but a non-trivial
+mean function. We leave that translation as an exercise to the ambitious reader.
+
 \section{Marginalization by refactorization}
 
 Imagine that we are doing an inference using data $\vy$ (which is a
@@ -270,7 +282,7 @@ assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{\small likelihood} \hoggquad p(\vy\given\vtheta,\bP) \hoggquad.
+\mbox{\small likelihood:} \hoggquad p(\vy\given\vtheta,\bP) \hoggquad.
 \end{equation}
 
 Now let's imagine that the parameters $\vtheta$ are either nuisance
@@ -279,22 +291,33 @@ them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{\small marginalized likelihood} \hoggquad p(\vy\given\bP) \hoggquad.
+\mbox{\small marginalized likelihood:} \hoggquad p(\vy\given\bP) \hoggquad.
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
 \begin{equation}
-\mbox{\small prior on nuisance parameters} \hoggquad p(\vtheta\given\bP)
+\mbox{\small prior on nuisance parameters:} \hoggquad p(\vtheta\given\bP) \hoggquad.
 \end{equation}
-on the nuisances.
-This is the basis for the claim (stated elsewhere; HOGG) that
+This is the basis for the claim\footnote{A claim that hasn't been made forcefully
+  yet, but will eventually be by at least one of these authors.} that Bayesian
 inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
-in the pedagogical literature (for example, HOGG).
+in the pedagogical literature\footnote{For example, CITE, who claim that the
+  goal of Bayesian inference is to create posterior pdfs. That isn't correct.
+  Different Bayesian inferences have different objectives. The fundamental tenet
+  of Bayesian inference is the likelihood principle: All information comes to
+  you---all updates to your beliefs---multiplicatively through a likelihood
+  function. It is the likelihood, not the prior pdf, that is fundamental to Bayesian
+  inference.}
 We have said ``$p(\vtheta\given\bP)$'' because this prior may depend on
 the nonlinear parameters $\bP$, but it certainly doesn't have to.
+Armed with the likelihood and prior---if you want it---you can construct
+the posterior pdf for the linear parameters
+\begin{equation}
+\mbox{\small posterior for nuisance parameters:} \hoggquad p(\vtheta\given\vy,\bP) \hoggquad.
+\end{equation}
 
-To perform the marginalization, we have two choices.
+To perform a marginalization of the likelihood, we have two choices.
 We can either do an integral:
 \begin{equation}
 p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
