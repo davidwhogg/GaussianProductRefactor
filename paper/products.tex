@@ -3,27 +3,25 @@
 
 % to-do
 % -----
-% - audit all style notes
 % - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks; should we use \textsl instead?
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
-% - HOGG: cite Rasmussen, Matrix cookbook, Roweis notes
+% - HOGG: Matrix cookbook, Roweis notes
 % - HOGG: Refer to Luger, F-M, Hogg RNAAS? https://arxiv.org/pdf/1710.11136.pdf
 % - APW: We mention SPEED of computation in the abstract; we should say that again
 %   in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately. THERE NEED TO BE CITATIONS! ArXiv rejects papers that
 %   don't have bibliographies.
-% - make a comment about the connection to GPs, and what it means.
-% - Audit canonical form very carefully; it has been re-typeset three times.
 % - audit for and remove all HOGG, DWH, APW, BL, CITE from the text.
+% - audit all style notes
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
 % - profit
 
-% style notes -- audit for these.
-% -------------------------------
+% style notes -- audit for these
+% ------------------------------
 % - use \, for multiplication
-% - put punctuation after equations as necessary, with "~," or equivalent. Use ~
+% - put punctuation after equations as necessary, with "\hoggquad,". Use \hoggquad
 % - no condescending language; no "it is easy to show" or equivalent...!
 % - use \vA not A or \vector{A} and so on.
 % - modify typesetting above the \begin{document} line, not below.
@@ -64,6 +62,7 @@
 \newcommand{\foreign}[1]{\textsl{#1}}
 
 % math stuhh
+\newcommand{\hoggquad}{~~}
 \newcommand{\given}{\,|\,}
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\T}{^{\!\mathsf{T}\!}}
@@ -157,6 +156,7 @@ That is, a linear, Gaussian model.
 This product of a likelihood times a prior can be refactored into a product of a
 Bayesian evidence (or marginalized likelihood) times a posterior, where
 (in this case) both of these are also Gaussian.
+This magic also holds in many Gaussian-process contexts.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
@@ -267,6 +267,19 @@ the posterior pdf $p(\vtheta\given\vy,\bH)$ and the marginalized likelihood
 $p(\vy\given\bH)$ with closed-form transformations of the means and variances of
 the likelihood and prior pdf.
 
+A currently popular data-analysis context in which Gaussian likelihoods are
+multiplied by Gaussian priors is \emph{Gaussian processes} (\acronym{GP}s),
+which is a kind of
+non-parametric fitting in which a kernel function sets the flexibility of a
+data-driven model. A full discussion of \acronym{GP}s is out of scope for this
+\documentname, but excellent discussions abound.\footnote{We like the free
+  book by Rasmussen \& Williams (CITE).}
+The math below can be applied in many \acronym{GP} contexts.
+Indeed, most linear model fits of the kind we describe below can be translated
+into the language of \acronym{GP}s;
+they are generally \acronym{GP}s with a trivial kernel function but a non-trivial
+mean function. We leave that translation as an exercise to the ambitious reader.
+
 \section{Marginalization by refactorization}
 
 Imagine that we are doing an inference using data $\vy$ (which is a
@@ -278,7 +291,7 @@ assumptions or hyper parameters.}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
-\mbox{\small likelihood} \quad p(\vy\given\vtheta,\bP) ~.
+\mbox{\small likelihood:} \hoggquad p(\vy\given\vtheta,\bP) \hoggquad.
 \end{equation}
 
 Now let's imagine that the parameters $\vtheta$ are either nuisance
@@ -287,26 +300,37 @@ them out.
 This will leave us with a lower-dimensional marginalized likelihood
 function
 \begin{equation}
-\mbox{\small marginalized likelihood} \quad p(\vy\given\bP) ~.
+\mbox{\small marginalized likelihood:} \hoggquad p(\vy\given\bP) \hoggquad.
 \end{equation}
 That's good, but the marginalization comes at a cost:
 We have to choose a prior
 \begin{equation}
-\mbox{\small prior on nuisance parameters} \quad p(\vtheta\given\bP)
+\mbox{\small prior on nuisance parameters:} \hoggquad p(\vtheta\given\bP) \hoggquad.
 \end{equation}
-on the nuisances.
-This is the basis for the claim (stated elsewhere; HOGG) that
+This is the basis for the claim\footnote{A claim that hasn't been made forcefully
+  yet, but will eventually be by at least one of these authors.} that Bayesian
 inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
-in the pedagogical literature (for example, HOGG).
+in the pedagogical literature\footnote{For example, CITE, who claim that the
+  goal of Bayesian inference is to create posterior pdfs. That isn't correct.
+  Different Bayesian inferences have different objectives. The fundamental tenet
+  of Bayesian inference is the likelihood principle: All information comes to
+  you---all updates to your beliefs---multiplicatively through a likelihood
+  function. It is the likelihood, not the prior pdf, that is fundamental to Bayesian
+  inference.}
 We have said ``$p(\vtheta\given\bP)$'' because this prior may depend on
 the nonlinear parameters $\bP$, but it certainly doesn't have to.
+Armed with the likelihood and prior---if you want it---you can construct
+the posterior pdf for the linear parameters
+\begin{equation}
+\mbox{\small posterior for nuisance parameters:} \hoggquad p(\vtheta\given\vy,\bP) \hoggquad.
+\end{equation}
 
-To perform the marginalization, we have two choices.
+To perform a marginalization of the likelihood, we have two choices.
 We can either do an integral:
 \begin{equation}
 p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
-~,
+\hoggquad,
 \end{equation}
 where the integral is implicitly over the entire domain of the
 nuisances $\vtheta$ (or the entire support of the prior).
@@ -314,7 +338,7 @@ Or we can re-factorize the expression using Bayes' theorem:
 \begin{equation}
 p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
  = p(\vtheta\given\vy,\bP)\,p(\vy\given\bP)
-~.
+\hoggquad.
 \end{equation}
 That is, in certain magical circumstances it is possible to do this
 re-factorization without explicitly doing any integral.
@@ -346,7 +370,7 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 \end{equation}
 \begin{equation}\label{eq:Gaussian}
 \normal(\vx\given\vm,\tV) \equiv \frac{1}{||2\pi\,\tV||^{1/2}}\,\exp\left(-\frac{1}{2}\,[\vx-\vm]\T \cdot \tV\inv \cdot [\vx - \vm]\right)
-~,
+\hoggquad,
 \end{equation}
 where $\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian
 pdf\footnote{Check out what we did with the ``$2\pi$'' in
@@ -395,7 +419,7 @@ Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $N$-vector $\vb$,
 and $N\times N$ variance tensor $\tB$ such that
 \begin{equation}\label{eq:problem}
 \normal(\vy\given\mM\cdot\vtheta,\tC)\,\normal(\vtheta\given\vmu,\tLambda)
- = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) ~,
+ = \normal(\vtheta\given\va,\tA)\,\normal(\vy\given\vb,\tB) \hoggquad,
 \end{equation}
 and such that $\va$, $\tA$, $\vb$, and $\tB$ don't depend on $\vtheta$ at all.
 Note that
@@ -419,7 +443,7 @@ $\tLambda$ is a $K\times K$ non-negative semi-definite variance tensor.
 \end{equation}
 \begin{equation}\label{eq:b}
 \vb = \mM \cdot \vmu
-~.
+\hoggquad.
 \end{equation}
 This is the complete solution to the problem, and constitutes the main point
 of this \documentname.
@@ -431,7 +455,7 @@ hold.
 The first thing is that the determinant products must be equal:
 \begin{equation}
 ||\tC||\,||\tLambda|| = ||\tA||\,||\tB||
-~,
+\hoggquad,
 \end{equation}
 because the determinants are involved in the normalizations of the
 functions.
@@ -439,7 +463,7 @@ This equality of determinant products follows straightforwardly from
 the matrix determinant lemma (APW CITE WIKIPEDIA OR ??)
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
-~,
+\hoggquad,
 \end{equation}
 where $\mU$ and $\mV$ can be rectangular, and $\tI$ is the correct-sized identity matrix.
 This identity implies that
@@ -448,7 +472,7 @@ This identity implies that
 \end{equation}
 \begin{equation}
 ||\tB||     = ||\tI + \mM\T\cdot\tC\inv\cdot\mM\cdot\tLambda||\,||\tC||
-~,
+\hoggquad,
 \end{equation}
 where we had to apply the identity twice to get the $||\tA\inv||$ expression.
 We can ratio these as follows to prove this first thing:
@@ -457,7 +481,7 @@ We can ratio these as follows to prove this first thing:
  = \frac{||\tB||}{||\tA\inv||}
  = \frac{||\tC||}{||\tLambda\inv||}
  = ||\tC||\,||\tLambda||
-~.
+\hoggquad.
 \end{equation}
 
 The second thing required for the proof is that the quadratic scalar form
@@ -469,7 +493,7 @@ must equal the quadratic scalar form
 \begin{equation}\label{eq:RHS}
 [\vtheta-\va]\T\cdot\tA\inv\cdot[\vtheta-\va]
 + [\vy-\vb]\T\cdot\tB\inv\cdot[\vy-\vb]
-~,
+\hoggquad,
 \end{equation}
 because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
@@ -477,13 +501,13 @@ all the quadratic forms, plus some use of the matrix inversion lemma
 (APW CITE WIKIPEDIA OR ??),
 \begin{equation}\label{eq:invlemma}
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
-~,
+\hoggquad,
 \end{equation}
 which gives an expression for the inverse $\tB\inv$ of the marginalized
 likelihood variance:
 \begin{equation}
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
-~.
+\hoggquad.
 \end{equation}
 After that it's just a lot of grinding through matrix expressions.\footnote{%
 We leave this grinding to the avid reader.
@@ -510,9 +534,9 @@ There is an alternative derivation or proof involving the
 \normal(\vx\given\vm,\tV) = \exp\left(-\frac{1}{2}\vx^T \cdot\tH \cdot \vx + \veta^T \cdot \vx - \frac{1}{2}\,\xi\right)
 \end{equation}
 \begin{equation}
-\tH\equiv\tV\inv ~;~
-\veta\equiv\tV\inv\cdot\vm ~;~
-\xi\equiv\ln||2\pi\,\tV||+\veta^T\cdot\tV\cdot\veta ~.
+\tH\equiv\tV\inv \hoggquad;\hoggquad
+\veta\equiv\tV\inv\cdot\vm \hoggquad;\hoggquad
+\xi\equiv\ln||2\pi\,\tV||+\veta^T\cdot\tV\cdot\veta \hoggquad.
 \end{equation}
 In the canonical form, many products and other manipulations become
 simpler. \hogg{BL: Do you want to write more here? If you do, go to town! Note
@@ -605,8 +629,8 @@ One interesting case is when $K=1$, so the design matrix in fact
 reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and
 $\mu$ and $\Lambda$ are now scalars as well:
 \begin{equation}
-\mbox{\small likelihood} \times \mbox{\small prior} \quad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
-~ .
+\mbox{\small likelihood} \times \mbox{\small prior} \hoggquad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
+\hoggquad.
 \end{equation}
 In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
@@ -631,7 +655,7 @@ Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ $N_j$-vectors $\vb
 and $J$ $N_j\times N_j$ variance tensors $\tB_j$ such that
 \begin{equation}\label{eq:genproblem}
 \normal(\vtheta\given\vmu,\tLambda)\,\prod_{j=1}^J\normal(\vy_j\given\mM_j\cdot\vtheta,\tC_j)\,
- = \normal(\vtheta\given\va,\tA)\,\prod_{j=1}^J\normal(\vy_j\given\vb_j,\tB_j) ~ ,
+ = \normal(\vtheta\given\va,\tA)\,\prod_{j=1}^J\normal(\vy_j\given\vb_j,\tB_j) \hoggquad,
 \end{equation}
 and such that $\va$, $\tA$, all the $\vb_j$, and all the $\tB_j$
 don't depend on $\vtheta$ at all.
@@ -644,29 +668,25 @@ each $\mM_j$ is a $N_j\times K$ matrix,
 and
 each $\tC_j$ is a $N_j\times N_j$ non-negative semi-definite variance tensor.
 
-The solution to this is an iteration over data vectors $\vy_j$.
+The solution to this is an iteration over data vectors $\vy_j$:
 \begin{equation}
-  \tA_0\inv = \tLambda\inv ~;~ \va_0 = \vmu ~;~ \vx_0 = \tLambda\inv\cdot\vmu
+  \mbox{\small initialize:}\hoggquad
+  \tA_0\inv = \tLambda\inv \hoggquad;\hoggquad \va_0 = \vmu \hoggquad;\hoggquad \vx_0 = \tLambda\inv\cdot\vmu
 \end{equation}
-\begin{equation}
-  \tB_j = \tC_j + \mM_j \cdot A_{j-1} \cdot \mM_j\T
-\end{equation}
-\begin{equation}
-  \vb_j = \mM_j \cdot \va_{j-1}
-\end{equation}
-\begin{equation}
-  \tA_j\inv = \tA_{j-1}\inv + \mM_j\T \cdot \tC_j\inv \cdot \mM_j
-\end{equation}
-\begin{equation}
-  \vx_j = \vx_{j-1} + \mM_j\T \cdot \tC_j\inv \cdot \vy_j
-\end{equation}
-\begin{equation}
-  \va_j = \tA_j \cdot \vx_j
-\end{equation}
-\begin{equation}
-  \tA = \tA_J ~;~ \va = \va_J
-  ~.
-\end{equation}
+\begin{align}
+  \mbox{\small iterate:}\hoggquad
+  \tB_j &= \tC_j + \mM_j \cdot A_{j-1} \cdot \mM_j\T \\
+  \vb_j &= \mM_j \cdot \va_{j-1} \\
+  \tA_j\inv &= \tA_{j-1}\inv + \mM_j\T \cdot \tC_j\inv \cdot \mM_j \\
+  \vx_j &= \vx_{j-1} + \mM_j\T \cdot \tC_j\inv \cdot \vy_j \\
+  \va_j &= \tA_j \cdot \vx_j
+\end{align}
+\begin{align}
+  \mbox{\small finish:}\hoggquad
+  \tA &= \tA_J \\
+  \va &= \va_J
+  \hoggquad.
+\end{align}
 The solution is an iteration because you can think of adding each new data
 set $\vy_j$ sequentially, with the prior for set $j$ being the posterior from
 set $j-1$.
@@ -714,7 +734,7 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
   p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
   p(\gamma) &= \normal(\gamma \given \mu_\gamma, \sigma_\gamma)
-  ~ .
+  \hoggquad.
 \end{align}
 
 \tablename~\ref{tbl:data1} contains four data points, $(x_i, y_i,
@@ -765,13 +785,13 @@ above, the design matrix, $\mM$, is
       4.0 & 2.0 & 1\\
       7.29 & 2.7 & 1\\
       12.96 & 3.6 & 1
-    \end{pmatrix} ~ .
+    \end{pmatrix} \hoggquad.
 \end{align}
 By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values
 \begin{equation}
   \va\T =
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
-      (3.61, 1.98, 14.26) ~ .
+      (3.61, 1.98, 14.26) \hoggquad.
 \end{equation}
 Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
 MAP parameter values (blue line), and the 68-percent credible region (shaded blue
@@ -811,7 +831,7 @@ Assuming
 \begin{align}
   (\mu_\alpha, \sigma_\alpha) &= (0, 5)\\
   (\mu_\beta, \sigma_\beta) &= (0, 5)\\
-  (\mu_\gamma, \sigma_\gamma) &= (0, 10) ~ ,
+  (\mu_\gamma, \sigma_\gamma) &= (0, 10) \hoggquad,
 \end{align}
 compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
