@@ -113,6 +113,7 @@
 
 \usepackage{color}
 \newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
+\newcommand{\apw}[1]{\textcolor{CadetBlue}{[APW says: #1]}}
 \newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
 \newcommand{\hogg}[1]{\textcolor{magenta}{[Hogg says: #1]}}
 
@@ -158,7 +159,7 @@ That is, a linear, Gaussian model.
 This product of a likelihood times a prior can be refactored into a product of a
 Bayesian evidence (or marginalized likelihood) times a posterior, where
 (in this case) both of these are also Gaussian.
-This magic also holds in many Gaussian-process contexts.
+\apw{I don't think this line needs to appear in the abstract. For those who understand the factorization, it doesn't add anything (we mention later in the text). For those who don't know what we're talking about, this could be confusing:} This magic also holds in many Gaussian-process contexts.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
@@ -175,16 +176,15 @@ We show two toy examples, in the form of worked exercises, in
 
 \section{Inferences with linear parameters}
 
-It is common in physics and astronomy and engineering and machine learning and many other fields that likelihood functions
+It is common in physics, astronomy, engineering, machine learning, and many other fields that likelihood functions
 (probabilities of data given parameters) are chosen to be Gaussian
 (or normal\footnote{In this \documentname, we obey physics and astronomy
-  conventions and refer to the normal pdf as the Gaussian pdf. We apologize;
-  we realize that it is dumb and inaccurate to name things after people when
-  those things also have generic, descriptive names.
-  On the other hand, ``normal'' isn't the finest
-  name either. Perhaps Gaussian pdfs should be called ``central'' since they are
-  produced by the central limit theorem. Anyway, we will continue with
-  the name ``Gaussian'' despite our own reservations. Apologies.}):
+conventions and refer to the normal pdf as the Gaussian pdf. We realize that it
+is inaccurate to name things after people when those things also have generic,
+descriptive names. On the other hand, ``normal'' isn't the finest name either.
+Perhaps Gaussian pdfs should be called ``central'' since they are produced by
+the central limit theorem. Anyway, we will continue with the name ``Gaussian''
+despite our own reservations. Apologies.}):
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
 This Gaussian assumption for the likelihood function is
@@ -205,31 +205,28 @@ It is also common in physics and astronomy that models for data
 include parameters such that the expectation value for the data (in,
 say, a set of repeated experiments) is linearly proportional to some
 subset of the parameters.
-This is true, for example, when we fit a histogram of \textsl{Large Hadron Collider}
-events
-affected by the Higgs boson\footnote{See, for example, \todo{HOGG}{CITE here}};
+This is true, for example, when we fit a histogram of \textsl{Large Hadron
+Collider} events affected by the Higgs boson \citep[see, for example,
+][]{TODO}\todo{HOGG}{CITE here}:
 the expected number of counts in each
 energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
 This is true, for example, when we fit for the radial-velocity
-variation of a star in response to an faint, orbiting companion\footnote{See,
-  for an example in our own work \citep{Price-Whelan:2017}. That project and paper would have been
+variation of a star in response to an faint, orbiting companion \citep[see, for an example in our own work, ][]{Price-Whelan:2017, Price-Whelan:2020}\footnote{That project and papers would have been
   impossible without the speed-ups provided by the expressions derived in this
-  \documentname.} (this is a context
-we will use for one of our toy examples below), where the expectation of the
+  \documentname.}, where the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
 respect to the line of sight).
 In both of these cases, there are both linear parameters (like the
 amplitudes) and nonlinear parameters (like the mass of the Higgs, or
-the orbital period of the binary).
+the orbital period of the binary-star system).
 In what follows, we will spend our energies on the linear parameters,
 though our work on them is in service of learning the nonlinear
-parameters too, of course.
+parameters too, of course.\apw{The jump from this par to the next par could use smoothing, or an intermediate section heading?}
 
-Bayes theorem is often written as a ratio of probability density
-functions (pdfs in what follows), but it can be written as a simple
-pdf factorization:
+Bayes theorem is often written as a ratio of probability density functions (pdfs
+in what follows), but it can also be written as a pdf factorization:
 \begin{equation}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
@@ -462,7 +459,7 @@ The first thing is that the determinant products must be equal:
 because the determinants are involved in the normalizations of the
 functions.
 This equality of determinant products follows straightforwardly from
-the matrix determinant lemma \citep[e.g.,][]{Wiki:MDL, Harville:2011}
+the matrix determinant lemma \citep[for example, ][]{Wiki:MDL, Harville:2011}
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
 \hoggquad,
@@ -500,7 +497,7 @@ must equal the quadratic scalar form
 because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
 all the quadratic forms, plus some use of the matrix inversion lemma \citep[also
-called the Woodbury matrix identity; e.g.,][]{wiki:MIL, Harville:2011},
+called the Woodbury matrix identity; for example, ][]{wiki:MIL, Harville:2011},
 \begin{equation}\label{eq:invlemma}
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
 \hoggquad,
