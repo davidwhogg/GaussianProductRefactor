@@ -3,7 +3,6 @@
 
 % to-do
 % -----
-% - APW: update links to data files when archived with Zenodo
 % - HOGG: audit terms defined in quotation marks; should we use \textsl instead?
 % - HOGG: Audit all N K etc. It's a mess. And there have been HUGE errors.
 % - HOGG: Matrix cookbook, Roweis notes
@@ -13,6 +12,7 @@
 %   The Joker appropriately.
 % - audit for and remove all TODO, HOGG, DWH, APW, BL, CITE from the text.
 % - audit all style notes
+% - APW: update links to data files when archived with Zenodo
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
 % - profit
@@ -47,7 +47,7 @@
 \usepackage{doi}
 
 \usepackage{caption}
-\captionsetup{font=footnotesize}
+\captionsetup{labelfont=bf, labelsep=emdash}
 
 \usepackage{natbib}
 \bibliographystyle{abbrvnat}
@@ -159,7 +159,6 @@ That is, a linear, Gaussian model.
 This product of a likelihood times a prior can be refactored into a product of a
 Bayesian evidence (or marginalized likelihood) times a posterior, where
 (in this case) both of these are also Gaussian.
-\apw{I don't think this line needs to appear in the abstract. For those who understand the factorization, it doesn't add anything (we mention later in the text). For those who don't know what we're talking about, this could be confusing:} This magic also holds in many Gaussian-process contexts.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
