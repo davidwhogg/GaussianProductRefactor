@@ -47,7 +47,8 @@
 \usepackage{doi}
 
 \usepackage{caption}
-\captionsetup{labelfont=bf}
+\captionsetup[table]{labelformat=empty}
+\usepackage{adjustbox}
 
 \usepackage{natbib}
 \bibliographystyle{abbrvnat}
@@ -739,7 +740,7 @@ and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
   \hoggquad.
 \end{align}
 
-\tablename~\ref{tbl:data1} contains four data points, $(x_i, y_i,
+The table shown in Figure~\ref{fig:data1} contains four data points, $(x_i, y_i,
 \sigma_{y_i})$.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
@@ -750,7 +751,7 @@ $\tLambda$,
       5^2 & 0 & 0\\
       0 & 2^2 & 0\\
       0 & 0 & 8^2
-    \end{pmatrix}\\
+    \end{pmatrix}
 \end{align}
 compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
@@ -764,20 +765,31 @@ estimated using these samples.
 \begin{table}[t!]
   \footnotesize
   \begin{center}
-    \begin{tabular}{c|c|c}
-      $x$ & $y$ & $\sigma_y$ \\
-      \hline
-      $-0.6$ & 12.2 & 0.8 \\
-      2.0 & 4.1 & 3.2 \\
-      2.7 & 0.9 & 3.3 \\
-      3.6 & $-15.0$ & 3.9 \\
+    \begin{tabular}{c c}
+      \adjustbox{valign=t}{
+        \begin{tabular}{c|c|c}
+          $x$ & $y$ & $\sigma_y$ \\
+          \hline
+          $-0.6$ & 12.2 & 0.8 \\
+          2.0 & 4.1 & 3.2 \\
+          2.7 & 0.9 & 3.3 \\
+          3.6 & $-15.0$ & 3.9 \\
+        \end{tabular}
+      } &
+      \adjustbox{valign=t}{\includegraphics[width=0.7\textwidth]{exercise1.pdf}} \\
     \end{tabular}
-    \caption{Simulated data used in Exercise 1
-    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link to data}).
-    These data were generated with the true parameter values $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
-    \label{tbl:data1}}
+
+    \caption{\textbf{Figure 1}:
+    Left: Simulated data used in Exercise 1
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link
+    to data}). These data were generated with the true parameter values
+    $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
+    Right: The solution to Exercise 1. The MAP parameter values were found using
+    \equationname~\ref{eq:a} with the data shown in the included table.
+    \label{fig:data1}}
   \end{center}
 \end{table}
+
 
 \paragraph{Solution:} Given the assumptions and prior parameter values
 above, the design matrix, $\mM$, is
@@ -795,19 +807,11 @@ By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
       (3.61, 1.98, 14.26) \hoggquad.
 \end{equation}
-Figure~\ref{fig:ex1} shows the data (black points), the model computed with the
-MAP parameter values (blue line), and the 68-percent credible region (shaded blue
-region) estimated using posterior samples generated from
+Figure~\ref{fig:data1} shows the data (black points), the model computed with
+the MAP parameter values (blue line), and the 68-percent credible region (shaded
+blue region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
 
-% Generated with notebooks/Exercise1.ipynb
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.7\textwidth]{exercise1.pdf}
-  \caption{The solution to Exercise 1. The MAP parameter values were found using
-  \equationname~\ref{eq:a}.}
-  \label{fig:ex1}
-\end{figure}
 
 \subsection{Exercise 2: A model with linear and nonlinear parameters}
 
