@@ -225,8 +225,8 @@ In what follows, we will spend our energies on the linear parameters,
 though our work on them is in service of learning the nonlinear
 parameters too, of course.\apw{The jump from this par to the next par could use smoothing, or an intermediate section heading?}
 
-Bayes theorem is often written as a ratio of probability density functions (pdfs
-in what follows), but it can also be written as a pdf factorization:
+Bayes' theorem is often written as a ratio of probability density functions
+(pdfs in what follows), but it can also be written as a pdf factorization:
 \begin{equation}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
@@ -460,7 +460,7 @@ The first thing is that the determinant products must be equal:
 because the determinants are involved in the normalizations of the
 functions.
 This equality of determinant products follows straightforwardly from
-the matrix determinant lemma \citep[for example, ][]{Wiki:MDL, Harville:2011}
+the matrix determinant lemma \citep[for example,][]{Wiki:MDL, Harville:2011}
 \begin{equation}\label{eq:detlemma}
 ||\tQ + \mU\cdot\mV\T|| = ||\tI + \mV\T\cdot\tQ\inv\cdot\mU||\,||\tQ||
 \hoggquad,
@@ -498,7 +498,7 @@ must equal the quadratic scalar form
 because these quadratic scalar forms appear in the exponents in the functions.
 This equality follows from straightforward expansion of
 all the quadratic forms, plus some use of the matrix inversion lemma \citep[also
-called the Woodbury matrix identity; for example, ][]{wiki:MIL, Harville:2011},
+called the Woodbury matrix identity; for example,][]{wiki:MIL, Harville:2011},
 \begin{equation}\label{eq:invlemma}
 [\tQ + \mU\cdot\tS\cdot\mV\T]\inv = \tQ\inv - \tQ\inv\cdot\mU\cdot[\tS\inv + \mV\T\cdot\tQ\inv\cdot\mU]\inv\cdot\mV\T\cdot\tQ\inv
 \hoggquad,
@@ -544,7 +544,8 @@ simpler. \hogg{BL: Do you want to write more here? If you do, go to town! Note
   the \documentname}.
 
 Because the matrix $\mM$ is not square, it has no inverse. And because this
-is a physics problem, it has units (which are the units of $\dd\vy/\dd\vtheta$).
+is a physics problem, $\mM$ has units (which are the units of
+$\dd\vy/\dd\vtheta$).
 It's beautiful in the solution that $\mM$ and $\mM\T$ appear only where the
 units make sense.
 They make sense because the units of $\tC\inv$ are inverse data-squared (where $\vy$
@@ -553,17 +554,20 @@ of $\mM$ are data over parameters.
 And they are all different sizes.
 
 Various parts of the solution are highly interpretable in terms of the
-objects of Bayesian inference. For example, because the term $p(\vtheta\given \va,\tA)$
-is the conditional
-posterior pdf for the linear parameters $\vtheta$, the vector $\va$ is the
-maximum \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
+objects of Bayesian inference. For example, because the term $p(\vtheta\given
+\va,\tA)$ is the conditional posterior pdf\footnote{Remember that $\va$ and
+$\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
+$\mM$!} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
+\foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
 $\vtheta$.
 It is found by inverse-variance-weighted combinations of the data and the prior.
-In some projects posterior pdfs or \acronym{MAP} parameter values are the goal
-(although we don't think it often should be\footnote{\todo{HOGG}{WRITE STUFF ABOUT WHY YOU WANT TO PUBLISH LFs and marginalized LFs.}}); these expressions deliver the posterior
-straightforwardly too.
+In some projects, posterior pdfs or \acronym{MAP} parameter values are the goal
+(although we don't think it often should be\footnote{\todo{HOGG}{WRITE STUFF
+ABOUT WHY YOU WANT TO PUBLISH LFs and marginalized LFs.}}); these expressions
+deliver the posterior straightforwardly too. \apw{Didn't you just talk about
+this above? Or do you mean the full posterior pdf, not just the conditional?}
 The variance tensor $\tA$ is the posterior variance in the parameter space.
-It is strictly non-larger (in eigenvalues or determinant) than either
+It is strictly non-larger \apw{smaller?} (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
 variance $\mM\T\cdot\tC\cdot\mM$.
 The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
@@ -572,7 +576,7 @@ It is the most likely data vector, and also the expectation for the data,
 under the prior pdf.
 And the variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
-It is strictly non-smaller than both the data noise variance $\tC$ and the
+It is strictly non-smaller \apw{larger?} than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
 
@@ -592,16 +596,16 @@ The lemma saves you the most time and precision when the parameter size $K$
 is much smaller than the data size $N$ (or vice versa); that is, when $\mM$
 is ``very non-square''.
 
-We also give the general advice that one should \emph{never take an explicit
+We also give the general advice that one should \emph{avoid taking an explicit
 inverse} (unless you know the inverse exactly in closed form, as you do
 for, say, diagonal tensors).
-In your code you should never use the \code{inv()} function; you
-should always use a \code{solve()} function.
+In your code, it is typically stabler to use a \code{solve()} function instead
+of the \code{inv()} function.
 The reason is that the code operation \code{inv(B)} returns the best
 possible inverse to machine precision (if you are lucky), but what you
 really want instead is the best possible product of that inverse times
 a vector.
-So in general \code{solve(B,y)} will deliver more precise results than
+So, in general, \code{solve(B,y)} will deliver more precise results than
 the mathematically equivalent \code{dot(inv(B),y)}.
 
 The expressions in (\ref{eq:problem}) do not require that the tensors
