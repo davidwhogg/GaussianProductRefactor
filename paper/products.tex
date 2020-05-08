@@ -8,7 +8,6 @@
 %   The Joker appropriately.
 % - APW: Feel free to ignore: Can we get the date to follow the author directly
 %   in the bibliography entries?
-% - audit for and remove all TODO, HOGG, DWH, APW, BL, CITE from the text.
 % - audit all style notes
 % - APW: update links to data files when archived with Zenodo
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
@@ -50,7 +49,7 @@
 \usepackage{adjustbox}
 
 \usepackage{natbib}
-\bibliographystyle{abbrvnat}
+\bibliographystyle{hogg_abbrvnat}
 \setcitestyle{round,citesep={,},aysep={}}
 
 % text stuhh
@@ -61,6 +60,7 @@
 \newcommand{\acronym}[1]{{\small{#1}}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\foreign}[1]{\textsl{#1}}
+\newcommand{\etal}{\foreign{et~al.}}
 
 % math stuhh
 \newcommand{\hquad}{~~}
@@ -277,9 +277,9 @@ multiplied by Gaussian priors is \emph{Gaussian processes} (\acronym{GP}s),
 which is a kind of
 non-parametric fitting in which a kernel function sets the flexibility of a
 data-driven model. A full discussion of \acronym{GP}s is out of scope for this
-\documentname, but excellent discussions abound.\footnote{We like the free
+\documentname, but excellent discussions abound\footnote{We like the free
   book by \cite{Rasmussen:2005}. We commented on some of the relevant math that
-  connects to this \documentname\ in \cite{luger}.}
+  connects to this \documentname\ in \cite{luger}.}.
 The math below can be applied in many \acronym{GP} contexts.
 Indeed, most linear model fits of the kind we describe below can be translated
 into the language of \acronym{GP}s;
@@ -292,8 +292,8 @@ Imagine that we are doing an inference using data $\vy$ (which is a
 $N$-dimensional vector, say).
 We are trying to learn linear parameters $\vtheta$ (a $K$-dimensional vector)
 and also nonlinear parameters $\bP$ (an arbitrary vector, list, or
-blob).\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
-assumptions or hyper parameters.}
+blob)\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
+assumptions or hyper parameters.}.
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
@@ -411,10 +411,11 @@ Obtaining the specific forms of these Gaussians is the object of this
 \section{Products of two Gaussians}\label{sec:problemsolution}
 
 On the internets, there are many documents, slide decks, and videos
-that explain products of Gaussians in terms of other Gaussians.\footnote{Two
+that explain products of Gaussians in terms of other Gaussians\footnote{Two
   good examples are \cite{roweis}, and \cite{cookbook}. The closest---that we know
-  of---to a complete
-  discussion of what is shown here is our own previous contribution \cite{luger}.}
+  of---to a 
+  discussion with the generality of
+  what is shown here is perhaps our own previous contribution \cite{luger}.}.
 The vast majority of these consider either the univariate case (where
 the data $\vy$ and the parameter $\vtheta$ are both simple scalars, which
 is not useful for our science cases), or the same-dimension case (where the data
@@ -521,13 +522,13 @@ likelihood variance:
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
 \hquad.
 \end{equation}
-After that it's just a lot of grinding through matrix expressions.\footnote{%
+After that it's just a lot of grinding through matrix expressions\footnote{%
 We leave this grinding to the avid reader.
 For guidance, it might help to realize that there are terms that
 contain $\vtheta\T\cdots\vtheta$, $\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$,
 $\vtheta\T\cdots\vmu$, and $\vmu\T\cdots\vmu$.
 If you expand out each of these five kinds of terms, each of the five
-should lead to an independent-ish equality.}
+should lead to an independent-ish equality.}.
 
 \paragraph{Solution notes:}
 In principle we found this factorization by expanding the quadratic in
@@ -551,9 +552,7 @@ There is an alternative derivation or proof involving the
 \xi\equiv\ln||2\pi\,\tV||+\veta^T\cdot\tV\cdot\veta \hquad.
 \end{equation}
 In the canonical form, many products and other manipulations become
-simpler. \hogg{BL: Do you want to write more here? If you do, go to town! Note
-  that I adjusted your typesetting to make it more consistent with the rest of
-  the \documentname}.
+simpler, so it is worth trying if you get stuck when manipulating Gaussian expressions.
 
 Because the matrix $\mM$ is not square, it has no inverse. And because this
 is a physics problem, $\mM$ has units (which are the units of
@@ -574,12 +573,19 @@ $\mM$!} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
 $\vtheta$.
 It is found by inverse-variance-weighted combinations of the data and the prior.
 In some projects, posterior pdfs or \acronym{MAP} parameter values are the goal
-(although we don't think it often should be\footnote{\todo{HOGG}{WRITE STUFF
-ABOUT WHY YOU WANT TO PUBLISH LFs and marginalized LFs.}}); these expressions
-deliver the posterior straightforwardly too. \apw{Didn't you just talk about
-this above? Or do you mean the full posterior pdf, not just the conditional?}
+(although we don't think it often should be\footnote{Although---in subjective
+  Bayesian inference---the posterior pdf
+  is the valid statement of your belief, it is not so useful to your colleagues,
+  who start with different beliefs from yours. They are unlikely to agree on
+  priors and posteriors, but they might (just might) agree on your likelihood
+  function. So if you are a subjective Bayesian, you serve your community better
+  by publishing your likelihoods than you do by publishing your posterior pdfs.
+  Of course there are many subjective decisions that go into a likelihood function
+  too! So you really serve your community best by both publishing your likelihood
+  function \emph{and} your raw data. But that's all beyond the scope of this
+  \documentname!}).
 The variance tensor $\tA$ is the posterior variance in the parameter space.
-It is strictly non-larger \apw{smaller?} (in eigenvalues or determinant) than either
+It is strictly smaller (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
 variance $\mM\T\cdot\tC\cdot\mM$.
 The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
@@ -588,7 +594,7 @@ It is the most likely data vector, and also the expectation for the data,
 under the prior pdf.
 And the variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
-It is strictly non-smaller \apw{larger?} than both the data noise variance $\tC$ and the
+It is strictly larger than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
 
@@ -630,14 +636,19 @@ freezes the parameters to a subspace of the $\vtheta$-space, which
 would lead to a zero eigenvalue in $\tLambda$, or if a data point is
 unmeasured or missing, which would lead to a zero eigenvalue in
 $\tC\inv$---you might have to \emph{think about how you implement the
-  linear algebra operations to be zero-safe}\footnote{\todo{HOGG}{WRITE SOMETHING
-  here about what it looks like when, say, $\tA$ or $\tB$ contains
-  zero eigenvalues}. It leads to directions in $\vtheta$ or $\vy$ space
-  in which log probabilities are negative-infinity. These are
-  disallowed directions. In this world, data and parameters \emph{are
-    not permitted} to go in those directions. What does ``zero-safe''
-  look like in this context?}.
-
+  linear algebra operations to be zero-safe}\footnote{A completely
+  zero-safeimplementation
+  is somewhat challenging, but one comment to make is that if, say, $\tA$
+  contains a zero eigenvalue, then there is a direction in the parameter
+  space (the $\vtheta$ space) in which the variance vanishes. This means that
+  all valid parameter combinations lie on a linear subspace of the full $K$-dimensional
+  space. All parameter combinations that wander off the subspace get strictly
+  zero probabiity or negative infinities in the log.
+  If all your inference is valid, it will probably be the case that the
+  vectors at which you want to evaluate \emph{always} lie in the non-zero
+  subspace. It makes sense, then, in this case, to work in a representation in which it is easy
+  to enforce or ensure that. This usually involves some kind of coordinate transformation
+  or rotation or projection. Doing this right is out of scope for this \documentname.}.
 
 \paragraph{Simplification: single multiplicative scaling}
 
@@ -886,13 +897,13 @@ pdf $\ln p(\vy\given\omega) + \ln p(\omega)$ as a function of this frequency
 grid.
 
 Generate 512 posterior samples in the full set of parameters $(\alpha, \beta,
-\gamma, \omega)$.\footnote{Hint: Did you see how multimodal the posterior pdf
+\gamma, \omega)$\footnote{Hint: Did you see how multimodal the posterior pdf
 over $\omega$ is? Don't fire up standard MCMC! Try using Rejection Sampling
 instead: Generate a dense, prior sampling in the nonlinear parameter $\omega$,
 evaluate the log-marginal likelihood at each sample in $\omega$, and use this to
 rejection sample. You can generate posterior samples in $(\alpha, \beta,
 \gamma)$ using the solution vector and matrix, $\va, \tA$, for the samples in
-$\omega$ that survive the rejection step.}
+$\omega$ that survive the rejection step.}.
 Make a scatter plot showing a 2D projection of these samples in $(\alpha, \ln
 \omega)$.
 Plot the data, and over-plot 128 models (equation \ref{eq:ex2model}) computed
