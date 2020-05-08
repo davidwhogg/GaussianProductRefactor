@@ -747,7 +747,7 @@ The parametric model we will use for these data is a quadratic polynomial,
   % APW: I used greek here because a, b are used in expressions above...
   f(x \,;\, \alpha, \beta, \gamma) = \alpha\,x^2 + \beta\,x + \gamma
 \end{equation}
-and we assume we have Gaussian prior pdfs on all of the linear parameters
+and we assume we have Gaussian prior pdfs on all of the $K=3$ linear parameters
 $(\alpha, \beta, \gamma)$,
 \begin{align}
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
@@ -759,8 +759,8 @@ While this example may seem overly simple or contrived, quadratic models are
 occasionally useful in astronomy and physics, for example, when centroiding a
 peak, and polynomial models are often used to capture long-term trends in data.
 
-The table shown in Figure~\ref{fig:data1} contains four data points, $(x_i, y_i,
-\sigma_{y_i})$, generated using this quadratic model.
+The table shown in Figure~\ref{fig:data1} contains $N=4$ data points, $(x_i,
+y_i, \sigma_{y_i})$, generated using this quadratic model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
 \begin{align}
@@ -857,8 +857,8 @@ of the nonlinear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters) conditioned on the frequency
 $\omega$.
 
-The table shown in Figure~\ref{fig:data2} contains four data points, $(x_i, y_i,
-\sigma_{y_i})$, generated with this sinusoid model.
+The table shown in Figure~\ref{fig:data2} contains $N=4$ data points, $(x_i,
+y_i, \sigma_{y_i})$, generated with this sinusoid model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
 \begin{align}
@@ -881,8 +881,9 @@ $(0.1, 100)$,
 evaluate the log-marginal likelihood $\ln p(\vy\given\omega)$ times the
 frequency prior $\ln p(\omega)$ over a grid of 16,384 frequencies $\omega$
 between (0.1, 100).
-Plot $\ln p(\vy\given\omega) + \ln p(\vy\given\omega)$ as a function of this
-frequency grid.
+Plot both the log-marginal likelihood $\ln p(\vy\given\omega)$ and the posterior
+pdf $\ln p(\vy\given\omega) + \ln p(\omega)$ as a function of this frequency
+grid.
 
 Generate 512 posterior samples in the full set of parameters $(\alpha, \beta,
 \gamma, \omega)$.\footnote{Hint: Did you see how multimodal the posterior pdf
