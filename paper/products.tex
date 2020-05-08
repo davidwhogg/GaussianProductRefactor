@@ -413,7 +413,7 @@ Obtaining the specific forms of these Gaussians is the object of this
 On the internets, there are many documents, slide decks, and videos
 that explain products of Gaussians in terms of other Gaussians\footnote{Two
   good examples are \cite{roweis}, and \cite{cookbook}. The closest---that we know
-  of---to a 
+  of---to a
   discussion with the generality of
   what is shown here is perhaps our own previous contribution \cite{luger}.}.
 The vast majority of these consider either the univariate case (where
@@ -892,9 +892,8 @@ $(0.1, 100)$,
 evaluate the log-marginal likelihood $\ln p(\vy\given\omega)$ times the
 frequency prior $\ln p(\omega)$ over a grid of 16,384 frequencies $\omega$
 between (0.1, 100).
-Plot both the log-marginal likelihood $\ln p(\vy\given\omega)$ and the posterior
-pdf $\ln p(\vy\given\omega) + \ln p(\omega)$ as a function of this frequency
-grid.
+Plot both the marginal likelihood $p(\vy\given\omega)$ and the posterior pdf
+$p(\vy\given\omega)\,p(\omega)$ as a function of this frequency grid.
 
 Generate 512 posterior samples in the full set of parameters $(\alpha, \beta,
 \gamma, \omega)$\footnote{Hint: Did you see how multimodal the posterior pdf
@@ -906,7 +905,7 @@ rejection sample. You can generate posterior samples in $(\alpha, \beta,
 $\omega$ that survive the rejection step.}.
 Make a scatter plot showing a 2D projection of these samples in $(\alpha, \ln
 \omega)$.
-Plot the data, and over-plot 128 models (equation \ref{eq:ex2model}) computed
+Plot the data, and over-plot 64 models (equation \ref{eq:ex2model}) computed
 using a subset of these posterior samples.
 The companion \texttt{IPython} notebook contains the full solution.
 
@@ -925,8 +924,8 @@ The companion \texttt{IPython} notebook contains the full solution.
           4.1 & 13.5 & 0.3
         \end{tabular}
       } &
-      \adjustbox{valign=t}{\includegraphics[width=0.7\textwidth]{exercise2a.pdf}} \\
-      \multicolumn{2}{c}{Cell spanning two columns}\\
+      \adjustbox{valign=t}{\includegraphics[width=0.5\textwidth]{exercise2a.pdf}} \\
+      \multicolumn{2}{c}{\includegraphics[width=1\textwidth]{exercise2b.pdf}}\\
     \end{tabular}
     \caption{\textbf{Figure 2}:
     \textsl{Left:} Simulated data used in Exercise 2
