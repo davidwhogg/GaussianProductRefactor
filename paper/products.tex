@@ -742,13 +742,13 @@ first, and the solutions are given below.
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
-The parametric model we will use for this data is a quadratic polynomial,
+The parametric model we will use for these data is a quadratic polynomial,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
   f(x \,;\, \alpha, \beta, \gamma) = \alpha\,x^2 + \beta\,x + \gamma
 \end{equation}
-and we assume we have Gaussian prior pdfs on all of the parameters $(\alpha,
-\beta, \gamma)$,
+and we assume we have Gaussian prior pdfs on all of the linear parameters
+$(\alpha, \beta, \gamma)$,
 \begin{align}
   p(\alpha) &= \normal(\alpha \given \mu_\alpha, \sigma_\alpha)\\
   p(\beta) &= \normal(\beta \given \mu_\beta, \sigma_\beta)\\
@@ -776,7 +776,7 @@ compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
 Plot the data (with error bars) and over-plot the model evaluated at the
 MAP parameter values.
-Generate 4096 posterior samples of the parameters.
+Generate 4096 posterior samples of the linear parameters.
 Over-plot a shaded region showing the 68~percent credible region for the model,
 estimated using these samples.
 
@@ -838,7 +838,7 @@ The companion \texttt{IPython} notebook contains the full solution.
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
-The parametric model we will use for this data is a generalized sinusoid with a
+The parametric model we will use for these data is a generalized sinusoid with a
 constant offset,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
