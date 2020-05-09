@@ -525,7 +525,7 @@ FUNCTION {format.pages}
 FUNCTION {format.eid}
 { eid empty$
     { "" }
-    { "art." eid tie.or.space.connect }
+    { "" eid tie.or.space.connect }
   if$
 }
 

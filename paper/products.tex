@@ -28,6 +28,7 @@
 % - don't say "i.e.," say "that is,". Don't say "e.g.," say "for example,".
 % - words in equations should be \small
 % - citations always or mainly in footnotes.
+% - every bibliography item should have a hot url link or doi or equivalent.
 % - ...[your pet peeve here]...
 
 \documentclass[12pt, letterpaper]{article}
@@ -119,7 +120,9 @@
 
 \begin{document}
 
-\section*{Data Analysis Recipes:\\ Products of dependent multivariate Gaussians}
+\section*{Data Analysis Recipes:\\
+  Products of multivariate Gaussians\\
+  in Bayesian inferences}
 
 \noindent\textbf{David W. Hogg}\footnote{%
 The authors would like to thank
@@ -156,16 +159,16 @@ Here we use it to derive a refactoring of a common product of
 multivariate Gaussians:
 The product of a Gaussian likelihood times a Gaussian prior, where some or all
 of those parameters enter the likelihood only in the mean and only linearly.
-That is, a linear, Gaussian model.
-This product of a likelihood times a prior can be refactored into a product of a
-Bayesian evidence (or marginalized likelihood) times a posterior, where
+That is, a linear, Gaussian, Bayesian model.
+This product of a likelihood times a prior pdf can be refactored into a product of a
+marginalized likelihood (or a Bayesian evidence) times a posterior pdf, where
 (in this case) both of these are also Gaussian.
 The means and variance tensors of the refactored Gaussians are straightforward
 to obtain as closed-form expressions;
 here we deliver these expressions, with discussion.
 The closed-form expressions can be used to speed up and improve the precision
 of inferences that contain linear parameters with Gaussian priors.
-We connect the methods to inferences that arise frequently in physics
+We connect these methods to inferences that arise frequently in physics
 and astronomy.
 
 If all you want is the answer, the question is posed and answered at the
@@ -180,11 +183,11 @@ It is common in physics, astronomy, engineering, machine learning, and many othe
 (probabilities of data given parameters) are chosen to be Gaussian
 (or normal\footnote{In this \documentname, we obey physics and astronomy
 conventions and refer to the normal pdf as the Gaussian pdf. We realize that it
-is inaccurate to name things after people when those things also have generic,
+is irresponsible to name things after people when those same things also have generic,
 descriptive names. On the other hand, ``normal'' isn't the finest name either.
 Perhaps Gaussian pdfs should be called ``central'' since they are produced by
 the central limit theorem. Anyway, we will continue with the name ``Gaussian''
-despite our own reservations. Apologies.}):
+despite our own reservations. We apologize to our reader.}):
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
 This Gaussian assumption for the likelihood function is
@@ -211,13 +214,14 @@ This is true, for example, when we fit a histogram of \textsl{Large Hadron
 the expected number of counts in each
 energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
-This is true, for example, when we fit for the radial-velocity
-variation of a star in response to an faint, orbiting companion\footnote{See,
+Another linear-parameter context, for example, arises when we fit for the radial-velocity
+variation of a star in response to a faint, orbiting companion\footnote{See,
   for an example in our own work, \cite{Price-Whelan:2017, Price-Whelan:2020}.
   That project and those papers would have all been
   impossible without the speed-ups provided by the expressions derived in this
-  \documentname. Indeed, it was that project which motivated this \documentname},
-where the expectation of the
+  \documentname. Indeed, the writing of this \documentname\ was motivated by
+  the work presented in those papers.}.
+In this problem, the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
 respect to the line of sight).
@@ -232,7 +236,8 @@ In Bayesian inference contexts, the ``models'' to which we are referring are
 expressions for likelihood functions and prior pdfs; these are the things
 that will be Gaussians here.
 Bayes' theorem is often written as a ratio of probability density functions
-(pdfs in what follows), but it can also be written as a pdf factorization:
+(pdfs in what follows), but it can also be written as a pdf factorization\footnote{For
+  a tutorial on probability factorizations, see \cite{probcalc}.}:
 \begin{equation}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
@@ -261,8 +266,8 @@ likelihood}.}).
 
 If the likelihood is Gaussian, and the expectation of the data depends linearly
 on the parameters, and if we choose the prior pdf to also be Gaussian, then
-everything else (the joint, the posterior, and the marginalized likelihood)
-becomes Gaussian too.
+all the other pdfs (the joint, the posterior, and the marginalized likelihood)
+all become Gaussian too.
 The main point of this \documentname\ is that the means and variances of these
 five Gaussians are all related by simple, closed-form expressions, given below.
 One consequence of this math is that \emph{if} you have a Gaussian
@@ -278,13 +283,15 @@ which is a kind of
 non-parametric fitting in which a kernel function sets the flexibility of a
 data-driven model. A full discussion of \acronym{GP}s is out of scope for this
 \documentname, but excellent discussions abound\footnote{We like the free
-  book by \cite{Rasmussen:2005}. We commented on some of the relevant math that
-  connects to this \documentname\ in \cite{luger}.}.
+  book by \cite{Rasmussen:2005}.}.
 The math below can be applied in many \acronym{GP} contexts.
 Indeed, most linear model fits of the kind we describe below can be translated
 into the language of \acronym{GP}s;
 they are generally \acronym{GP}s with a trivial kernel function but a non-trivial
-mean function. We leave that translation as an exercise to the ambitious reader.
+mean function. We leave that translation as an exercise to the ambitious
+reader\footnote{If you want a cheat sheet,
+  we come close to performing this complete translation in \cite{luger}.}.
+
 
 \section{Marginalization by refactorization}
 
@@ -293,7 +300,9 @@ $N$-dimensional vector, say).
 We are trying to learn linear parameters $\vtheta$ (a $K$-dimensional vector)
 and also nonlinear parameters $\bP$ (an arbitrary vector, list, or
 blob)\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
-assumptions or hyper parameters.}.
+  assumptions or hyper parameters. That is, it contains everything on which
+  the linear model is conditioned, including not just nonlineaer parameters
+  but also investigator choices. Note our subjectivism here!}.
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
@@ -309,15 +318,15 @@ function
 \mbox{\small marginalized likelihood:} \hquad p(\vy\given\bP) \hquad.
 \end{equation}
 That's good, but the marginalization comes at a cost:
-We have to choose a prior
+We have to become Bayesian, and we have to choose a prior
 \begin{equation}
 \mbox{\small prior on nuisance parameters:} \hquad p(\vtheta\given\bP) \hquad.
 \end{equation}
-This is the basis for the claim\footnote{A claim that hasn't been made forcefully
+This is the basis for the claim\footnote{A claim that perhaps hasn't been made forcefully
   yet, but will eventually be by at least one of these authors.} that Bayesian
 inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
-in the pedagogical literature\footnote{It is very common for papers or projects with
+in the literature\footnote{It is very common for papers or projects with
   Bayesian approaches to claim that the
   goal of Bayesian inference is to create posterior pdfs. That isn't correct.
   Different Bayesian inferences have different objectives. The fundamental tenet
@@ -326,7 +335,7 @@ in the pedagogical literature\footnote{It is very common for papers or projects 
   function. It is the likelihood, not the posterior pdf, that is fundamental to Bayesian
   inference. Prior pdfs are important in Bayesian inferences mainly because they permit
   marginalizations and other kinds of integrals involving likelihood functions.}
-We have said ``$p(\vtheta\given\bP)$'' because this prior may depend on
+We have said ``$p(\vtheta\given\bP)$'' because this prior pdf may depend on
 the nonlinear parameters $\bP$, but it certainly doesn't have to.
 Armed with the likelihood and prior---if you want it---you can construct
 the posterior pdf for the linear parameters
@@ -353,7 +362,8 @@ re-factorization without explicitly doing any integral.
 When this is true, the marginalization is sometimes far easier than
 the relevant integral.
 
-One such magical circumstance can arise when the two probability
+The point of this \documentname is that this magical circumstance
+arises when the two probability
 distributions---the likelihood and the prior---are both Gaussian in
 form, and when the model is linear.
 In detail we will assume
@@ -381,14 +391,15 @@ p(\vtheta\given\bP) = \normal(\vtheta\given\vmu,\tLambda)
 \hquad,
 \end{equation}
 where $\normal(\vx\given\vm,\tV)$ is the multivariate Gaussian
-pdf\footnote{Check out what we did with the ``$2\pi$'' in
+pdf\footnote{Check out what we did with the ``$2\pi$'' in the determinant in
   \equationname~(\ref{eq:Gaussian}): We wrote an expression for the
   multivariate Gaussian that never makes any reference to the
   dimension $d$ of the $\vx$-space. Most expressions in the literature
   have a pesky $d/2$ in them, which is ugly and implies some need for
   code or equations to know the dimension explicitly, even though all
   the terms (determinant, inner product) are coordinate-free scalar
-  forms.} for a vector $\vx$
+  forms. If you use the expression as we have written it here, you never
+  have to explicitly access the dimensions.} for a vector $\vx$
 given a mean vector $\vm$ and a variance tensor $\tV$,
 $\mM$ is a $N\times K$ rectangular design matrix (which depends, in
 general, on the nonlinear parameters $\bP$),
@@ -401,10 +412,9 @@ for the Gaussian prior.
 
 In this incredibly restrictive---but also surprisingly
 common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$
-(also known as the posterior for the linear parameters, conditioned on
+(the posterior for the linear parameters, conditioned on
 the nonlinear parameters in $\bP$) and $p(\vy\given\bP)$ (the
-partially marginalized likelihood, marginalizing out the linear
-parameters) will also both be Gaussian.
+marginalized likelihood, similarly conditioned) will also both be Gaussian.
 Obtaining the specific forms of these Gaussians is the object of this
 \documentname.
 
@@ -421,7 +431,10 @@ the data $\vy$ and the parameter $\vtheta$ are both simple scalars, which
 is not useful for our science cases), or the same-dimension case (where the data
 $\vy$ and the parameter vector $\vtheta$ are the same length, which never
 occurs in our applications).
-Here we solve this problem in the general case:
+Here we solve this problem in the general case\footnote{We solve this general
+  case, but we are not claiming \emph{priority} in any sense: This mathematics
+  has been understood for many many decades or even centuries. This \documentname\ is
+  a pedagogical contribution, not a research contribution.}:
 The inputs are multivariate (vectors) and the two Gaussians we are
 multiplying live in spaces of different dimensions.
 That is, we solve the following problem:
@@ -590,9 +603,10 @@ the prior variance $\tLambda$ or the parameter-space data-noise
 variance $\mM\T\cdot\tC\cdot\mM$.
 The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
 value for the data $\vy$.
-It is the most likely data vector, and also the expectation for the data,
+It is the most probable data vector (prior to seeing any data),
+and also the prior expectation for the data,
 under the prior pdf.
-And the variance tensor $\tB$ is the prior variance expanded out to the
+The variance tensor $\tB$ is the prior variance expanded out to the
 data space, and including the noise variance in the data.
 It is strictly larger than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
@@ -637,7 +651,7 @@ would lead to a zero eigenvalue in $\tLambda$, or if a data point is
 unmeasured or missing, which would lead to a zero eigenvalue in
 $\tC\inv$---you might have to \emph{think about how you implement the
   linear algebra operations to be zero-safe}\footnote{A completely
-  zero-safeimplementation
+  zero-safe implementation
   is somewhat challenging, but one comment to make is that if, say, $\tA$
   contains a zero eigenvalue, then there is a direction in the parameter
   space (the $\vtheta$ space) in which the variance vanishes. This means that
@@ -678,8 +692,10 @@ the total likelihood is just the product of
 the individual-data-vector likelihoods.
 That setup leads to the following generalized problem statement:
 
-Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ $N_j$-vectors $\vb_j$,
-and $J$ $N_j\times N_j$ variance tensors $\tB_j$ such that
+Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ vectors $\vb_j$ (each
+of which is a different length $N_j$),
+and $J$ variance tensors $\tB_j$ (each of which is a different size $N_j\times N_j$)
+such that
 \begin{equation}\label{eq:genproblem}
 \normal(\vtheta\given\vmu,\tLambda)\,\prod_{j=1}^J\normal(\vy_j\given\mM_j\cdot\vtheta,\tC_j)\,
  = \normal(\vtheta\given\va,\tA)\,\prod_{j=1}^J\normal(\vy_j\given\vb_j,\tB_j) \hquad,
@@ -768,7 +784,10 @@ $(\alpha, \beta, \gamma)$,
 \end{align}
 While this example may seem overly simple or contrived, quadratic models are
 occasionally useful in astronomy and physics, for example, when centroiding a
-peak, and polynomial models are often used to capture long-term trends in data.
+peak\footnote{Fitting second-order polynomials has been shown to be great for
+  centroiding peaks in astronomy contexts. See, for example, \cite{vakili}, and
+  \cite{teague}.},
+and polynomial models are often used to capture long-term trends in data.
 
 The table shown in Figure~\ref{fig:data1} contains $N=4$ data points, $(x_i,
 y_i, \sigma_{y_i})$, generated using this quadratic model.
