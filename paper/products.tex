@@ -103,15 +103,27 @@
 \newcommand{\bH}{\ensuremath{\textrm{\ding{114}}}} % THIS IS HERE TO ANNOY DWH / you failed
 
 % Journal keys - kill me now
-\newcommand{\apj}{ApJ} % Astrophysical Journal
-\newcommand{\apjs}{ApJS} % Astrophysical Journal Supplements
+\newcommand{\aj}{Astron.\,J.}
+\newcommand{\apj}{Astrophys.\,J.} % Astrophysical Journal
+\newcommand{\apjs}{Astrophys.\,J.\,Supp.\,Ser.} % Astrophysical Journal Supplements
 
-% typesetting stuff
-\addtolength{\topmargin}{-0.75in}
-\addtolength{\textheight}{1.5in}
+% page layout stuff
+\setlength{\topmargin}{-0.4in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{9.55in}
 \setlength{\parindent}{\baselineskip}
+\setlength{\oddsidemargin}{-0.4in}
+\setlength{\textwidth}{4.8in}
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
+% kill this
+\setlength{\marginparsep}{0.125in}
+\setlength{\marginparwidth}{2.5in}
+\usepackage{marginfix}
+\renewcommand{\footnote}[1]{\footnotemark\marginpar{\raggedright\footnotesize\textsuperscript{\thefootnote}{#1}}}
+
+% kill these at submission
 \usepackage{color}
 \newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
 \newcommand{\apw}[1]{\textcolor{CadetBlue}{[APW says: #1]}}
@@ -824,7 +836,7 @@ estimated using these samples.
           3.6 & $-15.0$ & 3.9 \\
         \end{tabular}
       } &
-      \adjustbox{valign=t}{\includegraphics[width=0.7\textwidth]{exercise1.pdf}} \\
+      \adjustbox{valign=t}{\includegraphics[width=0.6\textwidth]{exercise1.pdf}} \\
     \end{tabular}
 
     \caption{\textbf{Figure 1}:
