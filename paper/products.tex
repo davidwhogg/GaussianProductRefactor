@@ -3,6 +3,10 @@
 
 % to-do
 % -----
+% - BL: Audit the discussion of canonical form.
+% - BL: Audit the solution to the multiple data sets problem.
+% - APW: Can you put in explicit links to the iPython notebooks?
+% - APW: Can you make the text larger in the Figure 1 legend?
 % - APW: We mention SPEED of computation in the abstract; we should say that
 %   again in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately.
@@ -13,6 +17,10 @@
 % - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
 % - profit
+
+% bugs
+% ----
+% - HOLY FUCK marginfix and marginpar are brittle. Some margin notes just disappear. OMG.
 
 % style notes -- audit for these
 % ------------------------------
@@ -117,11 +125,13 @@
 \setlength{\textwidth}{4.8in}
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
-% kill this
+% this might be crazy, but here's my number
 \setlength{\marginparsep}{0.125in}
 \setlength{\marginparwidth}{2.5in}
-\usepackage{marginfix}
-\renewcommand{\footnote}[1]{\footnotemark\marginpar{\raggedright\footnotesize\textsuperscript{\thefootnote}{#1}}}
+\usepackage{marginfix} % necessary but possibly evil
+\newcounter{marginnote}
+\setcounter{marginnote}{0}
+\renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
 
 % kill these at submission
 \usepackage{color}
@@ -144,7 +154,7 @@ The authors would like to thank
 for help with all these concepts through the years.
 This work was supported in part by the National Science Foundation
 and the National Aeronautics and Space Administration. It was developed
-in part at \textsl{AstroHackWeek 2016}, which was hosted at Berkeley
+in part at \textsl{Astro Hack Week 2016}, which was hosted at Berkeley
 by the Moore--Sloan Data Science Environment.
 }\\
 {\footnotesize%
@@ -748,8 +758,8 @@ set $j-1$.
 This solution is unpleasant, because the specific values you get for the
 $\vb_j$ and the $\tB_j$ depend on the order in which you insert the data.
 But---and very importantly for the rules of Bayesian inference---the posterior
-mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{
-  It is literally part of the fundamental justification of Bayesian inference
+mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
+  is literally part of the fundamental justification of Bayesian inference
   that the knowledge you eventually have (your final beliefs) does not depend
   on the order in which you observed the data. This is one of the axioms or inputs
   to the theorems that underly the consistency of Bayesian reasoning.
@@ -777,7 +787,7 @@ worked exercises: The examples are written such that the problems are set up
 first, and the solutions are given below.
 
 
-\subsection{Exercise 1: A fully linear model}
+\subsection*{Exercise 1: A fully linear model}
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
@@ -801,8 +811,8 @@ peak\footnote{Fitting second-order polynomials has been shown to be great for
   \cite{teague}.},
 and polynomial models are often used to capture long-term trends in data.
 
-The table shown in Figure~\ref{fig:data1} contains $N=4$ data points, $(x_i,
-y_i, \sigma_{y_i})$, generated using this quadratic model.
+The table shown in Figure~\ref{fig:data1} contains $N=4$ data points,
+$(x_i, y_i, \sigma_{y_i})$, generated using this quadratic model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
 \begin{align}
@@ -876,7 +886,7 @@ $\normal(\vtheta\given\va,\tA)$.
 The companion \texttt{IPython} notebook contains the full solution.
 
 
-\subsection{Exercise 2: A model with linear and nonlinear parameters}
+\subsection*{Exercise 2: A model with linear and nonlinear parameters}
 
 \paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
@@ -898,8 +908,8 @@ of the nonlinear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters) conditioned on the frequency
 $\omega$.
 
-The table shown in Figure~\ref{fig:data2} contains $N=4$ data points, $(x_i,
-y_i, \sigma_{y_i})$, generated with this sinusoid model.
+The table shown in Figure~\ref{fig:data2} contains $N=4$ data points,
+$(x_i, y_i, \sigma_{y_i})$, generated with this sinusoid model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
 \begin{align}
@@ -912,8 +922,9 @@ $\tLambda$,
     \end{pmatrix}
 \end{align}
 write a function to compute the vectors and matrices we need for the linear
-parameters (the design matrix and components of the factorization, $\va, \tA,
-\vb, \tB$) at a given value of the frequency $\omega$.
+parameters (the design matrix and components
+$\va, \tA, \vb, \tB$
+of the factorization) at a given value of the frequency $\omega$.
 Assuming a prior on $\omega$ that is uniform in $\ln\omega$ over the domain
 $(0.1, 100)$,
 \begin{equation}
@@ -925,16 +936,16 @@ between (0.1, 100).
 Plot both the marginal likelihood $p(\vy\given\omega)$ and the posterior pdf
 $p(\vy\given\omega)\,p(\omega)$ as a function of this frequency grid.
 
-Generate 512 posterior samples in the full set of parameters $(\alpha, \beta,
-\gamma, \omega)$\footnote{Hint: Did you see how multimodal the posterior pdf
-over $\omega$ is? Don't fire up standard MCMC! Try using Rejection Sampling
-instead: Generate a dense, prior sampling in the nonlinear parameter $\omega$,
-evaluate the log-marginal likelihood at each sample in $\omega$, and use this to
-rejection sample. You can generate posterior samples in $(\alpha, \beta,
-\gamma)$ using the solution vector and matrix, $\va, \tA$, for the samples in
-$\omega$ that survive the rejection step.}.
-Make a scatter plot showing a 2D projection of these samples in $(\alpha, \ln
-\omega)$.
+Generate 512 posterior samples in
+the full set of parameters
+$(\alpha, \beta, \gamma, \omega)$. The posterior
+  posterior pdf over $\omega$ will be extremely multimodal. Don't fire up
+  standard MCMC! Try using Rejection Sampling instead: Generate a
+  dense, prior sampling in the nonlinear parameter $\omega$, evaluate
+  the marginalized likelihood at each sample in $\omega$, and use this
+  to reject prior samples.
+Make a scatter plot showing a 2D projection of these samples in
+$(\alpha, \ln \omega)$.
 Plot the data, and over-plot 64 models (equation \ref{eq:ex2model}) computed
 using a subset of these posterior samples.
 The companion \texttt{IPython} notebook contains the full solution.
@@ -954,7 +965,7 @@ The companion \texttt{IPython} notebook contains the full solution.
         \end{tabular}
       } &
       \adjustbox{valign=t}{\includegraphics[width=0.6\textwidth]{exercise2a.pdf}} \\
-      \multicolumn{2}{l}{\includegraphics[width=1\textwidth]{exercise2b.pdf}}\\
+      \multicolumn{2}{l}{\includegraphics[width=0.9\textwidth]{exercise2b.pdf}}\\
     \end{tabular}
     \caption{\textbf{Figure 2}:
     \textsl{Left:} Simulated data used in Exercise 2
@@ -967,7 +978,7 @@ The companion \texttt{IPython} notebook contains the full solution.
 \end{table}
 
 % Render the references
-\clearpage\raggedright
+\clearmargin\clearpage\raggedright
 \bibliography{refs}
 
 \end{document}
