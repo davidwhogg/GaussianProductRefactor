@@ -33,7 +33,7 @@
 % - every bibliography item should have a hot url link or doi or equivalent.
 % - ...[your pet peeve here]...
 
-\documentclass[12pt, letterpaper]{article}
+\documentclass[11pt, letterpaper]{article}
 
 \usepackage{amsmath, bm, mathrsfs, amssymb}
 \usepackage[dvipsnames]{xcolor}
@@ -44,12 +44,11 @@
             urlcolor=NavyBlue]{hyperref}
 \usepackage{pifont}
 \usepackage{graphicx}
-
 \usepackage{doi}
 
-\usepackage{caption}
-\captionsetup[table]{labelformat=empty}
-\usepackage{adjustbox}
+% \usepackage{caption}
+% \captionsetup[table]{labelformat=empty}
+% \usepackage{adjustbox}
 
 \usepackage{natbib}
 \bibliographystyle{hogg_abbrvnat}
@@ -889,7 +888,6 @@ of the nonlinear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters) conditioned on the frequency
 $\omega$.
 
-% Generated with notebooks/Exercise2.ipynb
 \marginpar{\tfigurerule\\
   \parbox{\marginparwidth}{
     ~\hfill\begin{tabular}{c|c|c}
@@ -939,7 +937,7 @@ $p(\vy\given\omega)\,p(\omega)$ as a function of this frequency grid.
 
 Generate 512 posterior samples\footnote{The
 posterior pdf over $\omega$ will be extremely multimodal. Don't fire up
-standard \acronym{MCMC}! Try using Rejection Sampling instead: Generate a
+standard \acronym{MCMC}! Try using rejection sampling instead: Generate a
 dense, prior sampling in the nonlinear parameter $\omega$, evaluate
 the marginalized likelihood at each sample in $\omega$, and use this
 to reject prior samples.} in the full set of parameters
