@@ -3,24 +3,18 @@
 
 % to-do
 % -----
+% - HOGG: Send to Neige and Forbes for comments.
 % - BL: Audit the discussion of canonical form.
 % - BL: Audit the solution to the multiple data sets problem.
 % - APW: Can you put in explicit links to the iPython notebooks?
-% - APW: Can you make the text larger in the Figure 1 legend?
+% - APW: Can you make the text larger in the Figures?
 % - APW: We mention SPEED of computation in the abstract; we should say that
 %   again in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately.
-% - APW: Feel free to ignore: Can we get the date to follow the author directly
-%   in the bibliography entries?
 % - audit all style notes
 % - APW: update links to data files when archived with Zenodo
-% - send to friendlies (DFM, Lang, Bovy, Rix, others??)
 % - post to arXiv
 % - profit
-
-% bugs
-% ----
-% - HOLY FUCK marginfix and marginpar are brittle. Some margin notes just disappear. OMG.
 
 % style notes -- audit for these
 % ------------------------------
@@ -45,9 +39,9 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage[hidelinks,
             colorlinks=true,
-            linkcolor=black,
-            citecolor=black,
-            urlcolor=CornflowerBlue]{hyperref}
+            linkcolor=NavyBlue,
+            citecolor=darkgray,
+            urlcolor=NavyBlue]{hyperref}
 \usepackage{pifont}
 \usepackage{graphicx}
 
@@ -131,12 +125,11 @@
 \usepackage{marginfix} % necessary but possibly evil
 \newcounter{marginnote}
 \setcounter{marginnote}{0}
-\renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
-\newcommand{\tfigurerule}{\rule{0pt}{1ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{0.5ex}}
-\newcommand{\bfigurerule}{\rule{0pt}{0.5ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
+\renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\color{darkgray}\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
+\newcommand{\tfigurerule}{\rule{0pt}{1ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{0.25ex}}
+\newcommand{\bfigurerule}{\rule{0pt}{0.25ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
 
 % kill these at submission
-\usepackage{color}
 \newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
 \newcommand{\apw}[1]{\textcolor{CadetBlue}{[APW says: #1]}}
 \newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
@@ -160,7 +153,7 @@ in part at \textsl{Astro Hack Week 2016}, which was hosted at Berkeley
 by the Moore--Sloan Data Science Environment.
 }\\
 {\footnotesize%
-  \textsl{Center for Cosmology and Particle Physics, Department of Physics, New York University}\\
+  \textsl{Center for Cosmology and Particle Physics, Dept.\ Physics, New York University}\\
   \textsl{Max-Planck-Institut f\"ur Astronomie, Heidelberg}\\
   \textsl{Flatiron Institute, a division of the Simons Foundation}%
 }
@@ -173,7 +166,7 @@ by the Moore--Sloan Data Science Environment.
 \medskip\noindent\textbf{Boris Leistedt}\\
 {\footnotesize%
   \textsl{Department of Physics, Imperial College, London}\\
-  \textsl{Center for Cosmology and Particle Physics, Department of Physics, New York University}%
+  \textsl{Center for Cosmology and Particle Physics, Dept.\ Physics, New York University}%
 }
 
 \paragraph{Abstract:}
