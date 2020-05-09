@@ -132,6 +132,8 @@
 \newcounter{marginnote}
 \setcounter{marginnote}{0}
 \renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
+\newcommand{\tfigurerule}{\rule{0pt}{1ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{0.5ex}}
+\newcommand{\bfigurerule}{\rule{0pt}{0.5ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
 
 % kill these at submission
 \usepackage{color}
@@ -608,7 +610,7 @@ $\mM$!} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
 $\vtheta$.
 It is found by inverse-variance-weighted combinations of the data and the prior.
 In some projects, posterior pdfs or \acronym{MAP} parameter values are the goal
-(although we don't think it often should be\footnote{Although---in subjective
+(although we don't think they often should be\footnote{Although---in subjective
   Bayesian inference---the posterior pdf
   is the valid statement of your belief, it is not so useful to your colleagues,
   who start with different beliefs from yours. They are unlikely to agree on
@@ -692,7 +694,7 @@ One interesting case is when $K=1$, so the design matrix in fact
 reduces to a model vector $\vm$, multiplied by a scalar $\theta$, and
 $\mu$ and $\Lambda$ are now scalars as well:
 \begin{equation}
-\mbox{\small likelihood} \times \mbox{\small prior} \hquad \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
+\normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 \hquad.
 \end{equation}
 In this case, the previous equations are simplified and no longer
@@ -740,7 +742,7 @@ The solution to this is an iteration over data vectors $\vy_j$:
 \end{equation}
 \begin{align}
   \mbox{\small iterate:}\hquad
-  \tB_j &= \tC_j + \mM_j \cdot A_{j-1} \cdot \mM_j\T \\
+  \tB_j &= \tC_j + \mM_j \cdot \tA_{j-1} \cdot \mM_j\T \\
   \vb_j &= \mM_j \cdot \va_{j-1} \\
   \tA_j\inv &= \tA_{j-1}\inv + \mM_j\T \cdot \tC_j\inv \cdot \mM_j \\
   \vx_j &= \vx_{j-1} + \mM_j\T \cdot \tC_j\inv \cdot \vy_j \\
@@ -756,7 +758,7 @@ The solution is an iteration because you can think of adding each new data
 set $\vy_j$ sequentially, with the prior for set $j$ being the posterior from
 set $j-1$.
 This solution is unpleasant, because the specific values you get for the
-$\vb_j$ and the $\tB_j$ depend on the order in which you insert the data.
+vectors $\vb_j$ and tensors $\tB_j$ depend on the order in which you insert the data.
 But---and very importantly for the rules of Bayesian inference---the posterior
 mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
   is literally part of the fundamental justification of Bayesian inference
@@ -777,20 +779,17 @@ model (which makes generating samples or computing integrals far simpler), and
 marginalizations over linear parameters).
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo\footnote{We have also written a tutorial
-  on MCMC in this series \citep{Hogg:2018}.} (MCMC)
+  on \acronym{MCMC} in this series \citep{Hogg:2018}.} (\acronym{MCMC})
 sampling methods, or enable
 alternate sampling methods (for example, rejection sampling) that may be intractable
 when the parameter dimensionality is large.
-
-Here, we demonstrate the utility of the identities shown above with two toy,
-worked exercises: The examples are written such that the problems are set up
-first, and the solutions are given below.
+Here, we demonstrate the utility of the identities shown above with two
+worked exercises.
 
 
-\subsection*{Exercise 1: A fully linear model}
-
-\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
-known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
+\paragraph{Exercise 1: A fully linear model:} We observe
+a set of data $(x_i, y_i)$ (indexed by $i$) with
+known, Gaussian uncertainties in $y$, $\sigma_y$, and no uncertainty in $x$.
 The parametric model we will use for these data is a quadratic polynomial,
 \begin{equation}
   % APW: I used greek here because a, b are used in expressions above...
@@ -811,7 +810,27 @@ peak\footnote{Fitting second-order polynomials has been shown to be great for
   \cite{teague}.},
 and polynomial models are often used to capture long-term trends in data.
 
-The table shown in Figure~\ref{fig:data1} contains $N=4$ data points,
+\marginpar{\tfigurerule\\
+  \parbox{\marginparwidth}{
+    ~\hfill\begin{tabular}{c|c|c}
+      $x$ & $y$ & $\sigma_y$ \\
+      \hline
+      $-0.6$ & 12.2 & 0.8 \\
+      2.0 & 4.1 & 3.2 \\
+      2.7 & 0.9 & 3.3 \\
+      3.6 & $-15.0$ & 3.9 \\
+    \end{tabular}\hfill~}
+  \includegraphics[width=\marginparwidth]{exercise1.pdf}
+  \parbox{\marginparwidth}{\raggedright\footnotesize\textbf{Figure 1}:
+    \textsl{Top:} Simulated data used in Exercise~1
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link
+    to data}). These data were generated with ``true'' parameters
+    $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
+    \textsl{Bottom:} The solution to Exercise 1. The data points (black markers)
+    show the data from the table. The \acronym{MAP} parameter values were
+    found using \equationname~(\ref{eq:a}).}\\
+  \bfigurerule}
+The data table shown in Figure~1 contains $N=4$ data points,
 $(x_i, y_i, \sigma_{y_i})$, generated using this quadratic model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
@@ -824,43 +843,13 @@ $\tLambda$,
       0 & 0 & 8^2
     \end{pmatrix}
 \end{align}
-compute the MAP parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
+compute the \acronym{MAP} parameter values $\va\T = (\alpha_{\rm MAP}, \beta_{\rm MAP},
 \gamma_{\rm MAP})$.
 Plot the data (with error bars) and over-plot the model evaluated at the
-MAP parameter values.
+\acronym{MAP} parameter values.
 Generate 4096 posterior samples of the linear parameters.
 Over-plot a shaded region showing the 68~percent credible region for the model,
 estimated using these samples.
-
-% Generated with notebooks/Exercise1.ipynb
-\begin{table}[t!]
-  \begin{center}
-    \begin{tabular}{l r}
-      \adjustbox{valign=t}{
-        \begin{tabular}{c|c|c}
-          $x$ & $y$ & $\sigma_y$ \\
-          \hline
-          $-0.6$ & 12.2 & 0.8 \\
-          2.0 & 4.1 & 3.2 \\
-          2.7 & 0.9 & 3.3 \\
-          3.6 & $-15.0$ & 3.9 \\
-        \end{tabular}
-      } &
-      \adjustbox{valign=t}{\includegraphics[width=0.6\textwidth]{exercise1.pdf}} \\
-    \end{tabular}
-
-    \caption{\textbf{Figure 1}:
-    \textsl{Left:} Simulated data used in Exercise 1
-    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link
-    to data}). These data were generated with the true parameter values
-    $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
-    \textsl{Right:} The solution to Exercise 1. The data points (black markers)
-    show the data included in the table (left). The MAP parameter values were
-    found using \equationname~\ref{eq:a}.
-    \label{fig:data1}}
-  \end{center}
-\end{table}
-
 
 \paragraph{Solution:} Given the assumptions and prior parameter values
 above, the design matrix, $\mM$, is
@@ -872,23 +861,22 @@ above, the design matrix, $\mM$, is
       12.96 & 3.6 & 1
     \end{pmatrix} \hquad.
 \end{align}
-By plugging in to \equationname~\ref{eq:a}, we find MAP parameter values for the
+By plugging in to \equationname~(\ref{eq:a}), we find \acronym{MAP} parameter values for the
 linear parameters
 \begin{equation}
   \va\T =
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
       (3.61, 1.98, 14.26) \hquad.
 \end{equation}
-Figure~\ref{fig:data1} shows the data (black points), the model computed with
-the MAP parameter values (blue line), and the 68-percent credible region (shaded
+Figure~1 shows the data (black points), the model computed with
+the \acronym{MAP} parameter values (blue line), and the 68-percent credible region (shaded
 blue region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
 The companion \texttt{IPython} notebook contains the full solution.
 
 
-\subsection*{Exercise 2: A model with linear and nonlinear parameters}
-
-\paragraph{Problem:} We observe a set of data $(x_i, y_i)$ (indexed by $i$) with
+\paragraph{Exercise 2: A model with a nonlinear parameter:} We
+observe a set of data $(x_i, y_i)$ (indexed by $i$) with
 known, Gaussian uncertainties in $y$, $\sigma_{y_i}$, and no uncertainty in $x$.
 The parametric model we will use for these data is a generalized sinusoid with a
 constant offset,
@@ -908,7 +896,27 @@ of the nonlinear parameter $\omega$, but we can compute the marginal likelihood
 (marginalizing over the linear parameters) conditioned on the frequency
 $\omega$.
 
-The table shown in Figure~\ref{fig:data2} contains $N=4$ data points,
+% Generated with notebooks/Exercise2.ipynb
+\marginpar{\tfigurerule\\
+  \parbox{\marginparwidth}{
+    ~\hfill\begin{tabular}{c|c|c}
+    $x$ & $y$ & $\sigma_y$ \\
+    \hline
+    $-1.2$ & 11.2 & 0.2 \\
+    1.3 & 16.1 & 0.2 \\
+    3.1 & 10.2 & 0.3 \\
+    4.1 & 13.5 & 0.3
+    \end{tabular}\hfill~}
+  \includegraphics[width=\marginparwidth]{exercise2a.pdf}
+  \includegraphics[width=\marginparwidth]{exercise2b.pdf}
+  \parbox{\marginparwidth}{\raggedright\footnotesize\textbf{Figure 2}:
+    \textsl{Top:} Simulated data used in Exercise 2
+    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data2.csv}{link
+      to data}). These data were generated with ``true'' parameters
+    $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
+    \textsl{Middle and Bottom:} The solution to Exercise 2.}\\
+  \bfigurerule}
+The table shown in Figure~2 contains $N=4$ data points,
 $(x_i, y_i, \sigma_{y_i})$, generated with this sinusoid model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
@@ -936,46 +944,18 @@ between (0.1, 100).
 Plot both the marginal likelihood $p(\vy\given\omega)$ and the posterior pdf
 $p(\vy\given\omega)\,p(\omega)$ as a function of this frequency grid.
 
-Generate 512 posterior samples in
-the full set of parameters
-$(\alpha, \beta, \gamma, \omega)$. The posterior
-  posterior pdf over $\omega$ will be extremely multimodal. Don't fire up
-  standard MCMC! Try using Rejection Sampling instead: Generate a
-  dense, prior sampling in the nonlinear parameter $\omega$, evaluate
-  the marginalized likelihood at each sample in $\omega$, and use this
-  to reject prior samples.
+Generate 512 posterior samples\footnote{The
+posterior pdf over $\omega$ will be extremely multimodal. Don't fire up
+standard \acronym{MCMC}! Try using Rejection Sampling instead: Generate a
+dense, prior sampling in the nonlinear parameter $\omega$, evaluate
+the marginalized likelihood at each sample in $\omega$, and use this
+to reject prior samples.} in the full set of parameters
+$(\alpha,\beta,\gamma,\omega)$.
 Make a scatter plot showing a 2D projection of these samples in
 $(\alpha, \ln \omega)$.
-Plot the data, and over-plot 64 models (equation \ref{eq:ex2model}) computed
-using a subset of these posterior samples.
+Plot the data, and over-plot 64 models (\equationname~\ref{eq:ex2model}) computed
+using a fair subset of these posterior samples.
 The companion \texttt{IPython} notebook contains the full solution.
-
-% Generated with notebooks/Exercise2.ipynb
-\begin{table}[t!]
-  \begin{center}
-    \begin{tabular}{l r}
-      \adjustbox{valign=t}{
-        \begin{tabular}{c|c|c}
-          $x$ & $y$ & $\sigma_y$ \\
-          \hline
-          $-1.2$ & 11.2 & 0.2 \\
-          1.3 & 16.1 & 0.2 \\
-          3.1 & 10.2 & 0.3 \\
-          4.1 & 13.5 & 0.3
-        \end{tabular}
-      } &
-      \adjustbox{valign=t}{\includegraphics[width=0.6\textwidth]{exercise2a.pdf}} \\
-      \multicolumn{2}{l}{\includegraphics[width=0.9\textwidth]{exercise2b.pdf}}\\
-    \end{tabular}
-    \caption{\textbf{Figure 2}:
-    \textsl{Left:} Simulated data used in Exercise 2
-    (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data2.csv}{link
-    to data}). These data were generated with the true parameter values
-    $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
-    \textsl{Right:} The solution to Exercise 2.
-    \label{fig:data2}}
-  \end{center}
-\end{table}
 
 % Render the references
 \clearmargin\clearpage\raggedright
