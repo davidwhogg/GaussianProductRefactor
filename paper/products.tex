@@ -4,6 +4,8 @@
 % to-do
 % -----
 % - HOGG: Send to Neige and Forbes for comments.
+% - HOGG: Are notes 12 and 20 redundant? If so, pick one and stick to
+%   it. Note 20 could be modified to be a refer back to note 12.
 % - BL: Audit the discussion of canonical form.
 % - BL: Audit the solution to the multiple data sets problem.
 % - APW: Can you put in explicit links to the iPython notebooks?
@@ -11,13 +13,15 @@
 % - APW: We mention SPEED of computation in the abstract; we should say that
 %   again in the introduction and parts of the conversation below it. Refer to
 %   The Joker appropriately.
+% - APW: Cite Lomb-Scargle somewhere in Ex 2, perhaps? I'm not sure it's appropriate,
+%   so use your judgement.
 % - audit all style notes
 % - APW: update links to data files when archived with Zenodo
 % - post to arXiv
 % - profit
 
-% style notes -- audit for these
-% ------------------------------
+% style notes
+% -----------
 % - use \, for multiplication
 % - put punctuation after equations as necessary, with "\hquad,". Use \hquad
 % - no condescending language; no "it is easy to show" or equivalent...!
@@ -147,10 +151,10 @@
   Rodrigo Luger (Flatiron), and
   Sam Roweis (deceased),
   for help with all these concepts.
-This work was supported in part by the National Science Foundation
-and the National Aeronautics and Space Administration. It was developed
-in part at \textsl{AstroHackWeek 2016}, which was hosted at Berkeley
-by the Moore--Sloan Data Science Environment.
+  This project was developed
+  in part at \textsl{AstroHackWeek 2016}, which was
+  hosted by the Moore--Sloan Data Science Environment.
+  This research was supported by the National Science Foundation and National Aeronautics and Space Administration.
 }\\
 {\footnotesize%
   \textsl{Center for Cosmology and Particle Physics, Dept.\ Physics, New York University}\\
@@ -262,12 +266,12 @@ where
 $p(\vy,\vtheta\given\bH)$ is the joint probability of data $\vy$ and
 parameters $\vtheta$ given your model assumptions and hyper parameters
 (symbolized jointly as $\bH$)\footnote{%
-\textsl{Typographical note:} In this \documentname, we
-typeset vectors (which are column vectors) as $\va, \vb, \vtheta$, we typeset tensors (which
-are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
-we typeset matrices (which will in general be non-square) as $\mM, \mU$,
-and we typeset blobs or unstructured
-collections of information as $\bH, \bP$.},
+  In this \documentname, we typeset different mathematical objects according to their mathematical or transformation properties.
+  We typeset vectors (which are column vectors) as $\va, \vb, \vtheta$,
+  we typeset tensors (which are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
+  we typeset other matrices (which will in general be non-square) as $\mM, \mU$,
+  and we typeset blobs or unstructured
+  collections of information as $\bH, \bP$.},
 $p(\vy\given\vtheta,\bH)$ is the likelihood, or probability of data $\vy$
 given parameters (and assumptions),
 $p(\vtheta\given\bH)$ is the prior pdf for the parameters $\vtheta$,
@@ -618,7 +622,7 @@ In some projects, posterior pdfs or \acronym{MAP} parameter values are the goal
 The variance tensor $\tA$ is the posterior variance in the parameter space.
 It is strictly smaller (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
-variance $\mM\T\cdot\tC\cdot\mM$.
+variance $[\mM\T\cdot\tC\inv\cdot\mM]\inv$.
 The vector $\vb$ is the prior-optimal (maximum \foreign{a priori})
 value for the data $\vy$.
 It is the most probable data vector (prior to seeing any data),
