@@ -141,11 +141,12 @@
   in Bayesian inferences}
 
 \noindent\textbf{David W. Hogg}\footnote{%
-The authors would like to thank
+  The authors would like to thank
+  Will Farr (Stony Brook),
   Dan Foreman-Mackey (Flatiron),
   Rodrigo Luger (Flatiron), and
   Sam Roweis (deceased),
-for help with all these concepts through the years.
+  for help with all these concepts.
 This work was supported in part by the National Science Foundation
 and the National Aeronautics and Space Administration. It was developed
 in part at \textsl{Astro Hack Week 2016}, which was hosted at Berkeley
@@ -338,19 +339,20 @@ We have to become Bayesian, and we have to choose a prior
 \begin{equation}
 \mbox{\small prior on nuisance parameters:} \hquad p(\vtheta\given\bP) \hquad.
 \end{equation}
-This is the basis for the claim\footnote{A claim that perhaps hasn't been made forcefully
+This is the basis for the claim\footnote{A claim that perhaps hasn't been made clearly
   yet, but will eventually be by at least one of these authors.} that Bayesian
 inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
 in the literature\footnote{It is very common for papers or projects with
   Bayesian approaches to claim that the
   goal of Bayesian inference is to create posterior pdfs. That isn't correct.
-  Different Bayesian inferences have different objectives. The fundamental tenet
-  of Bayesian inference is the likelihood principle: All information comes to
-  you---all updates to your beliefs---multiplicatively through a likelihood
-  function. It is the likelihood, not the posterior pdf, that is fundamental to Bayesian
-  inference. Prior pdfs are important in Bayesian inferences mainly because they permit
-  marginalizations and other kinds of integrals involving likelihood functions.}
+  Different Bayesian inferences have different objectives. The fundamental
+  point
+  of Bayesian inference is that consistently held beliefs obey the rules of
+  probability. That, in turn, says that if you want
+  to communicate to \emph{others} things useful to the
+  updating of \emph{their} beliefs, you want to communicate about your likelihood.
+  Your posterior pdf isn't all that useful to them!}
 We have said ``$p(\vtheta\given\bP)$'' because this prior pdf may depend on
 the nonlinear parameters $\bP$, but it certainly doesn't have to.
 Armed with the likelihood and prior---if you want it---you can construct
