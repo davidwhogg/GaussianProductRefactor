@@ -4,8 +4,6 @@
 % to-do
 % -----
 % - HOGG: Send to Neige and Forbes for comments.
-% - HOGG: Are notes 12 and 20 redundant? If so, pick one and stick to
-%   it. Note 20 could be modified to be a refer back to note 12.
 % - BL: Audit the discussion of canonical form.
 % - BL: Audit the solution to the multiple data sets problem.
 % - APW: Can you put in explicit links to the iPython notebooks?
@@ -62,6 +60,7 @@
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\equationname}{equation}
+\newcommand{\notename}{Note}
 \renewcommand{\tablename}{Table}
 \newcommand{\acronym}[1]{{\small{#1}}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -356,7 +355,7 @@ in the literature\footnote{It is very common for papers or projects with
   probability. That, in turn, says that if you want
   to communicate to \emph{others} things useful to the
   updating of \emph{their} beliefs, you want to communicate about your likelihood.
-  Your posterior pdf isn't all that useful to them!}
+  Your posterior pdf isn't all that useful to them!\label{note:lf}}
 We have said ``$p(\vtheta\given\bP)$'' because this prior pdf may depend on
 the nonlinear parameters $\bP$, but it certainly doesn't have to.
 Armed with the likelihood and prior---if you want it---you can construct
@@ -611,14 +610,7 @@ In some projects, posterior pdfs or \acronym{MAP} parameter values are the goal
 (although we don't think they often should be\footnote{Although---in subjective
   Bayesian inference---the posterior pdf
   is the valid statement of your belief, it is not so useful to your colleagues,
-  who start with different beliefs from yours. They are unlikely to agree on
-  priors and posteriors, but they might (just might) agree on your likelihood
-  function. So if you are a subjective Bayesian, you serve your community better
-  by publishing your likelihoods than you do by publishing your posterior pdfs.
-  Of course there are many subjective decisions that go into a likelihood function
-  too! So you really serve your community best by both publishing your likelihood
-  function \emph{and} your raw data. But that's all beyond the scope of this
-  \documentname!}).
+  who start with different beliefs from yours. See \notename\textsuperscript{\ref{note:lf}}.}).
 The variance tensor $\tA$ is the posterior variance in the parameter space.
 It is strictly smaller (in eigenvalues or determinant) than either
 the prior variance $\tLambda$ or the parameter-space data-noise
