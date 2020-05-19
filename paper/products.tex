@@ -37,7 +37,7 @@
 % - every bibliography item should have a hot url link or doi or equivalent.
 % - ...[your pet peeve here]...
 
-\documentclass[11pt, letterpaper]{article}
+\documentclass[10pt, letterpaper]{article}
 
 \usepackage{amsmath, bm, mathrsfs, amssymb}
 \usepackage[dvipsnames]{xcolor}
@@ -114,24 +114,25 @@
 \newcommand{\apjs}{Astrophys.\,J.\,Supp.\,Ser.} % Astrophysical Journal Supplements
 
 % page layout stuff
-\setlength{\topmargin}{-0.4in}
+\setlength{\topmargin}{-0.2in}
 \setlength{\headheight}{0in}
 \setlength{\headsep}{0in}
-\setlength{\textheight}{9.55in}
+\setlength{\textheight}{9.35in}
 \setlength{\parindent}{\baselineskip}
-\setlength{\oddsidemargin}{-0.4in}
-\setlength{\textwidth}{4.8in}
+\setlength{\oddsidemargin}{-0.2in}
+\setlength{\textwidth}{4.3in}
 \raggedbottom\sloppy\sloppypar\frenchspacing
 
 % this might be crazy, but here's my number
-\setlength{\marginparsep}{0.125in}
-\setlength{\marginparwidth}{2.5in}
+\setlength{\marginparsep}{0.15in}
+\setlength{\marginparwidth}{2.7in}
 \usepackage{marginfix} % necessary but possibly evil
 \newcounter{marginnote}
 \setcounter{marginnote}{0}
 \renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\color{darkgray}\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
 \newcommand{\tfigurerule}{\rule{0pt}{1ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{0.25ex}}
 \newcommand{\bfigurerule}{\rule{0pt}{0.25ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
+\renewcommand{\caption}[1]{\parbox{\marginparwidth}{\footnotesize\textbf{\refstepcounter{figure}\figurename~\thefigure}: {#1}}}
 
 % kill these at submission
 \newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
@@ -602,9 +603,11 @@ And they are all different sizes.
 
 Various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, because the term $p(\vtheta\given
-\va,\tA)$ is the conditional posterior pdf\footnote{Remember that $\va$ and
-$\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
-$\mM$!} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
+\va,\tA)$ is the conditional posterior pdf\footnote{We say ``conditional'' here
+  because it is conditioned on nonlinear paramebers $\bP$.
+  The vector $\va$ and tensor
+  $\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
+  $\mM$.} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
 \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
 $\vtheta$.
 It is found by inverse-variance-weighted combinations of the data and the prior.
@@ -678,7 +681,7 @@ $\tC\inv$---you might have to \emph{think about how you implement the
   vectors at which you want to evaluate \emph{always} lie in the non-zero
   subspace. It makes sense, then, in this case, to work in a representation in which it is easy
   to enforce or ensure that. This usually involves some kind of coordinate transformation
-  or rotation or projection. Doing this right is out of scope for this \documentname.}.
+  or rotation or projection. Doing this correctly is beyond the scope for this \documentname.}.
 
 \paragraph{Simplification: single multiplicative scaling}
 
@@ -813,8 +816,7 @@ and polynomial models are often used to capture long-term trends in data.
       3.6 & $-15.0$ & 3.9 \\
     \end{tabular}\hfill~}
   \includegraphics[width=\marginparwidth]{exercise1.pdf}
-  \parbox{\marginparwidth}{\raggedright\footnotesize\textbf{Figure 1}:
-    \textsl{Top:} Simulated data used in Exercise~1
+  \caption{\textsl{Top:} Data used in Exercise~1
     (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data1.csv}{link
     to data}). These data were generated with ``true'' parameters
     $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
@@ -900,8 +902,7 @@ $\omega$.
     \end{tabular}\hfill~}
   \includegraphics[width=\marginparwidth]{exercise2a.pdf}
   \includegraphics[width=\marginparwidth]{exercise2b.pdf}
-  \parbox{\marginparwidth}{\raggedright\footnotesize\textbf{Figure 2}:
-    \textsl{Top:} Simulated data used in Exercise 2
+  \caption{\textsl{Top:} Data used in Exercise 2
     (\href{https://raw.githubusercontent.com/davidwhogg/GaussianProductRefactor/master/notebooks/data2.csv}{link
       to data}). These data were generated with ``true'' parameters
     $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
