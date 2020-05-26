@@ -11,7 +11,7 @@ A project to write up one tiny point of math.
 - **Boris Leistedt** (Imperial)
 
 ## License
-Copyright 2019 the authors.
+Copyright 2019–2020 the authors.
 
 ## Contributors, supporters and helpers
 - Dan Foreman-Mackey (Flatiron)
