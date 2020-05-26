@@ -9,9 +9,6 @@
 % - BL: Audit the discussion of canonical form.
 % - BL: Audit the solution to the multiple data sets problem.
 % - APW: Can you put in explicit links to the iPython notebooks?
-% - APW: We mention SPEED of computation in the abstract; we should say that
-%   again in the introduction and parts of the conversation below it. Refer to
-%   The Joker appropriately.
 % - APW: Cite Lomb-Scargle somewhere in Ex 2, perhaps? I'm not sure it's appropriate,
 %   so use your judgement.
 % - audit all style notes
@@ -773,10 +770,11 @@ model (which makes generating samples or computing integrals far simpler), and
 marginalizations over linear parameters).
 Reducing the dimensionality of your parameter-space will in general improve
 convergence of Markov Chain Monte Carlo\footnote{We have also written a tutorial
-  on \acronym{MCMC} in this series \citep{Hogg:2018}.} (\acronym{MCMC})
-sampling methods, or enable
-alternate sampling methods (for example, rejection sampling) that may be intractable
-when the parameter dimensionality is large.
+on \acronym{MCMC} in this series \citep{Hogg:2018}.} (\acronym{MCMC}) sampling
+methods, or enable alternate sampling methods (for example, rejection sampling)
+that may be intractable when the parameter dimensionality is large: These two
+benefits also typically make inference procedures (like sampling) \emph{far}
+faster.
 Here, we demonstrate the utility of the identities shown above with two
 worked exercises.
 
