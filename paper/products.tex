@@ -271,10 +271,16 @@ parameters $\vtheta$ given your model assumptions and hyper parameters
 (symbolized jointly as $\bH$)\footnote{%
   In this \documentname, we typeset different mathematical objects according to their mathematical or transformation properties.
   We typeset vectors (which are column vectors) as $\va, \vb, \vtheta$,
-  we typeset tensors (which are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
+  we typeset variance tensors (which in this case are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
   we typeset other matrices (which will in general be non-square) as $\mM, \mU$,
   and we typeset blobs or unstructured
-  collections of information as $\bH, \bP$.},
+  collections of information as $\bH, \bP$.
+  Related to this typography is an implicit terminology:
+  We distinguish variance tensors from matrices.
+  This distinction is somewhat arbitrary, but the strong constraints on the
+  variance tensors (non-negative, real eigenvalues) make them special beasts,
+  with special geometric properties, like that they can be used as metrics
+  in their respective vector spaces.}
 $p(\vy\given\vtheta,\bH)$ is the likelihood, or probability of data $\vy$
 given parameters (and assumptions),
 $p(\vtheta\given\bH)$ is the prior pdf for the parameters $\vtheta$,
@@ -606,7 +612,7 @@ Various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, because the term $p(\vtheta\given
 \va,\tA)$ is the conditional posterior pdf\footnote{We say ``conditional'' here
   because it is conditioned on nonlinear paramebers $\bP$.
-  The vector $\va$ and tensor
+  The vector $\va$ and variance tensor
   $\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
   $\mM$.} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
 \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
@@ -640,8 +646,8 @@ the product of the inverse and vectors, as in $\tB\inv\cdot\vy$ and
 the same for $\vb$.
 To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
 the matrix inversion lemma} (\ref{eq:invlemma}) given above.
-This is often useful because you often know the data noise-variance
-tensor inverse $\tC\inv$, and the prior variance inverse
+This is often useful because you often know or are given the data inverse variance
+tensor $\tC\inv$ for the noise, and the prior variance inverse
 $\tLambda\inv$, and the lemma manipulates these into the answer without
 any heavy linear algebra.
 The lemma saves you the most time and precision when the parameter size $K$
@@ -660,7 +666,7 @@ a vector.
 So, in general, \code{solve(B,y)} will deliver more precise results than
 the mathematically equivalent \code{dot(inv(B),y)}.
 
-The expressions in \equationname~(\ref{eq:problem}) do not require that the tensors
+The expressions in \equationname~(\ref{eq:problem}) do not require that the variance tensors
 $\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
 that they be non-negative semi-definite.
 That means that they can have zero eigenvalues.
