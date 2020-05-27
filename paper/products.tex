@@ -262,7 +262,7 @@ that will be Gaussians here.
 Bayes' theorem is often written as a ratio of probability density functions
 (pdfs in what follows), but it can also be written as a pdf factorization\footnote{For
   a tutorial on probability factorizations, see \cite{probcalc}.}:
-\begin{equation}
+\begin{equation}\label{eq:bayes}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
 where
@@ -377,7 +377,7 @@ the posterior pdf for the linear parameters
 
 To perform a marginalization of the likelihood, we have two choices.
 We can either do an integral:
-\begin{equation}
+\begin{equation}\label{eq:integral}
 p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \hquad,
 \end{equation}
@@ -609,7 +609,24 @@ is the data vector) and the units of $\tLambda$ are parameters-squared and the u
 of $\mM$ are data over parameters.
 And they are all different sizes.
 
-Various parts of the solution are highly interpretable in terms of the
+If you remember the Bayesian context set in \equationname~(\ref{eq:bayes}) and
+discussion thereafter,
+the Gaussian $\normal(\vtheta\given\va,\tA)$ is the posterior pdf for the linear
+parameters $\vtheta$, and the Gaussian $\normal(\vy\given\vb,\tB)$ is the
+marginalized likelihood, marginalizing out the linear parameters $\vtheta$.
+This marginalization is usually thought of as being an integral, like the
+one given in \equationname~(\ref{eq:integral}).
+How are these linear-algebra expressions in any sense ``doing this integral''?
+The answer is: That integral is a correlation of two Gaussians\footnote{Astronomers
+  like to say that it is the ``convolution'' of two Gaussians, but it is really the
+  correlation of two Gaussians. The differences between convolution and correlation
+  are minimal, though, and we aren't sticklers.}, and the correlation of two
+Gaussians delivers a new Gaussian with a shifted mean that is wider than either
+of the original two Gaussians.
+This factorization does, indeed, deliver the correct marginalization integral.
+
+Continuing along these lines,
+various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, because the term $p(\vtheta\given
 \va,\tA)$ is the conditional posterior pdf\footnote{We say ``conditional'' here
   because it is conditioned on nonlinear paramebers $\bP$.
@@ -705,8 +722,15 @@ In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
 solution above for this scalar case. 
 
-\paragraph{Special case: wide uninformative prior}
-Another interesting case that can occur is that of a wide prior on the parameters $\theta$. Rather than ignoring the prior contribution on the lefthand side of \equationname~(\ref{eq:problem}), which would be incorrect, this can be solved properly by taking the limit $\tC\inv \rightarrow 0$ in the fiducial results we derived above. This is also left as an exercise. A partial solution can be found in \cite{Rasmussen:2005}.
+\paragraph{Special case: wide prior}
+Another interesting case that often arises in inferences is the use of an improper
+(infinitely wide) prior on the parameters $\theta$. Rather than
+ignoring the prior pdf on the left-hand side of
+\equationname~(\ref{eq:problem}), which is technically incorrect, the correct
+posterior pdf can be obtained by taking the limit $\tC\inv \rightarrow 0$ in the
+fiducial results derived above. It is perhaps
+worth noting that in the improper-prior case,
+the posterior can still be fine, but the marginalized likelihood will make no sense (it will technically vanish).
 
 
 \paragraph{Generalization: product of many Gaussians}
