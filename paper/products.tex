@@ -398,10 +398,10 @@ the likelihood $p(\vy\given\vtheta,\bP)$ is a Gaussian in $\vy$,
 \item
 the prior $p(\vtheta\given\bP)$ is a Gaussian in $\vtheta$,
 \item
-the mean of the likelihood Gaussian depends linearly on the nuisance
+the mean of the likelihood Gaussian depends linearly on the linear
 parameters $\vtheta$, and
 \item
-the nuisance parameters $\vtheta$ don't enter the likelihood anywhere
+the linear parameters $\vtheta$ don't enter the likelihood anywhere
 other than in the mean.
 \end{enumerate}
 In equations, this becomes:
@@ -431,7 +431,7 @@ general, on the nonlinear parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
 That is, the likelihood is a Gaussian with a mean that depends
-linearly on the nuisance parameters $\vtheta$, and
+linearly on the parameters $\vtheta$, and
 $\vmu$ and $\tLambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
