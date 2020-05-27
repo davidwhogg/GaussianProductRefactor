@@ -656,7 +656,7 @@ a vector.
 So, in general, \code{solve(B,y)} will deliver more precise results than
 the mathematically equivalent \code{dot(inv(B),y)}.
 
-The expressions in (\ref{eq:problem}) do not require that the tensors
+The expressions in \equationname~(\ref{eq:problem}) do not require that the tensors
 $\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
 that they be non-negative semi-definite.
 That means that they can have zero eigenvalues.
@@ -689,9 +689,13 @@ $\mu$ and $\Lambda$ are now scalars as well:
 \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 \hquad.
 \end{equation}
+This can arise if one wants to multiplicatively scale a model to the data. $a$ would then correspond to the maximum a posteriori value of the multiplicative scaling to fit $\vy$ with $\vm$.
 In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
-solution above for this scalar case.
+solution above for this scalar case. 
+
+\paragraph{Special case: wide uninformative prior}
+Another interesting case that can occur is that of a wide prior on the parameters $\theta$. Rather than ignoring the prior contribution on the lefthand side of \equationname~(\ref{eq:problem}), which would be incorrect, this can be solved properly by taking the limit $\tC\inv \rightarrow 0$ in the fiducial results we derived above. This is also left as an exercise. A partial solution can be found in \cite{Rasmussen:2005}.
 
 
 \paragraph{Generalization: product of many Gaussians}
@@ -702,11 +706,16 @@ different linear combination of the linear parameters $\vtheta$.
 That is, there are $J$ data vectors $\vy_j$, each of which has size or length $N_j$,
 and each of which has an expectation
 set linearly by the parameters $\vtheta$ but through a different design matrix $\mM_j$.
+
 Provided that the different data vectors $\vy_j$ are independently ``observed'' (that
 is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
-That setup leads to the following generalized problem statement:
+
+We can immediately note that we could ignore this fractorization and form a large  vector $\vy$ and matrix $\mM$ by concatenating the individual vectors $\vy_j$ and design matrices $\mM_j$, and a total covariance matrix $\tC$, a block diagonal matrix containing the noise variance tensors $\tC_j$. 
+We could then apply the result of \equationname~(\ref{eq:problem}). 
+However, this would result in significant unnecessary computation. By not take advantaging of the block diagonal nature of $\tC$, the matrix multiplications, inverses, and determinants needed in \equationname~(\ref{eq:problem}) are of much larger size, and this drastically increases the complexity of the problem.
+In order to avoid this, we take advantage of the separability of the likelihoods, and write the following generalized problem statement:
 
 Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ vectors $\vb_j$ (each
 of which is a different length $N_j$),
@@ -727,7 +736,8 @@ each $\mM_j$ is a $N_j\times K$ matrix,
 and
 each $\tC_j$ is a $N_j\times N_j$ non-negative semi-definite variance tensor.
 
-The solution to this is an iteration over data vectors $\vy_j$:
+One way to solve this problem is to write all Gaussians in their canonical form, then separate the elements that depend on $\vtheta$ and on the individual $\vy_j$.
+The resutlt can be written as an iteration over data vectors $\vy_j$:
 \begin{equation}
   \mbox{\small initialize:}\hquad
   \tA_0\inv = \tLambda\inv \hquad;\hquad \va_0 = \vmu \hquad;\hquad \vx_0 = \tLambda\inv\cdot\vmu
@@ -749,7 +759,7 @@ The solution to this is an iteration over data vectors $\vy_j$:
 The solution is an iteration because you can think of adding each new data
 set $\vy_j$ sequentially, with the prior for set $j$ being the posterior from
 set $j-1$.
-This solution is unpleasant, because the specific values you get for the
+The way this solution is written is unpleasant, because the specific values you get for the
 vectors $\vb_j$ and tensors $\tB_j$ depend on the order in which you insert the data.
 But---and very importantly for the rules of Bayesian inference---the posterior
 mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
