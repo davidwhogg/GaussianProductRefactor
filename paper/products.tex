@@ -308,7 +308,7 @@ $p(\vy\given\bH)$ with closed-form transformations of the means and variances of
 the likelihood and prior pdf.
 
 A currently popular data-analysis context in which Gaussian likelihoods are
-multiplied by Gaussian priors is \emph{Gaussian processes} (\acronym{GP}s),
+multiplied by Gaussian priors is \textsl{Gaussian processes} (\acronym{GP}s),
 which is a kind of
 non-parametric fitting in which a kernel function sets the flexibility of a
 data-driven model. A full discussion of \acronym{GP}s is beyond the scope of this
@@ -316,11 +316,12 @@ data-driven model. A full discussion of \acronym{GP}s is beyond the scope of thi
   book by \cite{Rasmussen:2005}.}.
 The math below can be applied in many \acronym{GP} contexts.
 Indeed, most linear model fits of the kind we describe below can be translated
-into the language of \acronym{GP}s;
-they are generally \acronym{GP}s with a trivial kernel function but a non-trivial
-mean function. We leave that translation as an exercise to the ambitious
+into the language of \acronym{GP}s, because any noise process that delivers
+both a prior pdf and a likelihood with Gaussian form is technically identical
+to a (probably non-stationary) \acronym{GP}.
+We leave that translation as an exercise to the ambitious
 reader\footnote{If you want a cheat sheet,
-  we come close to performing this complete translation in \cite{luger}.}.
+  we come close to performing this translation in \cite{luger}.}.
 
 
 \section{Marginalization by refactorization}
