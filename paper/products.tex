@@ -29,7 +29,7 @@
 % - every bibliography item should have a hot url link or doi or equivalent.
 % - ...[your pet peeve here]...
 
-\documentclass[10pt, letterpaper]{article}
+\documentclass[10pt]{article}
 
 \usepackage{amsmath, bm, mathrsfs, amssymb}
 \usepackage[dvipsnames]{xcolor}
@@ -106,7 +106,6 @@
 \setlength{\headheight}{0.0in}
 \setlength{\headsep}{0.0in}
 \setlength{\parindent}{\baselineskip}
-\setlength{\oddsidemargin}{-0.2in}
 \setlength{\textwidth}{4.3in}
 \setlength{\textheight}{2\textwidth}
 \raggedbottom\sloppy\sloppypar\frenchspacing
@@ -122,11 +121,12 @@
 \newcommand{\bfigurerule}{\rule{0pt}{0.25ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
 \renewcommand{\caption}[1]{\parbox{\marginparwidth}{\footnotesize\refstepcounter{figure}\textbf{\figurename~\thefigure}: {#1}}}
 
-% kill these at submission
-\newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
-\newcommand{\apw}[1]{\textcolor{CadetBlue}{[APW says: #1]}}
-\newcommand{\bl}[1]{\textcolor{red}{[BL says: #1]}}
-\newcommand{\hogg}[1]{\textcolor{magenta}{[Hogg says: #1]}}
+% and make the left margin correct
+\setlength{\oddsidemargin}{0.5\paperwidth}
+\addtolength{\oddsidemargin}{-1.0in}
+\addtolength{\oddsidemargin}{-0.5\textwidth}
+\addtolength{\oddsidemargin}{-0.5\marginparwidth}
+\addtolength{\oddsidemargin}{-0.5\marginparsep}
 
 \begin{document}
 
@@ -325,7 +325,7 @@ We are trying to learn linear parameters $\vtheta$ (a $K$-dimensional vector)
 and also nonlinear parameters $\bP$ (an arbitrary vector, list, or
 blob)\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
   assumptions or hyper parameters. That is, it contains everything on which
-  the linear model is conditioned, including not just nonlineaer parameters
+  the linear model is conditioned, including not just nonlinear parameters
   but also investigator choices. Note our subjectivism here!}.
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
@@ -750,10 +750,10 @@ is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
 
-We can immediately note that we could ignore this fractorization and form a large  vector $\vy$ and matrix $\mM$ by concatenating the individual vectors $\vy_j$ and design matrices $\mM_j$, and a total covariance matrix $\tC$, a block diagonal matrix containing the noise variance tensors $\tC_j$.
-We could then apply the result of \equationname~(\ref{eq:problem}).
-However, this would result in significant unnecessary computation. By not take advantaging of the block diagonal nature of $\tC$, the matrix multiplications, inverses, and determinants needed in \equationname~(\ref{eq:problem}) are of much larger size, and this drastically increases the complexity of the problem.
-In order to avoid this, we take advantage of the separability of the likelihoods, and write the following generalized problem statement:
+In principle we could work around this problem---reduce it to the previously solved problem---by forming a large vector $\vy$ which is the concatenation of all the individual data vectors $\vy_j$, and a large design matrix $\mM$ which is the conatenation of all the individual design matrices $\mM_j$, and a large total covariance matrix $\tC$ which is a block diagonal matrix containing the noise variance tensors $\tC_j$ on the diagonal blocks.
+We could then apply the result of the single-data-vector problem above.
+However, this can result in significant unnecessary computation, and it is hard to write the answer in a simple form.
+Instead we can take advantage of the separability of the likelihoods, and write the following generalized problem statement:
 
 Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ vectors $\vb_j$ (each
 of which is a different length $N_j$),
@@ -996,7 +996,7 @@ using a fair subset of these posterior samples.
 The companion \texttt{IPython} notebook contains the full solution.
 
 % Render the references
-\clearmargin\clearpage\raggedright
+\clearpage\raggedright
 \bibliography{refs}
 
 \end{document}
