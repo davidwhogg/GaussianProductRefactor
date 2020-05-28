@@ -9,7 +9,6 @@
 % - APW: Create git tag with version to submit and create release
 % - APW: update bibtex entry for Zenodo
 % - post to arXiv
-% - HOGG: Send to Neige and Forbes for comments.
 % - profit
 
 % style notes
@@ -237,7 +236,8 @@ variation of a star in response to a faint, orbiting companion\footnote{See,
   That project and those papers would have been
   impossible without the speed-ups provided by the expressions derived in this
   \documentname. Indeed, the writing of this \documentname\ was motivated by
-  the work presented in those papers.}.
+  the work presented in those papers. (Okay full disclosure: It was motivated in
+  part by a \emph{mistake} made by DWH in one of those papers!)}.
 In this problem, the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
@@ -612,8 +612,8 @@ is the data vector) and the units of $\tLambda$ are parameters-squared and the u
 of $\mM$ are data over parameters.
 And they are all different sizes.
 
-If you remember the Bayesian context set in \equationname~(\ref{eq:bayes}) and
-discussion thereafter,
+If you remember the Bayesian context around \equationname~(\ref{eq:bayes}) and the
+Bayesian discussion thereafter,
 the Gaussian $\normal(\vtheta\given\va,\tA)$ is the posterior pdf for the linear
 parameters $\vtheta$, and the Gaussian $\normal(\vy\given\vb,\tB)$ is the
 marginalized likelihood, marginalizing out the linear parameters $\vtheta$.
@@ -632,7 +632,7 @@ Continuing along these lines,
 various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, because the term $p(\vtheta\given
 \va,\tA)$ is the conditional posterior pdf\footnote{We say ``conditional'' here
-  because it is conditioned on nonlinear paramebers $\bP$.
+  because it is conditioned on nonlinear parameters $\bP$.
   The vector $\va$ and variance tensor
   $\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
   $\mM$.} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
@@ -704,7 +704,7 @@ $\tC\inv$---you might have to \emph{think about how you implement the
   space (the $\vtheta$ space) in which the variance vanishes. This means that
   all valid parameter combinations lie on a linear subspace of the full $K$-dimensional
   space. All parameter combinations that wander off the subspace get strictly
-  zero probabiity or negative infinities in the log.
+  zero probability or negative infinities in the log.
   If all your inference is valid, it will probably be the case that the
   vectors at which you want to evaluate \emph{always} lie in the non-zero
   subspace. It makes sense, then, in this case, to work in a representation in which it is easy
@@ -730,7 +730,7 @@ Another interesting case that often arises in inferences is the use of an improp
 (infinitely wide) prior on the parameters $\theta$. Rather than
 ignoring the prior pdf on the left-hand side of
 \equationname~(\ref{eq:problem}), which is technically incorrect, the correct
-posterior pdf can be obtained by taking the limit $\tC\inv \rightarrow 0$ in the
+posterior pdf can be obtained by taking the limit $\tLambda\inv \rightarrow 0$ in the
 fiducial results derived above. It is perhaps
 worth noting that in the improper-prior case,
 the posterior can still be fine, but the marginalized likelihood will make no sense (it will technically vanish).
@@ -775,7 +775,7 @@ and
 each $\tC_j$ is a $N_j\times N_j$ non-negative semi-definite variance tensor.
 
 One way to solve this problem is to write all Gaussians in their canonical form, then separate the elements that depend on $\vtheta$ and on the individual $\vy_j$.
-The resutlt can be written as an iteration over data vectors $\vy_j$:
+The result can be written as an iteration over data vectors $\vy_j$:
 \begin{equation}
   \mbox{\small initialize:}\hquad
   \tA_0\inv = \tLambda\inv \hquad;\hquad \va_0 = \vmu \hquad;\hquad \vx_0 = \tLambda\inv\cdot\vmu
@@ -805,7 +805,7 @@ mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
   that the knowledge you eventually have (your final beliefs) does not depend
   on the order in which you observed the data. This is one of the axioms or inputs
   to the theorems that underly the consistency of Bayesian reasoning.
-  There is an illuminating discussion of all this in Chapters 1 and 2 of \cite{jaynes}.}
+  There is an illuminating discussion of all this in Chapter~1 of \cite{jaynes}.}
 
 
 \section{Worked Examples}\label{sec:examples}
@@ -849,7 +849,8 @@ occasionally useful in astronomy and physics, for example, when centroiding a
 peak\footnote{Fitting second-order polynomials has been shown to be great for
   centroiding peaks in astronomy contexts. See, for example, \cite{vakili}, and
   \cite{teague}.},
-and polynomial models are often used to capture long-term trends in data.
+and polynomial models are often used to capture smooth trends in
+data.
 
 \marginpar{\tfigurerule\\
   \parbox{\marginparwidth}{
