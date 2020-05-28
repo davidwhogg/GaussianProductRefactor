@@ -5,7 +5,6 @@
 % -----
 % - audit all style notes
 % - HOGG: Should we connect even more explicitly to rejection sampling and etc to prepare the reader for the exercises?
-% - HOGG: Make a note in the introduction of who our audience is. Maybe abstract too.
 % - APW: Create git tag with version to submit and create release
 % - APW: update bibtex entry for Zenodo
 % - post to arXiv
@@ -191,6 +190,9 @@ If all you want is the answer, the question is posed and answered at the
 beginning of \sectionname~\ref{sec:problemsolution}.
 We show two toy examples, in the form of worked exercises, in
 \sectionname~\ref{sec:examples}.
+The solutions, discussion, and exercises in this \documentname\ are aimed at an
+advanced graduate student who is already familiar with introductory concepts in
+Bayesian inference and probability.
 
 
 \section{Inferences with linear parameters}
@@ -206,9 +208,8 @@ the central limit theorem. Anyway, we will continue with the name ``Gaussian''
 despite our own reservations. We apologize to our reader.}):
 One reason is that a likelihood function is basically a noise model,
 and it is often case that the noise is treated as Gaussian.
-This Gaussian assumption for the likelihood function is
-\emph{accurate} when the noise model has benefitted from the central
-limit theorem.
+This assumption for the likelihood function is \emph{accurate} when the noise
+model has benefitted from the central limit theorem.
 This is true, for example, when the noise is thermal, or when the
 noise is shot noise and the numbers (numbers of detected photons or other
 particles) are large.
@@ -225,19 +226,19 @@ include parameters such that the expectation value for the data (in,
 say, a set of repeated experiments) is linearly proportional to some
 subset of the parameters.
 This is true, for example, when we fit a histogram of \textsl{Large Hadron
-  Collider} events affected by the Higgs boson\footnote{See, for example,
+  Collider} events affected by the Higgs boson,\footnote{See, for example,
   \cite{atlas}, and \cite{cms}, and references therein.}
-the expected number of counts in each
+where the expected number of counts in each
 energy bin is proportional to a linear combination of the amplitudes
 of various backgrounds and some coupling to the Higgs.
 Another linear-parameter context, for example, arises when we fit for the radial-velocity
-variation of a star in response to a faint, orbiting companion\footnote{See,
+variation of a star in response to a faint, orbiting companion.\footnote{See,
   for an example in our own work, \cite{Price-Whelan:2017, Price-Whelan:2020}.
   That project and those papers would have been
   impossible without the speed-ups provided by the expressions derived in this
   \documentname. Indeed, the writing of this \documentname\ was motivated by
   the work presented in those papers. (Okay full disclosure: It was motivated in
-  part by a \emph{mistake} made by DWH in one of those papers!)}.
+  part by a \emph{mistake} made by DWH in one of those papers!)}
 In this problem, the expectation of the
 radial-velocity measurements depends linearly on the binary system
 velocity and some combination of masses and system inclination (with
@@ -253,15 +254,15 @@ In Bayesian inference contexts, the ``models'' to which we are referring are
 expressions for likelihood functions and prior pdfs; these are the things
 that will be Gaussians here.
 Bayes' theorem is often written as a ratio of probability density functions
-(pdfs in what follows), but it can also be written as a pdf factorization\footnote{For
-  a tutorial on probability factorizations, see \cite{probcalc}.}:
+(pdfs in what follows), but it can also be written as a pdf factorization:\footnote{For
+  a tutorial on probability factorizations, see \cite{probcalc}.}
 \begin{equation}\label{eq:bayes}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
 where
 $p(\vy,\vtheta\given\bH)$ is the joint probability of data $\vy$ and
 parameters $\vtheta$ given your model assumptions and hyper parameters
-(symbolized jointly as $\bH$)\footnote{%
+(symbolized jointly as $\bH$),\footnote{%
   In this \documentname, we typeset different mathematical objects according to their mathematical or transformation properties.
   We typeset vectors (which are column vectors) as $\va, \vb, \vtheta$,
   we typeset variance tensors (which in this case are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
@@ -305,16 +306,16 @@ multiplied by Gaussian priors is \textsl{Gaussian processes} (\acronym{GP}s),
 which is a kind of
 non-parametric fitting in which a kernel function sets the flexibility of a
 data-driven model. A full discussion of \acronym{GP}s is beyond the scope of this
-\documentname, but excellent discussions abound\footnote{We like the free
-  book by \cite{Rasmussen:2005}.}.
+\documentname, but excellent discussions abound.\footnote{We like the free
+  book by \cite{Rasmussen:2005}.}
 The math below can be applied in many \acronym{GP} contexts.
 Indeed, most linear model fits of the kind we describe below can be translated
 into the language of \acronym{GP}s, because any noise process that delivers
 both a prior pdf and a likelihood with Gaussian form is technically identical
 to a (probably non-stationary) \acronym{GP}.
 We leave that translation as an exercise to the ambitious
-reader\footnote{If you want a cheat sheet,
-  we come close to performing this translation in \cite{luger}.}.
+reader.\footnote{If you want a cheat sheet,
+  we come close to performing this translation in \cite{luger}.}
 
 
 \section{Marginalization by refactorization}
@@ -323,10 +324,10 @@ Imagine that we are doing an inference using data $\vy$ (which is a
 $N$-dimensional vector, say).
 We are trying to learn linear parameters $\vtheta$ (a $K$-dimensional vector)
 and also nonlinear parameters $\bP$ (an arbitrary vector, list, or
-blob)\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
+blob).\footnote{Here, $\bP$ represents the nonlinear parameters \emph{and}
   assumptions or hyper parameters. That is, it contains everything on which
   the linear model is conditioned, including not just nonlinear parameters
-  but also investigator choices. Note our subjectivism here!}.
+  but also investigator choices. Note our subjectivism here!}
 Whether we are Bayesian or frequentist, the inference is based on
 a likelihood function, or probability for the data given parameters
 \begin{equation}
@@ -350,7 +351,7 @@ This is the basis for the claim\footnote{A claim that perhaps hasn't been made c
   yet, but will eventually be by at least one of these authors.} that Bayesian
 inference requires a likelihood function, and priors on the nuisance parameters.
 It does not require a prior on everything, contrary to some statements
-in the literature\footnote{It is very common for papers or projects with
+in the literature.\footnote{It is very common for papers or projects with
   Bayesian approaches to claim that the
   goal of Bayesian inference is to create posterior pdfs. That isn't correct.
   Different Bayesian inferences have different objectives. The fundamental
@@ -375,7 +376,7 @@ p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \hquad,
 \end{equation}
 where the integral is implicitly over the entire domain of the
-nuisances $\vtheta$ (or the entire support of the prior).
+linear parameters $\vtheta$ (or the entire support of the prior).
 Or we can re-factorize the expression using Bayes' theorem:
 \begin{equation}
 p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)
@@ -390,7 +391,7 @@ the relevant integral.
 The point of this \documentname\ is that this magical circumstance
 arises when the two probability
 distributions---the likelihood and the prior---are both Gaussian in
-form, and when the model is linear.
+form, and when the model is linear over the parameters we would like to marginalize over.
 In detail we will assume
 \begin{enumerate}
 \item
@@ -456,20 +457,20 @@ Obtaining the specific form for the general Gaussian product is the object of th
 \section{Products of two Gaussians}\label{sec:problemsolution}
 
 On the internets, there are many documents, slide decks, and videos
-that explain products of Gaussians in terms of other Gaussians\footnote{Two
+that explain products of Gaussians in terms of other Gaussians.\footnote{Two
   good examples are \cite{roweis}, and \cite{cookbook}. The closest---that we know
   of---to a
   discussion with the generality of
-  what is shown here is perhaps our own previous contribution \cite{luger}.}.
+  what is shown here is perhaps our own previous contribution \cite{luger}.}
 The vast majority of these consider either the univariate case (where
 the data $\vy$ and the parameter $\vtheta$ are both simple scalars, which
 is not useful for our science cases), or the same-dimension case (where the data
 $\vy$ and the parameter vector $\vtheta$ are the same length, which never
 occurs in our applications).
-Here we solve this problem in the general case\footnote{We solve this general
+Here we solve this problem in the general case:\footnote{We solve this general
   case, but we are not claiming \emph{priority} in any sense: This mathematics
   has been understood for many many decades or even centuries. This \documentname\ is
-  a pedagogical contribution, not a research contribution.}:
+  a pedagogical contribution, not a research contribution.}
 The inputs are multivariate (vectors) and the two Gaussians we are
 multiplying live in spaces of different dimensions.
 That is, we solve the following problem:
@@ -570,13 +571,13 @@ likelihood variance:
 \tB\inv = \tC\inv - \tC\inv\cdot\mM\cdot[\tLambda\inv + \mM\T\cdot\tC\inv\cdot\mM]\inv\cdot\mM\T\cdot\tC\inv
 \hquad.
 \end{equation}
-After that it's just a lot of grinding through matrix expressions\footnote{%
+After that it's just a lot of grinding through matrix expressions.\footnote{%
 We leave this grinding to the avid reader.
 For guidance, it might help to realize that there are terms that
 contain $\vtheta\T\cdots\vtheta$, $\vtheta\T\cdots\vy$, $\vy\T\cdots\vy$,
 $\vtheta\T\cdots\vmu$, and $\vmu\T\cdots\vmu$.
 If you expand out each of these five kinds of terms, each of the five
-should lead to an independent-ish equality.}.
+should lead to an independent-ish equality.}
 
 \paragraph{Solution notes:}
 In principle we found this factorization by expanding the quadratic in
@@ -599,8 +600,9 @@ There is an alternative derivation or proof involving the
 \veta\equiv\tV\inv\cdot\vm \hquad;\hquad
 \xi\equiv\ln||2\pi\,\tV||+\veta^T\cdot\tV\cdot\veta \hquad.
 \end{equation}
-In the canonical form, many products and other manipulations become
-simpler, so it is worth trying if you get stuck when manipulating Gaussian expressions.
+In the canonical form, many products and other manipulations become simpler, so
+it is worth trying this route if you get stuck when manipulating Gaussian
+expressions.
 
 Because the matrix $\mM$ is not square, it has no inverse. And because this
 is a physics problem, $\mM$ has units (which are the units of
@@ -620,10 +622,10 @@ marginalized likelihood, marginalizing out the linear parameters $\vtheta$.
 This marginalization is usually thought of as being an integral, like the
 one given in \equationname~(\ref{eq:integral}).
 How are these linear-algebra expressions in any sense ``doing this integral''?
-The answer is: That integral is a correlation of two Gaussians\footnote{Astronomers
+The answer is: That integral is a correlation of two Gaussians,\footnote{Astronomers
   like to say that it is the ``convolution'' of two Gaussians, but it is really the
   correlation of two Gaussians. The differences between convolution and correlation
-  are minimal, though, and we aren't sticklers.}, and the correlation of two
+  are minimal, though, and we aren't sticklers.} and the correlation of two
 Gaussians delivers a new Gaussian with a shifted mean that is wider than either
 of the original two Gaussians.
 This factorization does, indeed, deliver the correct marginalization integral.
@@ -676,8 +678,8 @@ is much smaller than the data size $N$ (or vice versa); that is, when $\mM$
 is ``very non-square''.
 
 We also give the general advice that one should \emph{avoid taking an explicit
-inverse} (unless you know the inverse exactly in closed form, as you do
-for, say, diagonal tensors).
+numerical inverse} (unless you know the inverse exactly in closed form, as you
+do for, say, diagonal tensors).
 In your code, it is typically stabler to use a \code{solve()} function instead
 of the \code{inv()} function.
 The reason is that the code operation \code{inv(B)} returns the best
@@ -697,7 +699,7 @@ freezes the parameters to a subspace of the $\vtheta$-space, which
 would lead to a zero eigenvalue in $\tLambda$, or if a data point is
 unmeasured or missing, which would lead to a zero eigenvalue in
 $\tC\inv$---you might have to \emph{think about how you implement the
-  linear algebra operations to be zero-safe}\footnote{A completely
+  linear algebra operations to be zero-safe}.\footnote{A completely
   zero-safe implementation
   is somewhat challenging, but one comment to make is that if, say, $\tA$
   contains a zero eigenvalue, then there is a direction in the parameter
@@ -705,11 +707,11 @@ $\tC\inv$---you might have to \emph{think about how you implement the
   all valid parameter combinations lie on a linear subspace of the full $K$-dimensional
   space. All parameter combinations that wander off the subspace get strictly
   zero probability or negative infinities in the log.
-  If all your inference is valid, it will probably be the case that the
+  If your inference is valid, it will probably be the case that the
   vectors at which you want to evaluate \emph{always} lie in the non-zero
   subspace. It makes sense, then, in this case, to work in a representation in which it is easy
   to enforce or ensure that. This usually involves some kind of coordinate transformation
-  or rotation or projection. Doing this correctly is beyond the scope of this \documentname.}.
+  or rotation or projection. Doing this correctly is beyond the scope of this \documentname.}
 
 \paragraph{Simplification: single multiplicative scaling}
 
@@ -727,7 +729,7 @@ solution above for this scalar case.
 
 \paragraph{Special case: wide prior}
 Another interesting case that often arises in inferences is the use of an improper
-(infinitely wide) prior on the parameters $\theta$. Rather than
+(infinitely wide) prior on the parameters $\vtheta$. Rather than
 ignoring the prior pdf on the left-hand side of
 \equationname~(\ref{eq:problem}), which is technically incorrect, the correct
 posterior pdf can be obtained by taking the limit $\tLambda\inv \rightarrow 0$ in the
@@ -749,8 +751,11 @@ Provided that the different data vectors $\vy_j$ are independently ``observed'' 
 is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
+An example of this case arises in astronomy, for example, when considering
+radial velocity measurements of a star taken with different instruments that may
+have systematic offsets between their velocity zero-points.
 
-In principle we could work around this problem---reduce it to the previously solved problem---by forming a large vector $\vy$ which is the concatenation of all the individual data vectors $\vy_j$, and a large design matrix $\mM$ which is the conatenation of all the individual design matrices $\mM_j$, and a large total covariance matrix $\tC$ which is a block diagonal matrix containing the noise variance tensors $\tC_j$ on the diagonal blocks.
+In principle we could work around this problem---reduce it to the previously solved problem---by forming a large vector $\vy$ which is the concatenation of all the individual data vectors $\vy_j$, and a large design matrix $\mM$ which is the concatenation of all the individual design matrices $\mM_j$, and a large total covariance matrix $\tC$ which is a block diagonal matrix containing the noise variance tensors $\tC_j$ on the diagonal blocks.
 We could then apply the result of the single-data-vector problem above.
 However, this can result in significant unnecessary computation, and it is hard to write the answer in a simple form.
 Instead we can take advantage of the separability of the likelihoods, and write the following generalized problem statement:
@@ -804,7 +809,7 @@ mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
   is literally part of the fundamental justification of Bayesian inference
   that the knowledge you eventually have (your final beliefs) does not depend
   on the order in which you observed the data. This is one of the axioms or inputs
-  to the theorems that underly the consistency of Bayesian reasoning.
+  to the theorems that underlie the consistency of Bayesian reasoning.
   There is an illuminating discussion of all this in Chapter~1 of \cite{jaynes}.}
 
 
@@ -846,9 +851,9 @@ $(\alpha, \beta, \gamma)$,
 \end{align}
 While this example may seem overly simple or contrived, quadratic models are
 occasionally useful in astronomy and physics, for example, when centroiding a
-peak\footnote{Fitting second-order polynomials has been shown to be great for
+peak,\footnote{Fitting second-order polynomials has been shown to be great for
   centroiding peaks in astronomy contexts. See, for example, \cite{vakili}, and
-  \cite{teague}.},
+  \cite{teague}.}
 and polynomial models are often used to capture smooth trends in
 data.
 
@@ -913,7 +918,8 @@ linear parameters
 the \acronym{MAP} parameter values (blue line), and the 68-percent credible region (shaded
 blue region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
-The companion \texttt{IPython} notebook contains the full solution.
+The companion \href{https://doi.org/10.5281/zenodo.3855689}{\texttt{IPython}
+notebook} (\texttt{Exercise1.ipynb}) contains the full solution.
 
 
 \paragraph{Exercise 2: A model with a nonlinear parameter:} We
@@ -977,11 +983,12 @@ $(0.1, 100)$,
 \begin{equation}
   p(\omega) \propto \frac{1}{\omega}
 \end{equation}
-evaluate the log-marginal likelihood $\ln p(\vy\given\omega)$ times the
-frequency prior $\ln p(\omega)$ over a grid of 16,384 frequencies $\omega$
+evaluate the log-marginal likelihood $\ln p(\vy\given\omega)$ and add to the
+log-frequency prior $\ln p(\omega)$ over a grid of 16,384 frequencies $\omega$
 between (0.1, 100).
-Plot both the marginal likelihood $p(\vy\given\omega)$ and the posterior pdf
-$p(\vy\given\omega)\,p(\omega)$ as a function of this frequency grid.
+Plot both the marginal likelihood (not log!) $p(\vy\given\omega)$ and the
+posterior pdf $p(\vy\given\omega)\,p(\omega)$ as a function of this frequency
+grid.
 
 Generate 512 posterior samples\footnote{The
 posterior pdf over $\omega$ will be extremely multimodal. Don't fire up
@@ -994,7 +1001,8 @@ Make a scatter plot showing a 2D projection of these samples in
 $(\alpha, \ln \omega)$.
 Plot the data, and over-plot 64 models (\equationname~\ref{eq:ex2model}) computed
 using a fair subset of these posterior samples.
-The companion \texttt{IPython} notebook contains the full solution.
+The companion \href{https://doi.org/10.5281/zenodo.3855689}{\texttt{IPython}
+notebook} (\texttt{Exercise2.ipynb}) contains the full solution.
 
 % Render the references
 \clearpage\raggedright
