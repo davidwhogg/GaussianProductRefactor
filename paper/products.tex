@@ -149,6 +149,8 @@
   The source text, example IPython notebooks, and data files used below are
   available via \href{https://doi.org/10.5281/zenodo.3855689}{Zenodo archive}
   \citep{zenodo}.
+  This \documentname\ is aimed at an advanced graduate student who is already
+  familiar with the concepts of Bayesian inference and probability.
 
 }\\
 {\footnotesize%
@@ -750,7 +752,7 @@ is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
 
-In principle we could work around this problem---reduce it to the previously solved problem---by forming a large vector $\vy$ which is the concatenation of all the individual data vectors $\vy_j$, and a large design matrix $\mM$ which is the conatenation of all the individual design matrices $\mM_j$, and a large total covariance matrix $\tC$ which is a block diagonal matrix containing the noise variance tensors $\tC_j$ on the diagonal blocks.
+In principle we could work around this problem---reduce it to the previously solved problem---by forming a large vector $\vy$ which is the concatenation of all the individual data vectors $\vy_j$, and a large design matrix $\mM$ which is the concatenation of all the individual design matrices $\mM_j$, and a large total covariance matrix $\tC$ which is a block diagonal matrix containing the noise variance tensors $\tC_j$ on the diagonal blocks.
 We could then apply the result of the single-data-vector problem above.
 However, this can result in significant unnecessary computation, and it is hard to write the answer in a simple form.
 Instead we can take advantage of the separability of the likelihoods, and write the following generalized problem statement:
@@ -804,7 +806,7 @@ mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
   is literally part of the fundamental justification of Bayesian inference
   that the knowledge you eventually have (your final beliefs) does not depend
   on the order in which you observed the data. This is one of the axioms or inputs
-  to the theorems that underly the consistency of Bayesian reasoning.
+  to the theorems that underlie the consistency of Bayesian reasoning.
   There is an illuminating discussion of all this in Chapter~1 of \cite{jaynes}.}
 
 
