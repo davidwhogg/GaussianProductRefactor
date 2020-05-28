@@ -3,15 +3,10 @@
 
 % to-do
 % -----
-% - HOGG: Should we remind the reader of the one-d case to build intuition for the full solution?? Rix recommends this?
+% - audit all style notes
 % - HOGG: Should we connect even more explicitly to rejection sampling and etc to prepare the reader for the exercises?
 % - HOGG: Send to Neige and Forbes for comments.
-% - HODD: DFM comments https://github.com/davidwhogg/GaussianProductRefactor/issues/5
-% - HOGG: Put in paragraph about one-d case at the end of the introduction?
 % - HOGG: Make a note in the introduction of who our audience is. Maybe abstract too.
-% - BL: Audit the discussion of canonical form.
-% - BL: Audit the solution to the multiple data sets problem.
-% - audit all style notes
 % - APW: Create git tag with version to submit and create release
 % - APW: update bibtex entry for Zenodo
 % - post to arXiv
@@ -728,7 +723,7 @@ $\mu$ and $\Lambda$ are now scalars as well:
 This can arise if one wants to multiplicatively scale a model to the data. $a$ would then correspond to the maximum a posteriori value of the multiplicative scaling to fit $\vy$ with $\vm$.
 In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
-solution above for this scalar case. 
+solution above for this scalar case.
 
 \paragraph{Special case: wide prior}
 Another interesting case that often arises in inferences is the use of an improper
@@ -755,8 +750,8 @@ is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
 
-We can immediately note that we could ignore this fractorization and form a large  vector $\vy$ and matrix $\mM$ by concatenating the individual vectors $\vy_j$ and design matrices $\mM_j$, and a total covariance matrix $\tC$, a block diagonal matrix containing the noise variance tensors $\tC_j$. 
-We could then apply the result of \equationname~(\ref{eq:problem}). 
+We can immediately note that we could ignore this fractorization and form a large  vector $\vy$ and matrix $\mM$ by concatenating the individual vectors $\vy_j$ and design matrices $\mM_j$, and a total covariance matrix $\tC$, a block diagonal matrix containing the noise variance tensors $\tC_j$.
+We could then apply the result of \equationname~(\ref{eq:problem}).
 However, this would result in significant unnecessary computation. By not take advantaging of the block diagonal nature of $\tC$, the matrix multiplications, inverses, and determinants needed in \equationname~(\ref{eq:problem}) are of much larger size, and this drastically increases the complexity of the problem.
 In order to avoid this, we take advantage of the separability of the likelihoods, and write the following generalized problem statement:
 
