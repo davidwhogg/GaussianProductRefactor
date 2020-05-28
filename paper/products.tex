@@ -7,6 +7,8 @@
 % - HOGG: Should we connect even more explicitly to rejection sampling and etc to prepare the reader for the exercises?
 % - HOGG: Send to Neige and Forbes for comments.
 % - HODD: DFM comments https://github.com/davidwhogg/GaussianProductRefactor/issues/5
+% - HOGG: Put in paragraph about one-d case at the end of the introduction?
+% - HOGG: Make a note in the introduction of who our audience is. Maybe abstract too.
 % - BL: Audit the discussion of canonical form.
 % - BL: Audit the solution to the multiple data sets problem.
 % - audit all style notes
@@ -44,10 +46,6 @@
 \usepackage{pifont}
 \usepackage{graphicx}
 \usepackage{doi}
-
-% \usepackage{caption}
-% \captionsetup[table]{labelformat=empty}
-% \usepackage{adjustbox}
 
 \usepackage{natbib}
 \bibliographystyle{hogg_abbrvnat}
@@ -127,7 +125,7 @@
 \renewcommand{\footnote}[1]{\refstepcounter{marginnote}\textsuperscript{\themarginnote}\marginpar{\color{darkgray}\raggedright\footnotesize\textsuperscript{\themarginnote}#1}}
 \newcommand{\tfigurerule}{\rule{0pt}{1ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{0.25ex}}
 \newcommand{\bfigurerule}{\rule{0pt}{0.25ex}\\ \rule{\marginparwidth}{0.5pt}\\ \rule{0pt}{1ex}}
-\renewcommand{\caption}[1]{\parbox{\marginparwidth}{\footnotesize\textbf{\refstepcounter{figure}\figurename~\thefigure}: {#1}}}
+\renewcommand{\caption}[1]{\parbox{\marginparwidth}{\footnotesize\refstepcounter{figure}\textbf{\figurename~\thefigure}: {#1}}}
 
 % kill these at submission
 \newcommand{\todo}[2]{\textcolor{BrickRed}{[#1 TODO: #2]}}
@@ -145,7 +143,9 @@
   The authors would like to thank
   Will Farr (Stony Brook),
   Dan Foreman-Mackey (Flatiron),
-  Rodrigo Luger (Flatiron), and
+  Rodrigo Luger (Flatiron),
+  Hans-Walter Rix (MPIA),
+  and
   Sam Roweis (deceased),
   for help with all these concepts.
   This project was developed
@@ -260,7 +260,7 @@ that will be Gaussians here.
 Bayes' theorem is often written as a ratio of probability density functions
 (pdfs in what follows), but it can also be written as a pdf factorization\footnote{For
   a tutorial on probability factorizations, see \cite{probcalc}.}:
-\begin{equation}
+\begin{equation}\label{eq:bayes}
 p(\vy,\vtheta\given\bH) = p(\vy\given\vtheta,\bH)\,p(\vtheta\given\bH) = p(\vtheta\given\vy,\bH)\,p(\vy\given\bH)
 \end{equation}
 where
@@ -269,10 +269,16 @@ parameters $\vtheta$ given your model assumptions and hyper parameters
 (symbolized jointly as $\bH$)\footnote{%
   In this \documentname, we typeset different mathematical objects according to their mathematical or transformation properties.
   We typeset vectors (which are column vectors) as $\va, \vb, \vtheta$,
-  we typeset tensors (which are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
+  we typeset variance tensors (which in this case are square, non-negative semi-definite matrices) as $\tC, \tLambda$,
   we typeset other matrices (which will in general be non-square) as $\mM, \mU$,
   and we typeset blobs or unstructured
-  collections of information as $\bH, \bP$.},
+  collections of information as $\bH, \bP$.
+  Related to this typography is an implicit terminology:
+  We distinguish variance tensors from matrices.
+  This distinction is somewhat arbitrary, but the strong constraints on the
+  variance tensors (non-negative, real eigenvalues) make them special beasts,
+  with special geometric properties, like that they can be used as metrics
+  in their respective vector spaces.}
 $p(\vy\given\vtheta,\bH)$ is the likelihood, or probability of data $\vy$
 given parameters (and assumptions),
 $p(\vtheta\given\bH)$ is the prior pdf for the parameters $\vtheta$,
@@ -300,7 +306,7 @@ $p(\vy\given\bH)$ with closed-form transformations of the means and variances of
 the likelihood and prior pdf.
 
 A currently popular data-analysis context in which Gaussian likelihoods are
-multiplied by Gaussian priors is \emph{Gaussian processes} (\acronym{GP}s),
+multiplied by Gaussian priors is \textsl{Gaussian processes} (\acronym{GP}s),
 which is a kind of
 non-parametric fitting in which a kernel function sets the flexibility of a
 data-driven model. A full discussion of \acronym{GP}s is beyond the scope of this
@@ -308,11 +314,12 @@ data-driven model. A full discussion of \acronym{GP}s is beyond the scope of thi
   book by \cite{Rasmussen:2005}.}.
 The math below can be applied in many \acronym{GP} contexts.
 Indeed, most linear model fits of the kind we describe below can be translated
-into the language of \acronym{GP}s;
-they are generally \acronym{GP}s with a trivial kernel function but a non-trivial
-mean function. We leave that translation as an exercise to the ambitious
+into the language of \acronym{GP}s, because any noise process that delivers
+both a prior pdf and a likelihood with Gaussian form is technically identical
+to a (probably non-stationary) \acronym{GP}.
+We leave that translation as an exercise to the ambitious
 reader\footnote{If you want a cheat sheet,
-  we come close to performing this complete translation in \cite{luger}.}.
+  we come close to performing this translation in \cite{luger}.}.
 
 
 \section{Marginalization by refactorization}
@@ -368,7 +375,7 @@ the posterior pdf for the linear parameters
 
 To perform a marginalization of the likelihood, we have two choices.
 We can either do an integral:
-\begin{equation}
+\begin{equation}\label{eq:integral}
 p(\vy\given\bP) = \int p(\vy\given\vtheta,\bP)\,p(\vtheta\given\bP)\,\dd\vtheta
 \hquad,
 \end{equation}
@@ -396,10 +403,10 @@ the likelihood $p(\vy\given\vtheta,\bP)$ is a Gaussian in $\vy$,
 \item
 the prior $p(\vtheta\given\bP)$ is a Gaussian in $\vtheta$,
 \item
-the mean of the likelihood Gaussian depends linearly on the nuisance
+the mean of the likelihood Gaussian depends linearly on the linear
 parameters $\vtheta$, and
 \item
-the nuisance parameters $\vtheta$ don't enter the likelihood anywhere
+the linear parameters $\vtheta$ don't enter the likelihood anywhere
 other than in the mean.
 \end{enumerate}
 In equations, this becomes:
@@ -429,16 +436,26 @@ general, on the nonlinear parameters $\bP$),
 $\tC$ is a $N\times N$ covariance matrix of uncertainties for the
 data (diagonal if the data dimensions are independent).
 That is, the likelihood is a Gaussian with a mean that depends
-linearly on the nuisance parameters $\vtheta$, and
+linearly on the parameters $\vtheta$, and
 $\vmu$ and $\tLambda$ are the $K$-vector mean and $K\times K$ variance tensor
 for the Gaussian prior.
 
+\marginpar{\tfigurerule\\
+  \includegraphics[width=\marginparwidth]{oned.pdf}
+  \caption{The one-dimensional case: If the prior pdf and the likelihood are both
+    Gaussian in a single parameter, their product (and hence the posterior pdf) is
+    also Gaussian, with a narrower width (smaller variance) than
+    either the prior pdf or the likelihood.\label{fig:oned}}\\
+  \bfigurerule}
 In this incredibly restrictive---but also surprisingly
 common---situation, the re-factored pdfs $p(\vtheta\given\vy,\bP)$
 (the posterior for the linear parameters, conditioned on
 the nonlinear parameters in $\bP$) and $p(\vy\given\bP)$ (the
 marginalized likelihood, similarly conditioned) will also both be Gaussian.
-Obtaining the specific forms of these Gaussians is the object of this
+We will solve this problem for general multivariate Gaussians in spaces
+of different dimensionality (and units) but the one-dimensional case is
+illustrated in \figurename~\ref{fig:oned}.
+Obtaining the specific form for the general Gaussian product is the object of this
 \documentname.
 
 \section{Products of two Gaussians}\label{sec:problemsolution}
@@ -600,11 +617,28 @@ is the data vector) and the units of $\tLambda$ are parameters-squared and the u
 of $\mM$ are data over parameters.
 And they are all different sizes.
 
-Various parts of the solution are highly interpretable in terms of the
+If you remember the Bayesian context set in \equationname~(\ref{eq:bayes}) and
+discussion thereafter,
+the Gaussian $\normal(\vtheta\given\va,\tA)$ is the posterior pdf for the linear
+parameters $\vtheta$, and the Gaussian $\normal(\vy\given\vb,\tB)$ is the
+marginalized likelihood, marginalizing out the linear parameters $\vtheta$.
+This marginalization is usually thought of as being an integral, like the
+one given in \equationname~(\ref{eq:integral}).
+How are these linear-algebra expressions in any sense ``doing this integral''?
+The answer is: That integral is a correlation of two Gaussians\footnote{Astronomers
+  like to say that it is the ``convolution'' of two Gaussians, but it is really the
+  correlation of two Gaussians. The differences between convolution and correlation
+  are minimal, though, and we aren't sticklers.}, and the correlation of two
+Gaussians delivers a new Gaussian with a shifted mean that is wider than either
+of the original two Gaussians.
+This factorization does, indeed, deliver the correct marginalization integral.
+
+Continuing along these lines,
+various parts of the solution are highly interpretable in terms of the
 objects of Bayesian inference. For example, because the term $p(\vtheta\given
 \va,\tA)$ is the conditional posterior pdf\footnote{We say ``conditional'' here
   because it is conditioned on nonlinear paramebers $\bP$.
-  The vector $\va$ and tensor
+  The vector $\va$ and variance tensor
   $\tA$ will depend on the nonlinear parameters $\bP$ through the design matrix
   $\mM$.} for the linear parameters $\vtheta$, the vector $\va$ is the maximum
 \foreign{a posteriori} (or \acronym{MAP}) value for the parameter vector
@@ -638,8 +672,8 @@ the product of the inverse and vectors, as in $\tB\inv\cdot\vy$ and
 the same for $\vb$.
 To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
 the matrix inversion lemma} (\ref{eq:invlemma}) given above.
-This is often useful because you often know the data noise-variance
-tensor inverse $\tC\inv$, and the prior variance inverse
+This is often useful because you often know or are given the data inverse variance
+tensor $\tC\inv$ for the noise, and the prior variance inverse
 $\tLambda\inv$, and the lemma manipulates these into the answer without
 any heavy linear algebra.
 The lemma saves you the most time and precision when the parameter size $K$
@@ -658,7 +692,7 @@ a vector.
 So, in general, \code{solve(B,y)} will deliver more precise results than
 the mathematically equivalent \code{dot(inv(B),y)}.
 
-The expressions in (\ref{eq:problem}) do not require that the tensors
+The expressions in \equationname~(\ref{eq:problem}) do not require that the variance tensors
 $\tC$, $\tLambda$, $\tA$, $\tB$ be positive definite; they only require
 that they be non-negative semi-definite.
 That means that they can have zero eigenvalues.
@@ -691,9 +725,20 @@ $\mu$ and $\Lambda$ are now scalars as well:
 \normal(\vy\given\theta\,\vm,\tC)\,\normal(\theta\given\mu,\Lambda) = \normal(\theta\given a,A)\,\normal(\vy\given\vb,\tB)
 \hquad.
 \end{equation}
+This can arise if one wants to multiplicatively scale a model to the data. $a$ would then correspond to the maximum a posteriori value of the multiplicative scaling to fit $\vy$ with $\vm$.
 In this case, the previous equations are simplified and no longer
 involve many matrix operations. It's a nice exercise to simplify the
-solution above for this scalar case.
+solution above for this scalar case. 
+
+\paragraph{Special case: wide prior}
+Another interesting case that often arises in inferences is the use of an improper
+(infinitely wide) prior on the parameters $\theta$. Rather than
+ignoring the prior pdf on the left-hand side of
+\equationname~(\ref{eq:problem}), which is technically incorrect, the correct
+posterior pdf can be obtained by taking the limit $\tC\inv \rightarrow 0$ in the
+fiducial results derived above. It is perhaps
+worth noting that in the improper-prior case,
+the posterior can still be fine, but the marginalized likelihood will make no sense (it will technically vanish).
 
 
 \paragraph{Generalization: product of many Gaussians}
@@ -704,11 +749,16 @@ different linear combination of the linear parameters $\vtheta$.
 That is, there are $J$ data vectors $\vy_j$, each of which has size or length $N_j$,
 and each of which has an expectation
 set linearly by the parameters $\vtheta$ but through a different design matrix $\mM_j$.
+
 Provided that the different data vectors $\vy_j$ are independently ``observed'' (that
 is, they have independent noise draws with noise variance tensors $\tC_j$),
 the total likelihood is just the product of
 the individual-data-vector likelihoods.
-That setup leads to the following generalized problem statement:
+
+We can immediately note that we could ignore this fractorization and form a large  vector $\vy$ and matrix $\mM$ by concatenating the individual vectors $\vy_j$ and design matrices $\mM_j$, and a total covariance matrix $\tC$, a block diagonal matrix containing the noise variance tensors $\tC_j$. 
+We could then apply the result of \equationname~(\ref{eq:problem}). 
+However, this would result in significant unnecessary computation. By not take advantaging of the block diagonal nature of $\tC$, the matrix multiplications, inverses, and determinants needed in \equationname~(\ref{eq:problem}) are of much larger size, and this drastically increases the complexity of the problem.
+In order to avoid this, we take advantage of the separability of the likelihoods, and write the following generalized problem statement:
 
 Find $K$-vector $\va$, $K\times K$ variance tensor $\tA$, $J$ vectors $\vb_j$ (each
 of which is a different length $N_j$),
@@ -729,7 +779,8 @@ each $\mM_j$ is a $N_j\times K$ matrix,
 and
 each $\tC_j$ is a $N_j\times N_j$ non-negative semi-definite variance tensor.
 
-The solution to this is an iteration over data vectors $\vy_j$:
+One way to solve this problem is to write all Gaussians in their canonical form, then separate the elements that depend on $\vtheta$ and on the individual $\vy_j$.
+The resutlt can be written as an iteration over data vectors $\vy_j$:
 \begin{equation}
   \mbox{\small initialize:}\hquad
   \tA_0\inv = \tLambda\inv \hquad;\hquad \va_0 = \vmu \hquad;\hquad \vx_0 = \tLambda\inv\cdot\vmu
@@ -751,7 +802,7 @@ The solution to this is an iteration over data vectors $\vy_j$:
 The solution is an iteration because you can think of adding each new data
 set $\vy_j$ sequentially, with the prior for set $j$ being the posterior from
 set $j-1$.
-This solution is unpleasant, because the specific values you get for the
+The way this solution is written is unpleasant, because the specific values you get for the
 vectors $\vb_j$ and tensors $\tB_j$ depend on the order in which you insert the data.
 But---and very importantly for the rules of Bayesian inference---the posterior
 mean $\va$ and variance $\tA$ \emph{do not depend} on the order!\footnote{It
@@ -816,15 +867,15 @@ and polynomial models are often used to capture long-term trends in data.
       3.6 & $-15.0$ & 3.9 \\
     \end{tabular}\hfill~}
   \includegraphics[width=\marginparwidth]{exercise1.pdf}
-  \caption{\textsl{Top:} These data were generated with ``true'' parameters
+  \caption{\textsl{Top:} Data generated with ``true'' parameters
     $(\alpha, \beta, \gamma) = (3.21, 2.44, 14.82)$.
     \textsl{Bottom:} The solution to Exercise 1. The data points (black markers)
     show the data from the table. The \acronym{MAP} parameter values were
     found using \equationname~(\ref{eq:a}).
     All data files and solution notebooks are available via
-    \href{https://doi.org/10.5281/zenodo.3855689}{Zenodo} \citep{zenodo}.}\\
+    \href{https://doi.org/10.5281/zenodo.3855689}{Zenodo} \citep{zenodo}.\label{fig:ex1}}\\
   \bfigurerule}
-The data table shown in Figure~1 contains $N=4$ data points,
+The data table shown in \figurename~\ref{fig:ex1} contains $N=4$ data points,
 $(x_i, y_i, \sigma_{y_i})$, generated using this quadratic model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
@@ -862,7 +913,7 @@ linear parameters
     (\alpha_{\rm MAP}, \beta_{\rm MAP}, \gamma_{\rm MAP}) =
       (3.61, 1.98, 14.26) \hquad.
 \end{equation}
-Figure~1 shows the data (black points), the model computed with
+\figurename~\ref{fig:ex1} shows the data (black points), the model computed with
 the \acronym{MAP} parameter values (blue line), and the 68-percent credible region (shaded
 blue region) estimated using posterior samples generated from
 $\normal(\vtheta\given\va,\tA)$.
@@ -902,13 +953,13 @@ $\omega$.
     \end{tabular}\hfill~}
   \includegraphics[width=\marginparwidth]{exercise2a.pdf}
   \includegraphics[width=\marginparwidth]{exercise2b.pdf}
-  \caption{\textsl{Top:} These data were generated with ``true'' parameters
+  \caption{\textsl{Top:} Data generated with ``true'' parameters
     $(\alpha, \beta, \gamma, \omega) = (3.21, 2.44, 13.6, 1.27)$.
     \textsl{Middle and Bottom:} The solution to Exercise 2.
     All data files and solution notebooks are available via
-    \href{https://doi.org/10.5281/zenodo.3855689}{Zenodo} \citep{zenodo}.}\\
+    \href{https://doi.org/10.5281/zenodo.3855689}{Zenodo} \citep{zenodo}.\label{fig:ex2}}\\
   \bfigurerule}
-The table shown in Figure~2 contains $N=4$ data points,
+The table shown in \figurename~\ref{fig:ex2} contains $N=4$ data points,
 $(x_i, y_i, \sigma_{y_i})$, generated with this sinusoid model.
 Assuming values for the prior means, $\vmu$, and prior variance tensor,
 $\tLambda$,
