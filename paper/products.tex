@@ -660,20 +660,21 @@ data space, and including the noise variance in the data.
 It is strictly larger than both the data noise variance $\tC$ and the
 data-space prior variance $\mM\cdot\tLambda\cdot\mM\T$.
 
-
 \paragraph{Implementation notes:}
 The solution gives an expression for the variance tensor $\tB$, but
 note that when you actually evaluate the pdfs you probably need to
 have either the inverse of $\tB$, or else an operator that computes
 the product of the inverse and vectors, as in $\tB\inv\cdot\vy$ and
-the same for $\vb$.
-To get the inverse of the tensor $\tB$ stably, \emph{you might want to use
-the matrix inversion lemma} (\ref{eq:invlemma}) given above.
+the same for $\vb$. You will also need the determinant of the tensor.
+To get the inverse and determinant
+of the tensor $\tB$ stably and quickly, \emph{you might want to use
+  the matrix inversion and determinant lemmas} (\ref{eq:invlemma})
+and (\ref{eq:detlemma}) given above.
 This is often useful because you often know or are given the data inverse variance
 tensor $\tC\inv$ for the noise, and the prior variance inverse
 $\tLambda\inv$, and the lemma manipulates these into the answer without
-any heavy linear algebra.
-The lemma saves you the most time and precision when the parameter size $K$
+any heavy linear algebra; same for the determinants.
+The lemmas save you the most time and precision when the parameter size $K$
 is much smaller than the data size $N$ (or vice versa); that is, when $\mM$
 is ``very non-square''.
 
